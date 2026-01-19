@@ -1,0 +1,48 @@
+{
+  "website": "https://stripe.com",
+  "scrapedAt": "2026-01-19T15:04:55.303Z",
+  "logo": "https://images.stripeassets.com/fzn2n1nzq965/5k7VeoAQQDK7032fIF6PEU/25f3670f5f4508103ee77afd92b7e074/typeform-logo.svg",
+  "name": "Stripe",
+  "description": "Stripe is a suite of APIs powering online payment processing and commerce solutions for internet businesses of all sizes. Accept payments and scale faster with AI.",
+  "businessType": "Developer Platform",
+  "keywords": "",
+  "email": "",
+  "phone": "234 1234 1234 1234",
+  "pages": {
+    "pricing": "https://stripe.com/in/pricing",
+    "about": "",
+    "contact": "https://stripe.com/in/contact/sales",
+    "blog": "https://stripe.com/blog",
+    "careers": "",
+    "docs": "https://docs.stripe.com"
+  },
+  "socials": {
+    "twitter": "",
+    "linkedin": "",
+    "facebook": "",
+    "instagram": "",
+    "youtube": "",
+    "github": "https://github.com/stripe-samples"
+  },
+  "technologies": [
+    "Shopify",
+    "Squarespace"
+  ],
+  "seo": {
+    "title": "Stripe | Financial Infrastructure to Grow Your RevenueStripe logoOpen mobile navigationStripe logoClose mobile navigationPaymentsTerminalRadarAuthorization BoostConnectPayoutsBillingTaxRevenue RecognitionStripe SigmaPaymentsTerminalRadarAuthorizationConnectPayoutsBillingTaxRevenue RecognitionStripe SigmaOpenAI logoAmazon logoGoogle logoAnthropic logoMarriott logoShopify logoAirbnb logoURBN logoPaymentsBillingConnectIssuingOpenAI logoCursorAlt logoAnthropic logoSlack logoTwilio logoLinear logoBloomNation logoInstacart logoDeliveroo logoKarat logoShopify logoPersona logoGlossier logoDermalogica logoIndochino logoBlockchainCom logoBraintrust logoMagic logoTwitter logoSpotify logoSubstack logoPaymentsConnectPaymentsConnectPaymentsConnectPaymentsStripe SigmaBMW logoAmazon logoMaersk logoTwilio logoBMW logoAmazon logoMaersk logoTwilio logoAtlasCheckoutBillingStripe logo",
+    "metaDescription": "Stripe is a suite of APIs powering online payment processing and commerce solutions for internet businesses of all sizes. Accept payments and scale faster with AI.",
+    "h1Count": 84,
+    "hasOgTags": true,
+    "hasTwitterCard": true,
+    "imageCount": 59,
+    "linkCount": 420
+  },
+  "performance": {
+    "jsHeap": 805908,
+    "nodes": 22708,
+    "documents": 13
+  },
+  "confidence": 70,
+  "leadScore": 80,
+  "priority": "High"
+}
