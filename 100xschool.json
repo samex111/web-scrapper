@@ -1,6 +1,6 @@
 {
   "website": "https://school.100xdevs.com",
-  "scrapedAt": "2026-01-19T15:47:30.773Z",
+  "scrapedAt": "2026-01-19T15:48:48.799Z",
   "logo": "http://localhost:3000/opengraph-image.png?f8b0a80bdc358cf4",
   "name": "100xSchool",
   "description": "School for new generation of developers, trained by industry experts.",
@@ -37,8 +37,8 @@
     "linkCount": 163
   },
   "performance": {
-    "jsHeap": 1190072,
-    "nodes": 2914,
+    "jsHeap": 1189504,
+    "nodes": 2912,
     "documents": 4
   },
   "confidence": 70,

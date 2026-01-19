@@ -784,18 +784,18 @@ timeout: 35000
 try {
 // Single website with full intelligence
 console.log('\n🎯 === Single Website Analysis ===');
-const profile = await engine.scrape("https://stripe.com");
+const profile = await engine.scrape("https://school.100xdevs.com");
 console.log(` Lead Score: ${profile.leadScore} | Priority: ${profile.priority} `);
-await engine.save(profile, "stripe_intelligence.json");
+await engine.save(profile, "100xschool.json");
 
 // Batch processing multiple sites  
 console.log('\n🎯 === Batch Intelligence Gathering ===');  
 const urls = [  
-  "https://school.100xdevs.com/",  
-  "https://github.com",  
-  "https://vercel.com",  
-  "https://openai.com",  
-  "https://anthropic.com"  
+  "https://school.100xdevs.com",  
+//   "https://github.com",  
+//   "https://vercel.com",  
+//   "https://openai.com",  
+//   "https://anthropic.com"  
 ];  
   
 const results = await engine.scrapeMultiple(urls, {  
