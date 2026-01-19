@@ -1,6 +1,8 @@
 import puppeteer, { Browser, Page } from "puppeteer";
 import * as cheerio from "cheerio";
 import { promises as fs } from "fs";
+import { fileURLToPath } from "url";
+
 
 // Global crash recovery
 process.on("unhandledRejection", (err) => console.error("  Unhandled:", err));
@@ -392,23 +394,23 @@ export class WebsiteIntelligenceEngine {
         ];
 
         // Check mailto links first (highest quality)
-      $("a[href^='mailto:']").each((_, el) => {
-  const href = $(el).attr("href");
-  if (!href) return; // ⬅️ guard clause
+        $("a[href^='mailto:']").each((_, el) => {
+            const href = $(el).attr("href");
+            if (!href) return; // ⬅️ guard clause
 
-  const email = href
-    ?.replace(/^mailto:/i, "")
-    ?.split("?")[0]
-    ?.trim()
-    ?.toLowerCase();
-    
-    if (!email) return;
+            const email = href
+                ?.replace(/^mailto:/i, "")
+                ?.split("?")[0]
+                ?.trim()
+                ?.toLowerCase();
 
-  if (!emailBlocklist.some(blocked => email.startsWith(blocked))) {
-    mails.add(email);
-    emailQuality.set(email, "high");
-  }
-});
+            if (!email) return;
+
+            if (!emailBlocklist.some(blocked => email.startsWith(blocked))) {
+                mails.add(email);
+                emailQuality.set(email, "high");
+            }
+        });
 
 
         // Check contact section (excluding footer)
@@ -560,7 +562,17 @@ export class WebsiteIntelligenceEngine {
         const fullText = `${text} ${title} ${description}`;
 
         // Weighted scoring system
-        const scores: Record<string, number> = {
+        type BusinessType =
+            | "Developer Platform"
+            | "B2B SaaS"
+            | "Consumer SaaS"
+            | "E-Commerce"
+            | "Service Business"
+            | "EdTech"
+            | "Agency"
+            | "Media/Blog";
+
+        const scores: Record<BusinessType, number> = {
             "Developer Platform": 0,
             "B2B SaaS": 0,
             "Consumer SaaS": 0,
@@ -631,8 +643,14 @@ export class WebsiteIntelligenceEngine {
             scores["Media/Blog"] += 20;
 
         // Return highest scoring category
-        const type = Object.keys(scores).reduce((a, b) => (scores[a] > scores[b] ? a : b));
+        const businessTypes = Object.keys(scores) as BusinessType[];
+
+        const type = businessTypes.reduce((a, b) =>
+            scores[a] > scores[b] ? a : b
+        );
+
         return scores[type] > 20 ? type : "General Business";
+
     }
 
     private calculateConfidence($: cheerio.CheerioAPI, html: string): number {
@@ -741,7 +759,7 @@ export class WebsiteIntelligenceEngine {
             const batchResults = await Promise.allSettled(batch.map((url) => this.scrape(url)));
 
             for (let j = 0; j < batchResults.length; j++) {
-                const result = batchResults[j];
+                const result: any = batchResults[j];
                 if (result.status === "fulfilled") {
                     const data = result.value;
 
@@ -941,8 +959,11 @@ async function main() {
 }
 
 // Run if this is the main module
-if (import.meta.url === `file://${process.argv[1]}`) {
-    main();
+const isDirectRun =
+  process.argv[1] === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  main(); // OR quickTest()
 }
 
 export default WebsiteIntelligenceEngine;

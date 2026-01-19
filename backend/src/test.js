@@ -5,8 +5,8 @@ import { fileURLToPath } from "url";
 
 
 // Global crash recovery
-process.on("unhandledRejection", err => console.error("⚠️  Unhandled:", err));
-process.on("uncaughtException", err => console.error("💥 Fatal:", err));
+process.on("unhandledRejection", err => console.error(" Unhandled:", err));
+process.on("uncaughtException", err => console.error(" Fatal:", err));
 
 class WebsiteIntelligenceEngine {
 constructor(options = {}) {
