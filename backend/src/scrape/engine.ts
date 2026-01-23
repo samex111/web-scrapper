@@ -782,7 +782,7 @@ export class WebsiteIntelligenceEngine {
                     );
                 } else {
                     console.error(
-                        `❌ [${i + j + 1}/${urls.length}] ${batch[j]}: ${result.reason.message}`
+                        ` [${i + j + 1}/${urls.length}] ${batch[j]}: ${result.reason.message}`
                     );
                     results.push({
                         website: batch[j],
@@ -917,7 +917,7 @@ async function main() {
 
     try {
         // Single website with full intelligence
-        console.log("\n🎯 === Single Website Analysis ===");
+        console.log("\n === Single Website Analysis ===");
         const profile = await engine.scrape("https://stripe.com");
         console.log(` Lead Score: ${profile.leadScore} | Priority: ${profile.priority} `);
         await engine.save(profile, "stripe_intelligence.json");
@@ -952,7 +952,7 @@ async function main() {
 
         console.log("\n Intelligence gathering complete!");
     } catch (error) {
-        console.error("❌ Error:", error);
+        console.error(" Error:", error);
     } finally {
         await engine.close();
     }
