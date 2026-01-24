@@ -2,74 +2,14 @@ import puppeteer, { Browser, Page } from "puppeteer";
 import * as cheerio from "cheerio";
 import { promises as fs } from "fs";
 import { fileURLToPath } from "url";
-
+import type { EngineOptions , ScrapedData , ScrapeMultipleOptions } from './types.js';
 
 // Global crash recovery
 process.on("unhandledRejection", (err) => console.error("  Unhandled:", err));
 process.on("uncaughtException", (err) => console.error(" Fatal:", err));
 
-interface EngineOptions {
-    recycleAfter?: number;
-    enableSmartJS?: boolean;
-    timeout?: number;
-    retries?: number;
-    [key: string]: any;
-}
 
-interface ScrapedData {
-    website: string;
-    scrapedAt: string;
-    logo: string;
-    name: string;
-    description: string;
-    businessType: string;
-    keywords: string;
-    email: string;
-    phone: string;
-    pages: {
-        pricing: string;
-        about: string;
-        contact: string;
-        blog: string;
-        careers: string;
-        docs: string;
-    };
-    socials: {
-        twitter: string;
-        linkedin: string;
-        facebook: string;
-        instagram: string;
-        youtube: string;
-        github: string;
-    };
-    technologies: string[];
-    seo: {
-        title: string;
-        metaDescription: string;
-        h1Count: number;
-        hasOgTags: boolean;
-        hasTwitterCard: boolean;
-        imageCount: number;
-        linkCount: number;
-    };
-    performance: {
-        jsHeap: number;
-        nodes: number;
-        documents: number;
-    };
-    confidence: number;
-    leadScore?: number;
-    priority?: string;
-    error?: string;
-}
-
-interface ScrapeMultipleOptions {
-    batchSize?: number;
-    delay?: number;
-    screenshotHighPriority?: boolean;
-}
-
-export class WebsiteIntelligenceEngine {
+export class  ScraperEngine  {
     private browser: Browser | null = null;
     private jobs = 0;
     private activePages = 0;
@@ -184,7 +124,7 @@ export class WebsiteIntelligenceEngine {
         // Setup request interception once
         await this.resetInterception(page);
 
-        console.log(`🔍 Scraping ${url}`);
+        console.log(`Scraping ${url}`);
 
         try {
             // Auto-retry on navigation failure
@@ -220,7 +160,7 @@ export class WebsiteIntelligenceEngine {
                 html.includes("DDoS protection");
 
             if (isBotChallenge) {
-                console.log(`🛡️  Bot challenge detected, enabling JS...`);
+                console.log(`Bot challenge detected, enabling JS...`);
                 await this.withJS(page, async () => {
                     await this.resetInterception(page);
                     await page.reload({ waitUntil: "domcontentloaded" });
@@ -286,7 +226,7 @@ export class WebsiteIntelligenceEngine {
             throw error;
         }
     }
-
+    
     private detectSPA(html: string, $: cheerio.CheerioAPI): boolean {
         // Real SPA signals - strict detection
         const spaIndicators = [
@@ -396,7 +336,7 @@ export class WebsiteIntelligenceEngine {
         // Check mailto links first (highest quality)
         $("a[href^='mailto:']").each((_, el) => {
             const href = $(el).attr("href");
-            if (!href) return; // ⬅️ guard clause
+            if (!href) return; //  guard clause
 
             const email = href
                 ?.replace(/^mailto:/i, "")
@@ -909,7 +849,7 @@ export class WebsiteIntelligenceEngine {
 
 // Example usage
 async function main() {
-    const engine = new WebsiteIntelligenceEngine({
+    const engine = new  ScraperEngine ({
         enableSmartJS: true,
         recycleAfter: 25,
         timeout: 35000,
@@ -966,4 +906,4 @@ if (isDirectRun) {
   main(); // OR quickTest()
 }
 
-export default WebsiteIntelligenceEngine;
+export default  ScraperEngine ;

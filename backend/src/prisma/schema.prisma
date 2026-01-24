@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  apiKey    String   @unique @default(cuid())
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  jobs      Job[]
+  leads     Lead[]
+  
+  @@index([apiKey])
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  userId      String
+  status      JobStatus @default(QUEUED)
+  
+  urls        String[]
+  totalUrls   Int
+  completed   Int       @default(0)
+  failed      Int       @default(0)
+  
+  results     Json?
+  error       String?
+  
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leads       Lead[]
+  
+  @@index([userId, status])
+  @@index([createdAt])
+}
+
+model Lead {
+  id           String   @id @default(cuid())
+  userId       String
+  jobId        String
+  
+  website      String
+  name         String?
+  description  String?
+  email        String?
+  phone        String?
+  
+  businessType String?
+  leadScore    Int      @default(0)
+  confidence   Int      @default(0)
+  priority     String?
+  
+  logo         String?
+  keywords     String?
+  
+  pages        Json?
+  socials      Json?
+  technologies Json?
+  seo          Json?
+  performance  Json?
+  
+  createdAt    DateTime @default(now())
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, businessType])
+  @@index([leadScore, confidence])
+  @@index([createdAt])
+}
+
+enum JobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}

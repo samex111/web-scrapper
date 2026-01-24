@@ -1,19 +1,51 @@
-import express from "express";
+import express from 'express';
+import cors from 'cors';
+import { config } from './config.js';
+import { scrapeRoutes } from './routes/scrape.routes.js';
+import { leadsRoutes } from './routes/leads.routes.js';
+import { exportRoutes } from './routes/export.routes.js';
 
-const PORT = process.env.PORT || 3000;
+const app = express();
 
-const app  = express();
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-app.get("/health", (req,res)=>{
-    res.status(200).json({
-        msg:"backend is running"
-    })
-})
+// Routes
+app.use('/api/scrape', scrapeRoutes);
+app.use('/api/leads', leadsRoutes);
+app.use('/api/export', exportRoutes);
 
-app.use('/api/v1/scrape' , middleware, scrapeRoute);
-app.use('/api/v1/lead' , middleware, leadsRoute);
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+  });
+});
 
-app.listen(PORT, ()=>{
-    console.log("server is listening on port: "+ PORT)
-})
+// Root
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Scraper API',
+    version: '1.0.0',
+    endpoints: {
+      scrape: 'POST /api/scrape',
+      jobStatus: 'GET /api/scrape/job/:id',
+      leads: 'GET /api/leads',
+      export: 'GET /api/export/csv|json',
+    },
+  });
+});
+
+// Error handler
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// Start server
+app.listen(config.port, () => {
+  console.log(` Server running on port ${config.port}`);
+  console.log(`Environment: ${config.nodeEnv}`);
+});

@@ -1,5 +1,5 @@
-import { prisma } from "./client";
-export async function saveLeads(leads) {
+import { prisma } from "./client.js";
+export async function saveLeads(leads:any) {
   for (const lead of leads) {
     await prisma.lead.create({
       data: {
