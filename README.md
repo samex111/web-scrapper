@@ -1,1 +1,1 @@
-A tool that can scrape any website info 
+A tool that can scrape any website 

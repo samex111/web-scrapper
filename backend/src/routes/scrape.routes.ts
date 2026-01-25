@@ -2,42 +2,48 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { addScrapeJob, getJobStatus } from '../queue/jobs.js';
 import { prisma } from '../db/client.js';
+import { checkQuota, incrementUsage } from '../middleware/quota.middleware.js';
+import { requireAuthOrApiKey } from '../middleware/auth.middleware.js';
 
 export const scrapeRoutes = Router();
 
 const scrapeSchema = z.object({
   urls: z.array(z.string().url()).min(1).max(100),
-  apiKey: z.string(),
 });
 
 // Start new scrape job
-scrapeRoutes.post('/', async (req, res) => {
+scrapeRoutes.post('/', requireAuthOrApiKey, checkQuota, async (req, res) => {
   try {
-    const { urls, apiKey } = scrapeSchema.parse(req.body);
+    const { urls } = scrapeSchema.parse(req.body);
+    const user = req.user;
 
-    // Verify API key
-    const user = await prisma.user.findUnique({
-      where: { apiKey },
-    });
+    if (!urls || !Array.isArray(urls) || urls.length === 0) {
+      return res.status(400).json({ error: 'URLs array required' });
+    }
 
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid API key' });
+    if (urls.length > 100) {
+      return res.status(400).json({ error: 'Maximum 100 URLs per request' });
     }
 
     // Add job to queue
     const jobId = await addScrapeJob(user.id, urls);
 
+    // Increment usage
+    await incrementUsage(user.id, urls.length);
+
     res.json({
       jobId,
       status: 'queued',
       urls: urls.length,
-      message: 'Scraping job queued successfully',
+      creditsUsed: urls.length,
+      remaining: user.monthlyQuota - user.usedThisMonth - urls.length,
     });
 
   } catch (error: any) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
+
 
 // Get job status
 scrapeRoutes.get('/job/:id', async (req, res) => {

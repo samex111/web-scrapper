@@ -1,5 +1,5 @@
 import { Worker, Job } from 'bullmq';
-import { config } from '../config.js';
+import { config } from '../config/config.js';
 import { ScraperEngine } from '../scrape/engine.js';
 import { prisma } from '../db/client.js';
 

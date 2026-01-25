@@ -1,0 +1,230 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  avatar        String?   // Profile picture from Google
+  password      String?   // For email/password signup (hashed)
+  googleId      String?   @unique  // Google OAuth ID
+  apiKey        String    @unique @default(cuid())
+  plan          Plan      @default(FREE)
+  monthlyQuota  Int       @default(100)
+  usedThisMonth Int       @default(0)
+  resetDate     DateTime  @default(now()) // When quota resets
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  emailVerified Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  jobs          Job[]
+  leads         Lead[]
+  sessions      Session[]
+   web        Webhook[]
+   api        ApiKey[]
+
+  
+  @@index([email])
+  @@index([googleId])
+  @@index([apiKey])
+  @@index([plan, isActive])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionToken String   @unique
+  accessToken  String?  @db.Text
+  refreshToken String?  @db.Text
+  expiresAt    DateTime
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([sessionToken])
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String?   // User can name their job (optional)
+  status      JobStatus @default(QUEUED)
+  urls        String[]
+  totalUrls   Int
+  completed   Int       @default(0)
+  failed      Int       @default(0)
+  results     Json?
+  errors      Json?     // Store individual URL errors
+  source      JobSource @default(DASHBOARD) // Dashboard vs API
+  priority    JobPriority @default(NORMAL)
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leads       Lead[]
+  
+  @@index([userId, status])
+  @@index([status, priority])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+}
+
+model Lead {
+  id           String   @id @default(cuid())
+  userId       String
+  jobId        String
+  website      String
+  name         String?
+  description  String?  @db.Text
+  email        String?
+  emailQuality EmailQuality? // HIGH, MEDIUM, LOW
+  phone        String?
+  
+  businessType String?
+  industry     String?
+  leadScore    Int      @default(0)
+  confidence   Int      @default(0)
+  priority     LeadPriority?
+  logo         String?
+  screenshot   String?  // Path to screenshot if taken
+  
+  keywords     String?
+  
+  pages        Json?    // { pricing, about, contact, blog, careers, docs }
+  socials      Json?    // { twitter, linkedin, facebook, instagram, youtube, github }
+  technologies Json?    // Array of detected tech
+  seo          Json?    // SEO metrics
+  performance  Json?    // Performance metrics
+  isEnriched   Boolean  @default(false)
+  enrichedAt   DateTime?
+  isFavorite   Boolean  @default(false)
+  notes        String?  @db.Text
+  tags         String[] // User-added tags
+  exportedAt   DateTime?
+  exportCount  Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, businessType])
+  @@index([userId, leadScore])
+  @@index([leadScore, confidence])
+  @@index([priority])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@index([jobId])
+  @@index([isFavorite])
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  key         String   @unique @default(cuid())
+  name        String   // User-defined name like "Production Server"
+  permissions Json?    // { scrape: true, export: true, read: true }
+  rateLimit   Int      @default(100) // Requests per hour
+  isActive    Boolean  @default(true)
+  lastUsedAt  DateTime?
+  usageCount  Int      @default(0)
+  ipWhitelist String[] // Optional IP restriction
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime? // Optional expiration
+  revokedAt   DateTime?
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([key])
+  @@index([userId, isActive])
+}
+
+model Webhook {
+  id          String   @id @default(cuid())
+  userId      String
+  
+  url         String
+  events      String[] // ["job.completed", "job.failed"]
+  secret      String   // For signature verification
+  
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  lastTriggeredAt DateTime?
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, isActive])
+}
+
+model UsageLog {
+  id          String   @id @default(cuid())
+  userId      String
+  
+  action      String   // "scrape", "export", "api_call"
+  credits     Int      // Credits consumed
+  metadata    Json?    // Additional info
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, createdAt])
+  @@index([action])
+}
+
+enum Plan {
+  FREE
+  PRO
+  BUSINESS
+  ENTERPRISE
+}
+
+enum JobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum JobSource {
+  DASHBOARD
+  API
+  WEBHOOK
+  CRON
+}
+
+enum JobPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum EmailQuality {
+  HIGH      // From mailto or contact page
+  MEDIUM    // From contact section
+  LOW       // From footer/body
+}
+
+enum LeadPriority {
+  HIGH
+  MEDIUM
+  LOW
+}

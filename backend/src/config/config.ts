@@ -6,7 +6,10 @@ export const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   
   database: {
-    url: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL!  ,
+  },
+  jwtSercret: {
+    JWT_SECRET: process.env.DATABASE_URL!  ,
   },
   
   redis: {
@@ -18,9 +21,12 @@ export const config = {
     recycleAfter: parseInt(process.env.BROWSER_RECYCLE_AFTER || '25'),
     timeout: parseInt(process.env.SCRAPER_TIMEOUT || '35000'),
   },
+  GoogleClient:{
+    ID : process.env.GOOGLE_CLIENT_ID
+  }
 };
 
-// Validate required env vars
+
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
 }

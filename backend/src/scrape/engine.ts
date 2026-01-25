@@ -836,7 +836,7 @@ export class  ScraperEngine  {
             .join("\n");
 
         await fs.writeFile(filename, csv);
-        console.log(`📊 CSV saved: ${filename}`);
+        console.log(` CSV saved: ${filename}`);
     }
 
     async close(): Promise<void> {
@@ -848,62 +848,62 @@ export class  ScraperEngine  {
 }
 
 // Example usage
-async function main() {
-    const engine = new  ScraperEngine ({
-        enableSmartJS: true,
-        recycleAfter: 25,
-        timeout: 35000,
-    });
+// async function main() {
+//     const engine = new  ScraperEngine ({
+//         enableSmartJS: true,
+//         recycleAfter: 25,
+//         timeout: 35000,
+//     });
 
-    try {
-        // Single website with full intelligence
-        console.log("\n === Single Website Analysis ===");
-        const profile = await engine.scrape("https://stripe.com");
-        console.log(` Lead Score: ${profile.leadScore} | Priority: ${profile.priority} `);
-        await engine.save(profile, "stripe_intelligence.json");
+//     try {
+//         // Single website with full intelligence
+//         console.log("\n === Single Website Analysis ===");
+//         const profile = await engine.scrape("https://stripe.com");
+//         console.log(` Lead Score: ${profile.leadScore} | Priority: ${profile.priority} `);
+//         await engine.save(profile, "stripe_intelligence.json");
 
-        // Batch processing multiple sites
-        console.log("\n🎯 === Batch Intelligence Gathering ===");
-        const urls = [
-            "https://github.com",
-            "https://vercel.com",
-            "https://openai.com",
-            "https://anthropic.com",
-        ];
+//         // Batch processing multiple sites
+//         console.log("\n === Batch Intelligence Gathering ===");
+//         const urls = [
+//             "https://github.com",
+//             "https://vercel.com",
+//             "https://openai.com",
+//             "https://anthropic.com",
+//         ];
 
-        const results = await engine.scrapeMultiple(urls, {
-            batchSize: 2,
-            delay: 3000,
-            screenshotHighPriority: true, // Auto-screenshot leads with score >= 70
-        });
+//         const results = await engine.scrapeMultiple(urls, {
+//             batchSize: 2,
+//             delay: 3000,
+//             screenshotHighPriority: true, // Auto-screenshot leads with score >= 70
+//         });
 
-        // Filter by confidence and priority
-        const highConfidence = results.filter((r) => r.confidence >= 70);
-        const highPriority = results.filter((r) => r.priority === "High");
+//         // Filter by confidence and priority
+//         const highConfidence = results.filter((r) => r.confidence >= 70);
+//         const highPriority = results.filter((r) => r.priority === "High");
 
-        console.log(`\n Found ${highPriority.length} high-priority leads`);
-        console.log(` ${highConfidence.length} high-confidence profiles`);
+//         console.log(`\n Found ${highPriority.length} high-priority leads`);
+//         console.log(` ${highConfidence.length} high-confidence profiles`);
 
-        // Export by business niche
-        await engine.exportByNiche(results, "./exports");
+//         // Export by business niche
+//         await engine.exportByNiche(results, "./exports");
 
-        await engine.save(results, "intelligence_report.json");
-        await engine.saveCSV(highPriority, "high_priority_leads.csv");
+//         await engine.save(results, "intelligence_report.json");
+//         await engine.saveCSV(highPriority, "high_priority_leads.csv");
 
-        console.log("\n Intelligence gathering complete!");
-    } catch (error) {
-        console.error(" Error:", error);
-    } finally {
-        await engine.close();
-    }
-}
+//         console.log("\n Intelligence gathering complete!");
+//     } catch (error) {
+//         console.error(" Error:", error);
+//     } finally {
+//         await engine.close();
+//     }
+// }
 
-// Run if this is the main module
-const isDirectRun =
-  process.argv[1] === fileURLToPath(import.meta.url);
+// // Run if this is the main module
+// const isDirectRun =
+//   process.argv[1] === fileURLToPath(import.meta.url);
 
-if (isDirectRun) {
-  main(); // OR quickTest()
-}
+// if (isDirectRun) {
+//   main(); // OR quickTest()
+// }
 
 export default  ScraperEngine ;

@@ -1,20 +1,21 @@
 import express from 'express';
 import cors from 'cors';
-import { config } from './config.js';
+import { config } from './config/config.js';
 import { scrapeRoutes } from './routes/scrape.routes.js';
 import { leadsRoutes } from './routes/leads.routes.js';
 import { exportRoutes } from './routes/export.routes.js';
+import { authRoutes } from './routes/auth.routes.js';
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-
 // Routes
 app.use('/api/scrape', scrapeRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/export', exportRoutes);
+app.use('/api/auth',authRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
