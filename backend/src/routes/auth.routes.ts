@@ -112,50 +112,29 @@ authRoutes.post("/google", async (req, res) => {
   }
 });
 
-authRoutes.get("/me",requireAuth, async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
+authRoutes.get("/me", requireAuth, async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.userId },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      avatar: true,
+      plan: true,
+      monthlyQuota: true,
+      usedThisMonth: true,
+    },
+  });
 
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const decoded = jwt.verify(token, config.jwtSercret.JWT_SECRET) as {
-      userId: string;
-    };
-
-    const session = await prisma.session.findUnique({
-      where: { sessionToken: token },
-    });
-
-    if (!session || session.expiresAt < new Date()) {
-      return res.status(401).json({ error: "Session expired" });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        avatar: true,
-        plan: true,
-        monthlyQuota: true,
-        usedThisMonth: true,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    res.json({ user });
-  } catch {
-    res.status(401).json({ error: "Invalid token" });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
   }
+
+  res.json({ user });
 });
 
-authRoutes.post("/logout",requireAuth, async (req, res) => {
+
+authRoutes.post("/logout", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (token) {
