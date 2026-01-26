@@ -55,9 +55,9 @@ const worker = new Worker('scrape-jobs', async (job: Job) => {
             email: result.email,
             phone: result.phone,
             businessType: result.businessType,
-            leadScore: result.leadScore,
+            leadScore: result.leadScore ?? 0,
             confidence: result.confidence,
-            priority: result.priority,
+            priority: result.priority as any,
             logo: result.logo,
             keywords: result.keywords,
             pages: result.pages as any,
@@ -121,7 +121,7 @@ const worker = new Worker('scrape-jobs', async (job: Job) => {
       where: { id: dbJob.id },
       data: {
         status: 'FAILED',
-        error: error.message,
+        errors: error.message ,
         completedAt: new Date(),
       },
     });

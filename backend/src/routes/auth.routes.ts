@@ -6,7 +6,7 @@ import { OAuth2Client } from "google-auth-library";
 import { requireAuth } from '../middleware/auth.middleware.js';
 
 const googleClient = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID
+  config.GoogleClient.ID
 );
 
 
@@ -24,8 +24,8 @@ authRoutes.post("/google", async (req, res) => {
       idToken,
       audience: config.GoogleClient.ID as string,
     });
-
     const payload = ticket.getPayload();
+
     if (!payload?.email || !payload.sub) {
       return res.status(401).json({ error: "Invalid Google token" });
     }
@@ -134,14 +134,16 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
 });
 
 
-authRoutes.post("/logout", async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-
-  if (token) {
+authRoutes.post("/logout", requireAuth, async (req, res) => {
+  try {
     await prisma.session.deleteMany({
-      where: { sessionToken: token },
+      where: {
+        userId: req.user.id,
+      },
     });
-  }
 
-  res.json({ message: "Logged out" });
+    res.json({ message: "Logged out from all sessions" });
+  } catch (err) {
+    res.status(500).json({ message: "Logout failed" });
+  }
 });

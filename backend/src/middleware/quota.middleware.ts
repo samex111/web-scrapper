@@ -6,14 +6,20 @@ export async function checkQuota(
   res: Response,
   next: NextFunction
 ) {
+  try{
   const user = req.user;
 
   if (!user) {
     return res.status(401).json({ error: 'User not found' });
   }
+  const freshUser = await prisma.user.findUnique({
+  where: { id: user.id },
+  select: { usedThisMonth: true, monthlyQuota: true, plan: true },
+});
+
 
   // Check if quota exceeded
-  if (user.usedThisMonth >= user.monthlyQuota) {
+  if (freshUser!.usedThisMonth >= freshUser!.monthlyQuota) {
     return res.status(429).json({
       error: 'Monthly quota exceeded',
       quota: {
@@ -26,6 +32,13 @@ export async function checkQuota(
   }
 
   next();
+}
+catch(e){
+  console.log("error in check quota")
+  res.status(403).json({
+    error:"error in check quota: " +e
+  })
+}
 }
 
 export async function incrementUsage(userId: string, credits: number) {

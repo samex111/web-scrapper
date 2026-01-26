@@ -10,6 +10,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: any;
+      apiKey?: any;
     }
   }
 }
@@ -22,13 +23,21 @@ export async function requireAuth(
 ) {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    
+
     if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
     const decoded = jwt.verify(token, config.jwtSercret.JWT_SECRET) as any;
-    
+
+    const session = await prisma.session.findUnique({
+      where: { sessionToken: token },
+    });
+
+    if (!session || session.expiresAt < new Date()) {
+      return res.status(401).json({ error: "Session expired" });
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
@@ -52,25 +61,28 @@ export async function requireApiKey(
   next: NextFunction
 ) {
   try {
-    const apiKey = req.headers['x-api-key'] as string || 
-                   req.query.apiKey as string;
-    
+    const apiKey = req.headers['x-api-key'] as string ||
+      req.query.apiKey as string;
+
     if (!apiKey) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         error: 'API key required',
         hint: 'Pass as X-API-Key header or ?apiKey query param'
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { apiKey },
+    const apiKeyRecord = await prisma.apiKey.findUnique({
+      where: { key: apiKey },
+      include: { user: true },
     });
 
-    if (!user || !user.isActive) {
-      return res.status(401).json({ error: 'Invalid API key' });
+    if (!apiKeyRecord || !apiKeyRecord.isActive) {
+      return res.status(401).json({ error: "Invalid API key" });
     }
 
-    req.user = user;
+    req.user = apiKeyRecord.user;
+    req.apiKey = apiKeyRecord;
+
     next();
 
   } catch (error: any) {
@@ -78,47 +90,26 @@ export async function requireApiKey(
   }
 }
 
-
 export async function requireAuthOrApiKey(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // Try JWT first
-  const token = req.headers.authorization?.replace('Bearer ', '');
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, config.jwtSercret.JWT_SECRET) as any;
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
-      });
-      
-      if (user && user.isActive) {
-        req.user = user;
-        return next();
-      }
-    } catch (e) {
-      // Continue to API key check
-    }
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    return requireAuth(req, res, next);
   }
 
-  // Try API key
-  const apiKey = req.headers['x-api-key'] as string || 
-                 req.query.apiKey as string;
-  
+  const apiKey = req.headers['x-api-key'] as string || req.query.apiKey as string;
+
   if (apiKey) {
-    const user = await prisma.user.findUnique({
-      where: { apiKey },
-    });
-
-    if (user && user.isActive) {
-      req.user = user;
-      return next();
-    }
+    return requireApiKey(req, res, next);
   }
 
-  return res.status(401).json({ 
-    error: 'Authentication required',
-    hint: 'Provide JWT token or API key'
+  return res.status(401).json({
+    error: "Authentication required",
+    hint: "Provide Bearer token or API key",
   });
 }
+
