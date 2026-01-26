@@ -4,16 +4,19 @@ import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js';
 import { OAuth2Client } from "google-auth-library";
 import { requireAuth } from '../middleware/auth.middleware.js';
-
+import {z} from 'zod'
 const googleClient = new OAuth2Client(
   config.GoogleClient.ID
 );
 
+const requireBody = z.object({
+  idToken : z.string()
+})
 
 export const authRoutes = Router();
 authRoutes.post("/google", async (req, res) => {
   try {
-    const { idToken } = req.body;
+    const { idToken } = requireBody.parse(req.body);
 
     if (!idToken) {
       return res.status(400).json({ error: "Missing Google token" });
@@ -113,6 +116,7 @@ authRoutes.post("/google", async (req, res) => {
 });
 
 authRoutes.get("/me", requireAuth, async (req, res) => {
+  try{
   const user = await prisma.user.findUnique({
     where: { id: req.user.userId },
     select: {
@@ -131,6 +135,11 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
   }
 
   res.json({ user });
+}catch(e){
+  res.status(403).json({
+    error: "error in /me " + e
+  })
+}
 });
 
 

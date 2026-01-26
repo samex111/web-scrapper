@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { prisma } from '../db/client.js';
-import jwt from 'jsonwebtoken';
+import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { config } from '../config/config.js';
 
 
@@ -28,7 +28,7 @@ export async function requireAuth(
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const decoded = jwt.verify(token, config.jwtSercret.JWT_SECRET) as any;
+    const decoded = jwt.verify(token, config.jwtSercret.JWT_SECRET) as JwtPayload;
 
     const session = await prisma.session.findUnique({
       where: { sessionToken: token },
