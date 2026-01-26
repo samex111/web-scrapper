@@ -673,9 +673,9 @@ export class  ScraperEngine  {
         if (data.confidence < 30) score -= 30;
 
         // Determine priority
-        let priority = "Low";
-        if (score >= 70) priority = "High";
-        else if (score >= 40) priority = "Medium";
+        let priority = "LOW";
+        if (score >= 70) priority = "HIGH";
+        else if (score >= 40) priority = "MEDIUM";
 
         return {
             ...data,

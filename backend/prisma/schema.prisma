@@ -102,7 +102,7 @@ model Lead {
   industry     String?
   leadScore    Int      @default(0)
   confidence   Int      @default(0)
-  priority     LeadPriority?
+  priority     LeadPriority?  
   logo         String?
   screenshot   String?  // Path to screenshot if taken
   

@@ -57,14 +57,14 @@ const worker = new Worker('scrape-jobs', async (job: Job) => {
             businessType: result.businessType,
             leadScore: result.leadScore ?? 0,
             confidence: result.confidence,
-            priority: result.priority as any,
+            priority: result.priority as any ,
             logo: result.logo,
             keywords: result.keywords,
             pages: result.pages as any,
             socials: result.socials as any,
             technologies: result.technologies as any,
             seo: result.seo as any,
-            performance: result.performance as any,
+            performance: result.performance as any
           },
         });
 
