@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from 'react';
 import { motion, cubicBezier } from "framer-motion";
 import { ChevronDown } from 'lucide-react';
@@ -17,15 +17,30 @@ export function Header() {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 80);
-    };
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+    const diff = currentScrollY - lastScrollY.current;
 
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    // scroll down
+    if (diff > 10) {
+      setScrolled(true);
+    }
+
+    // scroll up
+    if (diff < -10) {
+      setScrolled(false);
+    }
+
+    lastScrollY.current = currentScrollY;
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
 
   const ease = cubicBezier(0.22, 1, 0.36, 1);
 
