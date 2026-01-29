@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useState } from 'react';
 import { motion, cubicBezier } from "framer-motion";
+import { ChevronDown } from 'lucide-react';
+
 
 
 export function Header() {
@@ -80,11 +82,11 @@ export default function Navbar() {
 
 
           {/* CENTER */}
-          <div className="hidden md:flex gap-6 text-white text-md mr-auto ml-10">
-            <span className="hover:text-white transition">Features</span>
-            <span className="hover:text-white transition">Developer</span>
-            <span className="hover:text-white transition">Resources</span>
-            <span className="hover:text-white transition">Pricing</span>
+          <div className={`hidden md:flex gap-6 text-white text-md mx-auto ${!scrolled &&'ml-10'}`}>
+            <span className=" transition flex gap-1">Features <ChevronDown className="text-white/45 mt-1" size={'18'}/></span> 
+            <span className=" transition flex gap-1">Developer <ChevronDown className="text-white/45 mt-1" size={'18'} /></span>
+            <span className=" transition flex gap-1">Resources <ChevronDown className="text-white/45 mt-1" size={'18'}/></span>
+            <span className=" transition flex gap-1">Pricing <ChevronDown className="text-white/45 mt-1" size={'18'}/></span>
           </div>
 
           {/* RIGHT */}
