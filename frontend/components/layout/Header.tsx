@@ -1,90 +1,108 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { useEffect } from "react";
 import { useState } from 'react';
+import { motion, cubicBezier } from "framer-motion";
+
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">
-              Lead Intelligence
-            </span>
-          </Link>
+    <Navbar></Navbar>
+  );
+}
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/#features" className="text-gray-700 hover:text-blue-600">
-              Features
-            </Link>
-            <Link href="/#pricing" className="text-gray-700 hover:text-blue-600">
-              Pricing
-            </Link>
-            <Link href="/docs" className="text-gray-700 hover:text-blue-600">
-              Documentation
-            </Link>
-            <Link href="/login">
-              <Button variant="outline">Sign In</Button>
-            </Link>
-            <Link href="/signup">
-              <Button>Get Started</Button>
-            </Link>
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 80);
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const ease = cubicBezier(0.22, 1, 0.36, 1);
+
+
+  return (
+    <div className="fixed top-0 left-0 w-full z-50 pointer-events-none">
+      {/* Width + position animation */}
+      <motion.div
+        animate={{
+          maxWidth: scrolled ? 640 : 1024,
+        }}
+        transition={{ duration: 0.45, ease }}
+        className="mx-auto mt-6 pointer-events-auto px-2"
+      >
+        {/* Navbar capsule */}
+        <motion.nav
+          animate={{
+            borderRadius: scrolled ? 999 : 12,
+            backgroundColor: scrolled
+              ? "rgba(0,0,0,0.6)"
+              : "rgba(0,0,0,0.4)",
+            backdropFilter: scrolled
+              ? "blur(24px)"
+              : "blur(12px)",
+          }}
+          transition={{ duration: 0.70, ease }}
+          className="
+            flex items-center justify-between
+            border border-white/10
+            px-4 py-6
+          "
+        >
+          {/* LEFT */}
+          <div className="flex items-center font-semibold overflow-hidden">
+            {/* Logo */}
+            <div className="h-8 w-8 rounded-full bg-lime-400 shrink-0 mr-2" />
+
+            {/* Text (collapses smoothly) */}
+            <motion.span
+              animate={{
+                opacity: scrolled ? 0 : 1,
+                maxWidth: scrolled ? 0 : 140,
+                marginRight: scrolled ? 0 : 12,
+              }}
+              transition={{
+                duration: 0.3,
+                ease: "easeOut",
+              }}
+              className="text-white whitespace-nowrap overflow-hidden font-bold text-xl"
+            >
+              Scrappex
+            </motion.span>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+
+          {/* CENTER */}
+          <div className="hidden md:flex gap-6 text-white text-sm mr-auto ml-10">
+            <span className="hover:text-white transition">Features</span>
+            <span className="hover:text-white transition">Developer</span>
+            <span className="hover:text-white transition">Resources</span>
+            <span className="hover:text-white transition">Pricing</span>
+          </div>
+
+          {/* RIGHT */}
+          <motion.button
+            animate={{
+              borderRadius: scrolled ? 999 : 10,
+            }}
+            transition={{ duration: 0.35, ease }}
+            className="
+              bg-white/10 text-white
+              px-4 py-2 text-sm
+              hover:bg-white/20 transition
+            "
           >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-3">
-            <Link
-              href="/#features"
-              className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Features
-            </Link>
-            <Link
-              href="/#pricing"
-              className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/docs"
-              className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Documentation
-            </Link>
-            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="outline" className="w-full">Sign In</Button>
-            </Link>
-            <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full">Get Started</Button>
-            </Link>
-          </div>
-        )}
-      </nav>
-    </header>
+            Login
+          </motion.button>
+        </motion.nav>
+      </motion.div>
+    </div>
   );
 }

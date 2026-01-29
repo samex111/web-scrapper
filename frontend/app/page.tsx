@@ -5,12 +5,12 @@ import { Footer } from '@/components/layout/Footer';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       <Header />
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
+        <section className="py-20 px-4 bg-gradient-to-b from-black-50 to-white">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">
               Extract Leads from Any Website
@@ -20,12 +20,10 @@ export default function LandingPage() {
               Get verified contacts, business intelligence, and tech stack analysis.
             </p>
             <div className="flex gap-4 justify-center">
-              <Link href="/signup">
-                <Button size="lg">Start Free Trial</Button>
+              <Link href="/auth">
+                <Button size="lg">Get Started</Button>
               </Link>
-              <Link href="/login">
-                <Button variant="outline" size="lg">Sign In</Button>
-              </Link>
+             
             </div>
           </div>
         </section>
@@ -111,7 +109,7 @@ function PricingCard({ name, price, features, highlighted }: any) {
           </li>
         ))}
       </ul>
-      <Button className="w-full" variant={highlighted ? 'default    ' : 'outline'}>
+      <Button className="w-full" variant={highlighted ? 'default' : 'outline'}>
         Get Started
       </Button>
     </div>
