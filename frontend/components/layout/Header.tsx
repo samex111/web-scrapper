@@ -80,7 +80,7 @@ export default function Navbar() {
 
 
           {/* CENTER */}
-          <div className="hidden md:flex gap-6 text-white text-sm mr-auto ml-10">
+          <div className="hidden md:flex gap-6 text-white text-md mr-auto ml-10">
             <span className="hover:text-white transition">Features</span>
             <span className="hover:text-white transition">Developer</span>
             <span className="hover:text-white transition">Resources</span>
