@@ -1,0 +1,7 @@
+export default function Home() {
+  return (
+    <div className="flex min-h-screen items-center justify-center  font-sans ">
+      <h1 className="text-9xl">Web scrapper</h1>
+    </div>
+  );
+}
