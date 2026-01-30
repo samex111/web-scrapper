@@ -3,7 +3,7 @@ import Hero from "@/components/section/hero";
 export default function Home() {
 
   return (
-    <div >
+    <div className="">
       <Hero/>
     </div>
   );

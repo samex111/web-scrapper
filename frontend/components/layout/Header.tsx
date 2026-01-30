@@ -69,7 +69,7 @@ const lastScrollY = useRef(0);
           transition={{ duration: 0.70, ease }}
           className="
             flex items-center justify-between
-            border border-white/10
+            border border-white/30
             px-4 py-6
           "
         >

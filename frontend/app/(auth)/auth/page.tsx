@@ -1,7 +1,7 @@
 'use client';
 
 
-import { GoogleButton } from '@/components/auth/GoogleButton';
+import { Google } from '@/components/auth/Google';
 
 export default function LoginPage() {
   return (
@@ -12,7 +12,7 @@ export default function LoginPage() {
       </div>
 
       {/* Google Sign-In */}
-      <GoogleButton />
+      <Google />
 
      
     </div>
