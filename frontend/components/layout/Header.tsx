@@ -58,7 +58,7 @@ const lastScrollY = useRef(0);
         {/* Navbar capsule */}
         <motion.nav
           animate={{
-            borderRadius: scrolled ? 999 : 12,
+            borderRadius: scrolled ? 999 : 20,
             backgroundColor: scrolled
               ? "rgba(0,0,0,0.6)"
               : "rgba(0,0,0,0.4)",
@@ -76,7 +76,7 @@ const lastScrollY = useRef(0);
           {/* LEFT */}
           <div className="flex items-center font-semibold overflow-hidden">
             {/* Logo */}
-            <div className="h-8 w-8 rounded-full bg-lime-400 shrink-0 mr-2" />
+            <div className="h-8 w-8 rounded-full bg-red-800 shrink-0 mr-2" />
 
             {/* Text (collapses smoothly) */}
             <motion.span
