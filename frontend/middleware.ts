@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public routes
-  const publicRoutes = ['/', '/login', '/auth', '/api/auth'];
+  const publicRoutes = ['/', '/auth', '/api/auth'];
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
   // Protected routes

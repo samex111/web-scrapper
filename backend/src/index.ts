@@ -5,11 +5,20 @@ import { scrapeRoutes } from './routes/scrape.routes.js';
 import { leadsRoutes } from './routes/leads.routes.js';
 import { exportRoutes } from './routes/export.routes.js';
 import { authRoutes } from './routes/auth.routes.js';
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
+app.use(cookieParser());
 app.use(express.json());
 // Routes
 app.use('/api/scrape', scrapeRoutes);

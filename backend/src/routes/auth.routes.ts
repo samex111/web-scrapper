@@ -4,13 +4,13 @@ import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js';
 import { OAuth2Client } from "google-auth-library";
 import { requireAuth } from '../middleware/auth.middleware.js';
-import {z} from 'zod'
+import { z } from 'zod'
 const googleClient = new OAuth2Client(
   config.GoogleClient.ID
 );
 
 const requireBody = z.object({
-  idToken : z.string()
+  idToken: z.string()
 })
 
 export const authRoutes = Router();
@@ -89,6 +89,14 @@ authRoutes.post("/google", async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24
+    });
+
+
     // 4️⃣ Persist session
     await prisma.session.create({
       data: {
@@ -116,30 +124,30 @@ authRoutes.post("/google", async (req, res) => {
 });
 
 authRoutes.get("/me", requireAuth, async (req, res) => {
-  try{
-  const user = await prisma.user.findUnique({
-    where: { id: req.user.id },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      avatar: true,
-      plan: true,
-      monthlyQuota: true,
-      usedThisMonth: true,
-    },
-  });
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatar: true,
+        plan: true,
+        monthlyQuota: true,
+        usedThisMonth: true,
+      },
+    });
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ user });
+  } catch (e) {
+    res.status(403).json({
+      error: "error in /me " + e
+    })
   }
-
-  res.json({ user });
-}catch(e){
-  res.status(403).json({
-    error: "error in /me " + e
-  })
-}
 });
 
 

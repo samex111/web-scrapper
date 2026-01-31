@@ -14,17 +14,17 @@ export function LeadCard({ lead, onClick }: LeadCardProps) {
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-1">{lead.name || 'Unknown'}</h3>
-            
+            <a 
               href={lead.website}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-blue-600 hover:underline"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e:any) => e.stopPropagation()}
             >
               {lead.website}
             </a>
           </div>
-          <Badge variant={lead.priority === 'High' ? 'success' : lead.priority === 'Medium' ? 'warning' : 'default'}>
+          <Badge variant={lead.priority === 'HIGH' ? 'success' : lead.priority === 'MEDUIM' ? 'warning' : 'default'}>
 {lead.priority}
 </Badge>
 </div>

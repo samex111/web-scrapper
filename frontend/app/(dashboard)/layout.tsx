@@ -16,15 +16,14 @@ export default function DashboardLayout({
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
+    const userData  =JSON.parse(localStorage.getItem('user') as string) ;
 
-    if (!token || !userData) {
-      router.push('/login');
+    if (!userData) {
+      router.push('/auth');
       return;
     }
 
-    setUser(JSON.parse(userData));
+    setUser(userData);
     setLoading(false);
   }, [router]);
 

@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { createJob } from '@/lib/api';
 
 export default function NewJobPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [urls, setUrls] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<any>(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
