@@ -15,10 +15,10 @@ export function middleware(request: NextRequest) {
 
   // Redirect logic
   if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL('/auth', request.url));
   }
 
-  if ((pathname === '/login' || pathname === '/signup') && token) {
+  if ((pathname === '/auth') && token) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 

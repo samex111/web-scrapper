@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { loginWithGoogle } from '@/lib/api';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { GoogleButton } from './GoogleButton';
+
 
 declare global {
   interface Window {
@@ -12,36 +11,54 @@ declare global {
   }
 }
 
-export function Google() {
-  const { login } = useAuth();
-  const router = useRouter();
+export  function Google() {
+  const router = useRouter()
 
-  useEffect(() => {
+  const {login } = useAuth()
+   useEffect(() => {
     if (!window.google) return;
 
     window.google.accounts.id.initialize({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-      callback: handleGoogleResponse,
-    });
+      client_id: "",
+      callback: handleCredentialResponse,
+    }); 
+
+    window.google.accounts.id.renderButton(
+      document.getElementById("google-login"),
+      {
+        theme: "outline",
+        size: "large",
+      }
+    );
   }, []);
 
-  async function handleGoogleResponse(response: any) {
-    try {
-      const idToken = response.credential;
+  async function handleCredentialResponse(response: any) {
+    const idToken = response.credential; // THIS is the token
+     console.log(idToken)
+    // Send token to backend
+    const res = await fetch("http://localhost:3001/api/auth/google", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idToken }),
+    });
 
-      const data = await loginWithGoogle({ idToken });
+    const data = await res.json();
 
-      login(data.token, data.user);
-      router.push('/dashboard');
-    } catch (err) {
-      console.error('Google login failed', err);
+    if (res.ok) {
+      // Save backend JWT
+      // localStorage.setItem("token", data.token);
+      // localStorage.setItem("user", data.user);
+      console.log(data)
+      console.log("Logged in:", data.user);
+      login(data.token , data.user)
+    router.push('/dashboard');
+      
+    } else {
+      console.error("Auth failed", data);
     }
   }
 
-  function handleGoogleLogin() {
-    console.log('Google button clicked');
-    window.google.accounts.id.prompt();
-  }
-
-  return <GoogleButton onClick={handleGoogleLogin} />;
+  return <div id="google-login"></div>;
 }
