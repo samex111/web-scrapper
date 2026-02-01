@@ -38,6 +38,8 @@ export function Google() {
         {
           theme: "outline",
           size: "large",
+           width: 360  
+           
         }
       );
     };
@@ -66,5 +68,8 @@ export function Google() {
     router.push("/dashboard");
   }
 
-  return <div id="google-login"></div>;
+ return <div className="custom-google-wrapper">
+  <div id="google-login"></div>
+</div>
+
 }

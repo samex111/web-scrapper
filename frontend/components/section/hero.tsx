@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 
 export default function Hero() {
@@ -29,8 +30,9 @@ export default function Hero() {
         <p className="max-w-2xl text-center">Automatically collect business data, contacts, and insights from any website. Use the dashboard or integrate via API — built for modern SaaS and developers.</p>
 
         <div className="flex gap-2 mt-8">
-          <Button className="bg-yellow-300 hover:bg-amber-200 text-black" onClick={()=>router.push('/auth')}>Get Started Now</Button>
-
+           <Link href="/auth">
+          <Button className="bg-yellow-300 hover:bg-amber-200 text-black" >Get Started Now</Button>
+           </Link>
         </div>
 
       </div>

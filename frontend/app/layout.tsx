@@ -21,17 +21,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  modal,
+}: {
   children: React.ReactNode;
-}>) {
+  modal: React.ReactNode;
+}) {
   return (
     <html lang="en">
 <head>
        
-<Script
+{/* <Script
   src="https://accounts.google.com/gsi/client"
   strategy="afterInteractive"
-/>
+/> */}
 
       </head>
 
@@ -40,6 +42,7 @@ export default function RootLayout({
       >
      <AuthProvider>
    {children}
+    {modal}
         </AuthProvider>
       </body>
     </html>

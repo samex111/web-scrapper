@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useState } from 'react';
 import { motion, cubicBezier } from "framer-motion";
 import { ChevronDown } from 'lucide-react';
+import { useRouter } from "next/navigation";
 
 
 
@@ -18,6 +19,7 @@ export function Header() {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 const lastScrollY = useRef(0);
+const router  = useRouter()
 
   useEffect(() => {
   const handleScroll = () => {
@@ -115,6 +117,7 @@ const lastScrollY = useRef(0);
               px-4 py-2 text-sm
               hover:bg-white/20 transition
             "
+            onClick={()=>router.push('/auth')}
           >
             Login
           </motion.button>
