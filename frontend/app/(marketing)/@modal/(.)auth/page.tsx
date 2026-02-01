@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AuthModal() {
-  const [mouseClick, setMouseClick] = useState(false)
   const router = useRouter();
 
   return (
@@ -27,7 +26,7 @@ export default function AuthModal() {
         <Button
           onClick={() => {router.back() } }
           className={`absolute right-4 bg-transparent hover:bg-transparent top-4 text-white/70 dela hover:text-white transition 
-                      ${mouseClick && "border"}`}
+                      `}
         >
           ✕
         </Button>
@@ -36,7 +35,7 @@ export default function AuthModal() {
         <div className="flex flex-col gap-3 px-6 py-7 md:px-8 md:py-8">
           {/* Header */}
           <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-bold text-white">
               Sign in
             </h2>
             <p className="text-sm text-white/50 leading-relaxed">
@@ -46,7 +45,7 @@ export default function AuthModal() {
 
           {/* Google Button */}
           <div className="flex justify-center pt-2">
-            <div className=" origin-center">
+            <div  className=" origin-center">
               <Google />
             </div>
           </div>
