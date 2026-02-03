@@ -13,25 +13,25 @@ export default function DashboardPage() {
   const [recentJobs, setRecentJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
 
-  const loadData = async () => {
-    try {
-      const [statsData, jobsData] = await Promise.all([
-        getStats(),
-        getJobs({ limit: 5 }),
-      ]);
+  // const loadData = async () => {
+  //   try {
+  //     const [statsData, jobsData] = await Promise.all([
+  //       getStats(),
+  //       getJobs({ limit: 5 }),
+  //     ]);
 
-      setStats(statsData);
-      setRecentJobs(jobsData.jobs);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setStats(statsData);
+  //     setRecentJobs(jobsData.jobs);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   if (loading) {
     return <div>Loading...</div>;

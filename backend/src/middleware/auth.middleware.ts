@@ -22,7 +22,8 @@ export async function requireAuth(
   next: NextFunction
 ) {
   try {
-     const token = req.cookies.token; 
+    // only for dev else only cookies
+    const token =req.cookies.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -33,7 +34,7 @@ export async function requireAuth(
     const session = await prisma.session.findUnique({
       where: { sessionToken: token },
     });
-
+ 
     if (!session || session.expiresAt < new Date()) {
       return res.status(401).json({ error: "Session expired" });
     }
@@ -95,7 +96,7 @@ export async function requireAuthOrApiKey(
   res: Response,
   next: NextFunction
 ) {
-  const authHeader = req.cookies.token; ;
+  const authHeader = req.cookies.token || req.headers.authorization?.split(' ')[1]; ;
 
   if (authHeader) {
     return requireAuth(req, res, next);

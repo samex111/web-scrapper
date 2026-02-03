@@ -1,5 +1,4 @@
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL =  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 type FetchOptions = RequestInit;
 
@@ -92,3 +91,24 @@ export async function exportCSV(jobId?: string) {
   a.remove();
   window.URL.revokeObjectURL(url);
 }
+
+  export async function handleCredential(response: any) {
+    const idToken = response.credential;
+
+    const res = await fetch(`${API_URL}/api/auth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", 
+      body: JSON.stringify({ idToken }),
+    });
+    const data = await res.json()
+    console.log(data.user)
+  localStorage.setItem('user', JSON.stringify(data.user));
+
+    if (!res.ok) {
+      console.error("Google auth failed" +res);
+      return;
+    }
+    // router.push("/dashboard");
+
+  }
