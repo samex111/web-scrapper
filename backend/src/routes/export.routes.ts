@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { prisma } from '../db/client.js';
+import { requireApiKey, requireAuthOrApiKey } from '../middleware/auth.middleware.js';
 
 export const exportRoutes = Router();
 
 // Export leads as CSV
-exportRoutes.get('/csv', async (req, res) => {
+exportRoutes.get('/csv',requireAuthOrApiKey, async (req, res) => {
   try {
     const { apiKey, jobId } = req.query;
 
@@ -62,7 +63,7 @@ exportRoutes.get('/csv', async (req, res) => {
 });
 
 // Export as JSON
-exportRoutes.get('/json', async (req, res) => {
+exportRoutes.get('/json',requireAuthOrApiKey, async (req, res) => {
   try {
     const { apiKey, jobId } = req.query;
 
