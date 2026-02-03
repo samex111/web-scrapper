@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { prisma } from '../db/client.js';
+import { requireAuthOrApiKey } from '../middleware/auth.middleware.js';
 
 export const leadsRoutes = Router();
 
 // Get all leads for a user
-leadsRoutes.get('/', async (req, res) => {
+leadsRoutes.get('/',requireAuthOrApiKey, async (req, res) => {
   try {
     const { apiKey, businessType, minScore, limit = '50' } = req.query;
 
@@ -47,9 +48,9 @@ leadsRoutes.get('/', async (req, res) => {
 });
 
 // Get single lead
-leadsRoutes.get('/:id', async (req, res) => {
+leadsRoutes.get('/:id', requireAuthOrApiKey,async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as unknown as any;
 
     const lead = await prisma.lead.findUnique({
       where: { id },
