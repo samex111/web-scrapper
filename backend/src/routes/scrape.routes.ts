@@ -12,7 +12,7 @@ const scrapeSchema = z.object({
 });
 
 // Start new scrape job
-scrapeRoutes.post('/', requireAuthOrApiKey, checkQuota, async (req, res) => {
+scrapeRoutes.post('/', requireAuthOrApiKey  , checkQuota, async (req, res) => {
   try {
     const { urls } = scrapeSchema.parse(req.body);
     const user = req.user;

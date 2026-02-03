@@ -5,7 +5,7 @@ import { requireApiKey, requireAuthOrApiKey } from '../middleware/auth.middlewar
 export const exportRoutes = Router();
 
 // Export leads as CSV
-exportRoutes.get('/csv',requireAuthOrApiKey, async (req, res) => {
+exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
   try {
     const { apiKey, jobId } = req.query;
 

@@ -48,7 +48,7 @@ leadsRoutes.get('/',requireAuthOrApiKey, async (req, res) => {
 });
 
 // Get single lead
-leadsRoutes.get('/:id', requireAuthOrApiKey,async (req, res) => {
+leadsRoutes.get('/:id', requireAuthOrApiKey ,async (req, res) => {
   try {
     const { id } = req.params as unknown as any;
 
