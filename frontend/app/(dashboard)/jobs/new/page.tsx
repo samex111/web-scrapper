@@ -10,7 +10,7 @@ export default function NewJobPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [urls, setUrls] = useState('');
-  const [loading, setLoading] = useState<any>(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,7 +83,7 @@ export default function NewJobPage() {
             </p>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex w-max gap-4">
             <Button
               type="submit"
               loading={loading}
