@@ -4,7 +4,6 @@ import { getLeads } from "@/lib/api";
 
 
 export default function LeadPage() {
-   const leads: any = getLeads()
 
   return(
       <section className="">

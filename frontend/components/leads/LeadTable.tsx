@@ -66,7 +66,8 @@ export function LeadTable() {
             <TableHead className="text-white">Business</TableHead>
             <TableHead className="text-white">Email</TableHead>
             <TableHead className="text-white">Score</TableHead>
-            <TableHead className="text-white">Priority</TableHead>
+            {/* <TableHead className="text-white">Priority</TableHead> */}
+            <TableHead className="text-white">Socials</TableHead>
             <TableHead>Date</TableHead>
           </TableRow>
         </TableHeader>
@@ -98,9 +99,14 @@ export function LeadTable() {
                 {lead.leadScore}
               </TableCell>
 
-              <TableCell>
+              {/* <TableCell>
                 <Badge variant={getPriorityColor(lead.priority)}>
                   {lead.priority}
+                </Badge>
+              </TableCell> */}
+              <TableCell>
+                <Badge className="font-semibold text-[#E7E9EE]">
+                  {lead?.socials?.github} <br />{lead?.socials?.linkedin} <br />{lead?.socials?.twitter} <br />{lead?.socials?.facebook} 
                 </Badge>
               </TableCell>
 
