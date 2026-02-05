@@ -7,7 +7,7 @@ import { UsageCard } from '@/components/dashboard/UsageCard';
 import { JobCard } from '@/components/jobs/JobCard';
 import { getJobs, getStats } from '@/lib/api';
 import { useEffect, useState } from 'react';
-import { DashboardSkeleton } from "@/skeleton/DashboardSkeleton";
+import { DashboardSkeleton } from "@/dashboardskeleton/DashboardSkeleton";
 import {
   Users,
   Flame,

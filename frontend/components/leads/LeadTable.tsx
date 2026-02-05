@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getLeads } from "@/lib/api";
+import { DashboardSkeleton } from "@/dashboardskeleton/DashboardSkeleton";
+import LeadsSkeleton from "@/LeadsSkeleton/LeadsSkeleton";
 
 export function LeadTable() {
   const router = useRouter();
@@ -49,7 +51,7 @@ export function LeadTable() {
   if (loading) {
     return (
       <div className="rounded-xl border border-none p-6 text-[#8B8F97]">
-        Loading leads…
+        <LeadsSkeleton/>
       </div>
     );
   }

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { TopNav } from '@/components/dashboard/TopNav';
-import { DashboardSkeleton } from '@/skeleton/DashboardSkeleton';
+import { DashboardSkeleton } from '@/dashboardskeleton/DashboardSkeleton';
 
 export default function DashboardLayout({
   children,
