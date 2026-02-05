@@ -27,7 +27,6 @@ export function UsageCard() {
   if (loading) return null;
 
   const percentage = (user.usedThisMonth / user.monthlyQuota) * 100;
-  const isNearLimit = percentage >= 80;
 
   return (
     <motion.div

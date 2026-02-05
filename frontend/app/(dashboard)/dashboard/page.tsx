@@ -6,6 +6,8 @@ import { StatsCard } from '@/components/dashboard/StatsCard';
 import { UsageCard } from '@/components/dashboard/UsageCard';
 import { JobCard } from '@/components/jobs/JobCard';
 import { getJobs, getStats } from '@/lib/api';
+import { useEffect, useState } from 'react';
+import { DashboardSkeleton } from "@/skeleton/DashboardSkeleton";
 import {
   Users,
   Flame,
@@ -15,6 +17,26 @@ import {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+
+    if (!userData) {
+      router.push("/auth");
+      return;
+    }
+
+    setUser(JSON.parse(userData));
+    setLoading(false);
+  }, [router]);
+
+  // ✅ Correct skeleton for layout
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
+
 
   return (
     <motion.div

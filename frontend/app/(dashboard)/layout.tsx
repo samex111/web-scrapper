@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { TopNav } from '@/components/dashboard/TopNav';
+import { DashboardSkeleton } from '@/skeleton/DashboardSkeleton';
 
 export default function DashboardLayout({
   children,
@@ -28,11 +29,7 @@ export default function DashboardLayout({
   }, [router]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -42,7 +39,7 @@ export default function DashboardLayout({
       <div className="lg:pl-64">
         <TopNav user={user} />
         
-        <main className="p-6">
+        <main  className="p-6">
           {children}
         </main>
       </div>

@@ -6,9 +6,9 @@ interface LeadCardProps {
   onClick?: () => void;
 }
 
-export function LeadCard({ lead, onClick }: LeadCardProps) {
+export default function LeadCard({ lead, onClick }: LeadCardProps) {
   return (
-    <Card className="cursor-pointer hover:shadow-lg transition" padding={false} onClick={onClick}>
+    <Card className="cursor-pointer hover:shadow-lg transition"  onClick={onClick}>
       <div className="p-6">
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
@@ -24,7 +24,7 @@ export function LeadCard({ lead, onClick }: LeadCardProps) {
               {lead.website}
             </a>
           </div>
-          <Badge variant={lead.priority === 'HIGH' ? 'success' : lead.priority === 'MEDUIM' ? 'warning' : 'default'}>
+          <Badge variant={lead.priority === 'HIGH' ? 'destructive' : lead.priority === 'MEDIUM' ? 'secondary' : 'default'}>
 {lead.priority}
 </Badge>
 </div>
