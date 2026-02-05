@@ -61,7 +61,7 @@ export function LeadTable() {
   }
 
   return (
-    <div className="rounded-xl flex-1 h-full overflow-x-auto">
+    <div className="rounded-xl flex-1 h-fit overflow-x-auto">
   <Table className="table-fixed w-full">
 
     {/* ---------- HEADER ---------- */}
