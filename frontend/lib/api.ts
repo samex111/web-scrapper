@@ -62,9 +62,8 @@ export async function getStats() {
   return res.json();
 }
 
-export async function getLeads(params?: any) {
-  const query = new URLSearchParams(params).toString();
-  const res = await apiFetch(`/api/leads?${query}`);
+export async function getLeads() {
+  const res = await apiFetch(`/api/leads/allLeads`);
   return res.json();
 }
 export async function exportCSV(jobId?: string) {

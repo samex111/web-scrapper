@@ -1,14 +1,14 @@
-'use client'
-import LeadCard from "@/components/leads/LeadCard";
-import { useState } from "react";
+
+import { LeadTable } from "@/components/leads/LeadTable";
+import { getLeads } from "@/lib/api";
+
 
 export default function LeadPage() {
-   const userData  =JSON.parse(localStorage.getItem('user') as string) ;
-
+   const leads: any = getLeads()
 
   return(
       <section>
-
+        <LeadTable></LeadTable>
       </section>
   )                         
 }
