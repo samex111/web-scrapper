@@ -55,8 +55,8 @@ export function LeadTable() {
   }
 
   return (
-    <div className="rounded-xl  border-none  ">
-      <Table>
+    <div className="rounded-xl  border-none flex-1 h-full ">
+      <Table className="rounded-xl border-none">
         <TableHeader className="text-white">
           <TableRow className="border-none">
             <TableHead  className="text-white">Website</TableHead>
@@ -65,7 +65,7 @@ export function LeadTable() {
             <TableHead className="text-white">Email</TableHead>
             <TableHead className="text-white">Score</TableHead>
             <TableHead className="text-white">Priority</TableHead>
-            <TableHead className="text-white">Date</TableHead>
+            <TableHead>Date</TableHead>
           </TableRow>
         </TableHeader>
 

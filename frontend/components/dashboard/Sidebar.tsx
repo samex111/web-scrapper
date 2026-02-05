@@ -69,7 +69,7 @@ export function Sidebar({ user }: { user: any }) {
   return (
     <aside className="hidden lg:flex fixed inset-y-0 left-0 w-[280px] flex-col">
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 text-2xl font-semibold text-[#8B8F97]">
+      <div className="flex h-16 items-center justify-center p-4 text-2xl bg-amber-300 rounded-md w-fit font-semibold ">
         Scrappex
       </div>
 
@@ -86,6 +86,7 @@ export function Sidebar({ user }: { user: any }) {
             if (item.children) {
               const isChildActive = item.children.some(
                 (c: any) =>
+
                   pathname === c.href ||
                   pathname.startsWith(c.href + "/")
               );
@@ -144,7 +145,6 @@ export function Sidebar({ user }: { user: any }) {
               );
             }
 
-            /* ----------------------------- Normal Link ----------------------------- */
             return (
               <Link
                 key={item.label}
@@ -171,7 +171,6 @@ export function Sidebar({ user }: { user: any }) {
 
       <Separator className="bg-white/10" />
 
-      {/* User */}
       <div className="flex items-center gap-3 p-4">
         <Avatar>
           <AvatarImage src={user?.avatar} />

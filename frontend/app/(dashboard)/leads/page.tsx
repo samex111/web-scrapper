@@ -7,7 +7,7 @@ export default function LeadPage() {
    const leads: any = getLeads()
 
   return(
-      <section>
+      <section className="">
         <LeadTable></LeadTable>
       </section>
   )                         
