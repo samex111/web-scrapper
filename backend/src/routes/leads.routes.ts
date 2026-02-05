@@ -5,37 +5,17 @@ import { requireAuthOrApiKey } from '../middleware/auth.middleware.js';
 export const leadsRoutes = Router();
 
 // Get all leads for a user
-leadsRoutes.get('/',requireAuthOrApiKey, async (req, res) => {
+leadsRoutes.get('/allLeads',requireAuthOrApiKey, async (req, res) => {
   try {
-    const { apiKey, businessType, minScore, limit = '50' } = req.query;
-
-    if (!apiKey) {
-      return res.status(401).json({ error: 'API key required' });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { apiKey: apiKey as string },
-    });
-
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid API key' });
-    }
+    
+    const user = req.user;
 
     const where: any = { userId: user.id };
-    
-    if (businessType) {
-      where.businessType = businessType;
-    }
-    
-    if (minScore) {
-      where.leadScore = { gte: parseInt(minScore as string) };
-    }
+
 
     const leads = await prisma.lead.findMany({
-      where,
-      orderBy: { leadScore: 'desc' },
-      take: parseInt(limit as string),
-    });
+      where
+        });
 
     res.json({
       total: leads.length,
@@ -48,7 +28,7 @@ leadsRoutes.get('/',requireAuthOrApiKey, async (req, res) => {
 });
 
 // Get single lead
-leadsRoutes.get('/:id', requireAuthOrApiKey ,async (req, res) => {
+leadsRoutes.get('/lead/:id', requireAuthOrApiKey ,async (req, res) => {
   try {
     const { id } = req.params as unknown as any;
 
