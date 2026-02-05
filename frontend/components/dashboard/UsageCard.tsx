@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { getUser } from '@/lib/api';
+import { getUser } from "@/lib/api";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export function UsageCard() {
-  const [user, setUser] = useState<any>(null);
+  
+    const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,44 +30,36 @@ export function UsageCard() {
   const isNearLimit = percentage >= 80;
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex justify-between items-start mb-4">
+    <motion.div
+      whileHover={{ y: -2 }}
+      className="rounded-xl bg-white/5 border border-white/10 p-6"
+    >
+      <div className="flex justify-between mb-4">
         <div>
-          <h2 className="text-lg font-semibold">Usage This Month</h2>
-          <p className="text-sm text-gray-600">
-            Resets on {new Date(user.resetDate).toLocaleDateString()}
+          <h3 className="text-sm text-[#8B8F97]">
+            Usage This Month
+          </h3>
+          <p className="text-xs text-[#6F7480]">
+            Resets monthly
           </p>
         </div>
+
         <div className="text-right">
-          <div className="text-2xl font-bold">
+          <p className="text-xl font-semibold text-[#E7E9EE]">
             {user.usedThisMonth} / {user.monthlyQuota}
-          </div>
-          <div className="text-sm text-gray-600">credits</div>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="relative">
-        <div className="overflow-hidden h-4 text-xs flex rounded-full bg-gray-200">
-          <div
-            style={{ width: `${Math.min(percentage, 100)}%` }}
-            className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center transition-all duration-300 ${
-              isNearLimit ? 'bg-red-500' : 'bg-blue-600'
-            }`}
-          />
-        </div>
-      </div>
-
-      {isNearLimit && (
-        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
-            ⚠️ You're running low on credits. 
-            <a href="/settings/billing" className="font-medium underline ml-1">
-              Upgrade your plan
-            </a>
           </p>
+          <p className="text-xs text-[#6F7480]">credits</p>
         </div>
-      )}
-    </div>
+      </div>
+
+      <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          transition={{ duration: 0.6 }}
+          className="h-full bg-emerald-400/80"
+        />
+      </div>
+    </motion.div>
   );
 }

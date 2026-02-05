@@ -1,24 +1,27 @@
-interface StatsCardProps {
+import { motion } from "framer-motion";
+import { LucideIcon } from "lucide-react";
+
+interface Props {
   label: string;
   value: string | number;
-  icon: string;
-  trend?: string;
-  className?: string;
+  icon: LucideIcon;
 }
 
-export function StatsCard({ label, value, icon, trend, className = '' }: StatsCardProps) {
+export function StatsCard({ label, value, icon: Icon }: Props) {
   return (
-    <div className={`bg-white rounded-lg shadow p-6 ${className}`}>
-      <div className="flex items-center justify-between">
+    <motion.div
+      whileHover={{ y: -2 }}
+      className="rounded-xl bg-white/5 border border-white/10 p-6"
+    >
+      <div className="flex justify-between items-center">
         <div>
-          <p className="text-sm text-gray-600 mb-1">{label}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-          {trend && (
-            <p className="text-sm text-green-600 mt-1">{trend}</p>
-          )}
+          <p className="text-sm text-[#8B8F97]">{label}</p>
+          <p className="text-2xl font-semibold text-[#E7E9EE]">
+            {value}
+          </p>
         </div>
-        <div className="text-4xl">{icon}</div>
+        <Icon className="h-6 w-6 text-[#6F7480]" />
       </div>
-    </div>
+    </motion.div>
   );
 }

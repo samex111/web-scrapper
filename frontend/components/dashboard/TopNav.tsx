@@ -13,7 +13,7 @@ export function TopNav({ user }: { user: any }) {
   };
 
   return (
-    <div className="sticky top-0 z-10 shrink-0 flex h-16  ">
+    <div className="sticky left-0 top-0 z-10 shrink-0 flex h-16  ">
       <div className="flex-1 px-4 flex justify-between items-center">
         {/* Mobile menu button */}
         <button className="lg:hidden p-2">
