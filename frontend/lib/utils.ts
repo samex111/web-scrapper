@@ -36,3 +36,5 @@ export function getDomain(url: string) {
     return url;
   }
 }
+
+

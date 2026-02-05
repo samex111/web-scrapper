@@ -2,15 +2,51 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import React from 'react';
+import {
+  House,
+  Briefcase,
+  Users,
+  Key,
+  Settings,
+  BookOpen
+} from "lucide-react";
+
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: '📊' },
-  { name: 'Jobs', href: '/jobs', icon: '⚙️' },
-  { name: 'Leads', href: '/leads', icon: '👥' },
-  { name: 'API Keys', href: '/api-keys', icon: '🔑' },
-  { name: 'Settings', href: '/settings', icon: '⚙️' },
-  { name: 'Docs', href: '/docs', icon: '📚' },
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+    icon: <House className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
+,
+  },
+  {
+    name: "Jobs",
+    href: "/jobs",
+    icon: <Briefcase className="h-5 w-5 text-muted-foreground group-hover:text-primary" />,
+  },
+  {
+    name: "Leads",
+    href: "/leads",
+    icon: <Users className="h-5 w-5 text-muted-foreground group-hover:text-primary" />,
+  },
+  {
+    name: "API Keys",
+    href: "/api-keys",
+    icon: <Key className="h-5 w-5 text-muted-foreground group-hover:text-primary" />,
+  },
+  {
+    name: "Settings",
+    href: "/settings",
+    icon: <Settings className="h-5 w-5 text-muted-foreground group-hover:text-primary" />,
+  },
+  {
+    name: "Docs",
+    href: "/docs",
+    icon: <BookOpen className="h-5 w-5 text-muted-foreground group-hover:text-primary" />,
+  },
 ];
+
 
 export function Sidebar({ user }: { user: any }) {
   const pathname = usePathname();
@@ -21,7 +57,7 @@ export function Sidebar({ user }: { user: any }) {
         {/* Logo */}
         <div className="flex items-center flex-shrink-0 px-4">
           <h1 className="text-xl font-bold text-blue-600">
-            Lead Intelligence
+            ScrapeX
           </h1>
         </div>
 
@@ -29,6 +65,7 @@ export function Sidebar({ user }: { user: any }) {
         <nav className="mt-8 flex-1 px-2 space-y-1">
           {navigation.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+            const color = isActive ? 'black' : 'white';
             
             return (
               <Link
@@ -36,8 +73,8 @@ export function Sidebar({ user }: { user: any }) {
                 href={item.href}
                 className={`
                   group flex items-center px-3 py-2 text-sm font-medium rounded-md
-                  ${isActive
-                    ? 'bg-blue-50 text-blue-600'
+                  ${isActive && "text-primary"
+                    ? 'bg-black text-white'
                     : 'text-gray-700 hover:bg-gray-50'
                   }
                 `}
