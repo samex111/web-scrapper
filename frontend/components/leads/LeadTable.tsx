@@ -136,17 +136,18 @@ export function LeadTable() {
         </TableRow>
       ))}
 
-      {
-        showCard && (
-          <section key={selected?.id} className="absolute right-2 bottom-2  z-100 ">
-            <LeadCard lead={selected} />
-          </section>
-        )
-      }
+    
 
     </TableBody>
 
   </Table>
+    {
+        showCard && (
+          <div key={selected?.id} className="absolute right-2 bottom-2  z-100 ">
+            <LeadCard lead={selected} />
+          </div>
+        )
+      }
 </div>
 
   );
