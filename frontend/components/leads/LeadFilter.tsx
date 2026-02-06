@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { LeadCard } from "./LeadCard";
+import  LeadCard  from "./LeadCard";
 
 interface Lead {
   id: string;
@@ -105,7 +105,7 @@ export function LeadTable({ leads }: { leads: Lead[] }) {
       {/* ================= HEADER ================= */}
       <Table>
         <TableHeader>
-          <TableRow className="bg-[#0B0D12]">
+          <TableRow className="]">
             {[
               ["#", "index"],
               ["Website", "website"],
