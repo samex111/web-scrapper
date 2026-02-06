@@ -26,7 +26,7 @@ export default function LeadCard({ lead }: any) {
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <Avatar className="h-16 w-16">
-          <AvatarImage src={lead.logo} />
+          <AvatarImage src={lead.logo || null} />
           <AvatarFallback className="bg-muted text-lg">{initials}</AvatarFallback>
         </Avatar>
         <div className="flex gap-2">

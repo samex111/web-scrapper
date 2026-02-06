@@ -1,5 +1,5 @@
 "use client";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableHeader,
@@ -61,93 +61,85 @@ export function LeadTable() {
   }
 
   return (
-    <div className="rounded-xl flex-1 h-fit overflow-x-auto">
-  <Table className="table-fixed w-full">
+    <div className="relative flex-1 rounded-xl overflow-hidden bg-white/5 border border-white/10">
 
-    {/* ---------- HEADER ---------- */}
+  {/* ================= HEADER (NON-SCROLL) ================= */}
+  <Table>
     <TableHeader>
-      <TableRow className="border-none bg-yellow-300">
+      <TableRow className="border-none bg-[#0B0D12]">
         <TableHead className="w-[60px]">Index</TableHead>
         <TableHead className="w-[160px]">Website</TableHead>
         <TableHead className="w-[180px]">Name</TableHead>
         <TableHead className="w-[160px]">Business</TableHead>
         <TableHead className="w-[220px]">Email</TableHead>
-        <TableHead className="w-[80px]">Score</TableHead>
+        <TableHead className="w-[80px knowing">Score</TableHead>
         <TableHead className="w-[260px]">Socials</TableHead>
         <TableHead className="w-[120px]">Date</TableHead>
       </TableRow>
     </TableHeader>
-
-    {/* ---------- BODY ---------- */}
-    <TableBody>
-      {leads.map((lead , i) => (
-        <TableRow
-          key={lead.id}
-          // onClick={() => router.push(`/leads/${lead.id}`)}
-          onClick={()=>{setSelected(lead); setShowCard(true)}}
-          className="cursor-pointer border-none hover:bg-white/5 transition-colors"
-        >
-         
-          {/* Website */}
-          <TableCell className="break-words whitespace-normal  text-[#E7E9EE]">
-              {i}
-          </TableCell>
-          <TableCell className="break-words whitespace-normal  text-[#E7E9EE]">
-              {  lead.website
-              ? new URL(lead.website).hostname
-              : "-"}
-          </TableCell>
-
-          {/* Name */}
-          <TableCell className="break-words whitespace-normal text-[#E7E9EE]">
-            {lead.name || "-"}
-          </TableCell>
-
-          {/* Business */}
-          <TableCell className="break-words whitespace-normal text-[#8B8F97]">
-            {lead.businessType || "-"}
-          </TableCell>
-
-          {/* Email */}
-          <TableCell className="break-words whitespace-normal text-[#8B8F97]">
-            {lead.email || "-"}
-          </TableCell>
-
-          {/* Score */}
-          <TableCell className="font-semibold text-[#E7E9EE]">
-            {lead.leadScore}
-          </TableCell>
-
-          {/* Socials (THIS IS IMPORTANT) */}
-          <TableCell className="whitespace-normal break-words">
-            <div className="flex flex-col gap-1 text-sm text-[#E7E9EE]">
-              <span className="truncate">{lead?.socials?.github}</span>
-              <span className="truncate">{lead?.socials?.linkedin}</span>
-              <span className="truncate">{lead?.socials?.twitter}</span>
-              <span className="truncate">{lead?.socials?.facebook}</span>
-            </div>
-          </TableCell>
-
-          {/* Date */}
-          <TableCell className="text-[#6F7480]">
-            {new Date(lead.createdAt).toLocaleDateString()}
-          </TableCell>
-
-        </TableRow>
-      ))}
-
-    
-
-    </TableBody>
-
   </Table>
-    {
-        showCard && (
-          <div key={selected?.id} className="absolute right-2 bottom-2  z-100 ">
-            <LeadCard lead={selected} />
-          </div>
-        )
-      }
+
+  {/* ================= BODY (SCROLLABLE) ================= */}
+  <ScrollArea className="h-[80vh]">
+    <Table>
+      <TableBody>
+        {leads.map((lead, i) => (
+          <TableRow
+            key={lead.id}
+            onClick={() => {
+              setSelected(lead);
+              setShowCard(true);
+            }}
+            className="cursor-pointer border-none hover:bg-white/5 transition-colors"
+          >
+            <TableCell className="w-[60px] text-[#E7E9EE]">
+              {i + 1}
+            </TableCell>
+
+            <TableCell className="w-[160px] text-[#E7E9EE]">
+              {lead.website ? new URL(lead.website).hostname : "-"}
+            </TableCell>
+
+            <TableCell className="w-[180px] text-[#E7E9EE]">
+              {lead.name || "-"}
+            </TableCell>
+
+            <TableCell className="w-[160px] text-[#8B8F97]">
+              {lead.businessType || "-"}
+            </TableCell>
+
+            <TableCell className="w-[220px] text-[#8B8F97] truncate">
+              {lead.email || "-"}
+            </TableCell>
+
+            <TableCell className="w-[80px] font-semibold text-[#E7E9EE]">
+              {lead.leadScore}
+            </TableCell>
+
+            <TableCell className="w-[260px]">
+              <div className="flex flex-col gap-1 text-sm text-[#E7E9EE]">
+                <span className="truncate">{lead.socials?.github}</span>
+                <span className="truncate">{lead.socials?.linkedin}</span>
+                <span className="truncate">{lead.socials?.twitter}</span>
+                <span className="truncate">{lead.socials?.facebook}</span>
+              </div>
+            </TableCell>
+
+            <TableCell className="w-[120px] text-[#6F7480]">
+              {new Date(lead.createdAt).toLocaleDateString()}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </ScrollArea>
+
+  {/* ================= OVERLAY CARD ================= */}
+  {showCard && selected && (
+    <div className="absolute right-4 bottom-4 z-50">
+      <LeadCard lead={selected} />
+    </div>
+  )}
 </div>
 
   );
