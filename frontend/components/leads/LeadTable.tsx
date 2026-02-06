@@ -8,9 +8,10 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
+import { X } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { getLeads } from "@/lib/api";
 import { DashboardSkeleton } from "@/dashboardskeleton/DashboardSkeleton";
 import LeadsSkeleton from "@/LeadsSkeleton/LeadsSkeleton";
@@ -38,19 +39,8 @@ export function LeadTable() {
 
     loadLeads();
   }, []);
+  const handleClick = () => setSelected(null);
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "HIGH":
-        return "destructive";
-      case "MEDIUM":
-        return "warning";
-      case "LOW":
-        return "secondary";
-      default:
-        return "secondary";
-    }
-  };
 
   if (loading) {
     return (
@@ -61,18 +51,19 @@ export function LeadTable() {
   }
 
   return (
-    <div className="relative flex-1 rounded-xl overflow-hidden bg-white/5 border border-white/10">
+    <div className="relative flex-1  overflow-x-auto ">
 
   {/* ================= HEADER (NON-SCROLL) ================= */}
   <Table>
     <TableHeader>
-      <TableRow className="border-none bg-[#0B0D12]">
-        <TableHead className="w-[60px]">Index</TableHead>
+      <TableRow className="border-none ">
+        <TableHead className="w-[60px] text-white/80">Index</TableHead>
+        <TableHead className="w-[60px] ">Index</TableHead>
         <TableHead className="w-[160px]">Website</TableHead>
         <TableHead className="w-[180px]">Name</TableHead>
         <TableHead className="w-[160px]">Business</TableHead>
         <TableHead className="w-[220px]">Email</TableHead>
-        <TableHead className="w-[80px knowing">Score</TableHead>
+        <TableHead className="w-[80px] text-white/80">Score</TableHead>
         <TableHead className="w-[260px]">Socials</TableHead>
         <TableHead className="w-[120px]">Date</TableHead>
       </TableRow>
@@ -88,7 +79,7 @@ export function LeadTable() {
             key={lead.id}
             onClick={() => {
               setSelected(lead);
-              setShowCard(true);
+              setShowCard(!showCard);
             }}
             className="cursor-pointer border-none hover:bg-white/5 transition-colors"
           >
@@ -135,9 +126,10 @@ export function LeadTable() {
   </ScrollArea>
 
   {/* ================= OVERLAY CARD ================= */}
-  {showCard && selected && (
-    <div className="absolute right-4 bottom-4 z-50">
-      <LeadCard lead={selected} />
+  { showCard && selected && (
+    <div  className="absolute right-4 bottom-4 z-50">
+      <X className="absolute right-2 top-2 h-4 w-4 cursor-pointer text-muted-foreground hover:text-foreground" onClick={handleClick}  />
+      <LeadCard  lead={selected} />
     </div>
   )}
 </div>

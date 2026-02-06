@@ -22,6 +22,7 @@ export default function LeadCard({ lead }: any) {
     .toUpperCase()
 
   return (
+    <>
     <div className="rounded-xl max-w-sm border border-border bg-card p-6">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
@@ -99,6 +100,7 @@ export default function LeadCard({ lead }: any) {
           <Send className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    </div>
+    </div> 
+    </>
   )
 }
