@@ -32,7 +32,7 @@ export default function DashboardPage() {
     setLoading(false);
   }, [router]);
 
-  // ✅ Correct skeleton for layout
+ 
   if (loading) {
     return <DashboardSkeleton />;
   }

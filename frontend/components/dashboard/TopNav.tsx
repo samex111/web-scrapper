@@ -2,14 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-
+import { logout } from '@/app/actions/logout';
 export function TopNav({ user }: { user: any }) {
   const router = useRouter();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    router.push('/login');
+  const handleLogout = async () => {
+    await logout();
+    router.push('/auth');
   };
 
   return (
@@ -42,9 +41,9 @@ export function TopNav({ user }: { user: any }) {
 
           {/* User Menu */}
           <div className="relative">
-            <Button variant={'ghost'}
+            <Button variant={"secondary"}
                onClick={handleLogout}
-              className="flex items-center text-sm text-gray-700 hover:text-gray-900"
+              className="flex items-center text-sm text-black bg-emerald-400/80 hover:text-gray-900 hover:bg-emerald-400"
             >
               <span className="mr-2">Logout</span>
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -4,6 +4,7 @@ import { Building2, Mail, MapPin, Send, ChevronDown } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 
 export default function LeadCard({ lead }: any) {
@@ -17,91 +18,151 @@ export default function LeadCard({ lead }: any) {
 
   const initials = lead?.name
     .split(" ")
-    .map((n:any) => n[0])
+    .map((n: any) => n[0])
     .join("")
     .toUpperCase()
 
   return (
     <>
-    <div className="rounded-xl max-w-sm max-h-110 border border-border bg-card p-6">
+       <div className="w-full rounded-xl border border-border bg-card p-4 sm:p-5 flex flex-col">
       {/* Header */}
-      <div className="mb-4 flex items-start justify-between">
-        <Avatar className="h-16 w-16">
-          <AvatarImage src={lead?.logo || null} />
-          <AvatarFallback className="bg-muted text-lg">{initials}</AvatarFallback>
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <Avatar className="h-12 w-12 sm:h-14 sm:w-14">
+          <AvatarImage src={lead?.logo || undefined} />
+          <AvatarFallback className="bg-muted text-sm">
+            {initials}
+          </AvatarFallback>
         </Avatar>
-        <div className="flex gap-2">
-          <Button  variant="ghost" size="icon" className="h-8 w-8">
-           <a target="_blank" rel="noopener noreferrer" href={lead?.socials?.twitter} > <svg  className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          </a></Button> 
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-           <a target="_blank" rel="noopener noreferrer" href={lead?.socials?.linkedin}> <svg  className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-            </svg></a>
-          </Button>
-        </div> 
-      </div>
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
 
-      {/* Name and Title */}
-      <h2 className="text-xl font-semibold">{lead.name}</h2>
-      <a target="_blank" rel="noopener noreferrer" href={lead?.website} className="text-sm font-medium text-blue-400">{lead?.website}</a>
-      <p className="mt-1 text-sm text-muted-foreground">{lead?.businessType}</p>
+        <div className="flex gap-1">
+          {lead?.socials?.twitter && (
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <a
+                href={lead.socials.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  
+                </svg>
+              </a>
+            </Button>
+          )}
 
-      {/* Company Info */}
-      <div className="mt-4 space-y-2 rounded-lg border border-border bg-muted/30 p-3">
-        <div className="flex items-center gap-2 text-sm">
-          <Building2 className="h-4 w-4 text-muted-foreground" />
-          <span>{lead?.description}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <Mail className="h-4 w-4 text-muted-foreground" />
-          <span>{lead?.email}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <MapPin className="h-4 w-4 text-muted-foreground" />
-          <span>{lead?.technologies}</span>
+          {lead?.socials?.linkedin && (
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <a
+                href={lead.socials.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  
+                </svg>
+              </a>
+            </Button>
+          )}
         </div>
       </div>
 
-      {/* Bio */}
-      <p className="mt-4 text-sm text-muted-foreground">
-        {lead?.bio}{" "}
-        <button className="font-medium text-foreground underline underline-offset-2">
-          See more
-        </button>
+      {/* Name & Website */}
+      <h2 className="text-base sm:text-lg font-semibold truncate">
+        {lead.name}
+      </h2>
+
+      {lead?.website && (
+        <a
+          href={lead.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-blue-400 truncate block"
+        >
+          {lead.website}
+        </a>
+      )}
+
+      <p className="mt-1 text-sm text-muted-foreground">
+        {lead?.businessType}
       </p>
 
-      {/* Functional Areas */}
-      <div className="mt-4">
-        <p className="mb-2 text-sm font-medium">Functional area</p>
-        <div className="flex flex-wrap gap-2">
-          {lead?.functionalAreas?.map((area:any) => (
-            <Badge
-              key={area}
-              variant="outline"
-              className="rounded-full border-border bg-card px-3 py-1 text-xs font-normal"
-            >
-              {area}
-            </Badge>
-          ))}
-        </div>
+      {/* Company Info */}
+      <div className="mt-3 space-y-2 rounded-lg border bg-muted/30 p-3 text-sm">
+        {lead?.description && (
+          <div className="flex gap-2 line-clamp-2">
+            <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span>{lead.description}</span>
+          </div>
+        )}
+
+        {lead?.email && (
+          <div className="flex gap-2 truncate">
+            <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="truncate">{lead.email}</span>
+          </div>
+        )}
+
+        {lead?.technologies && (
+          <div className="flex gap-2 truncate">
+            <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="truncate">{lead.technologies}</span>
+          </div>
+        )}
       </div>
 
+      {/* Bio Preview */}
+      {lead?.bio && (
+        <p className="mt-3 text-sm text-muted-foreground line-clamp-3">
+          {lead.bio}
+        </p>
+      )}
+
+      {/* See more */}
+      <Link
+        href={`/leads/${lead.id}`}
+        className="mt-2 text-sm font-medium text-primary underline underline-offset-2"
+      >
+        See more
+      </Link>
+
+      {/* Functional Areas */}
+      {lead?.functionalAreas?.length > 0 && (
+        <div className="mt-4">
+          <p className="mb-2 text-sm font-medium">Functional areas</p>
+          <div className="flex flex-wrap gap-2">
+            {lead.functionalAreas.slice(0, 4).map((area:any) => (
+              <Badge
+                key={area}
+                variant="outline"
+                className="rounded-full px-3 py-1 text-xs"
+              >
+                {area}
+              </Badge>
+            ))}
+
+            {lead.functionalAreas.length > 4 && (
+              <span className="text-xs text-muted-foreground">
+                +{lead.functionalAreas.length - 4} more
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Actions */}
-      <div className="mt-6 flex gap-2">
-        <Button variant="outline" className="flex-1 bg-transparent">
+      <div className="mt-5 flex gap-2">
+        <Button variant="outline" className="flex-1">
           Export PDF
           <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
-        <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
+
+        <Button className="flex-1">
           Email
           <Send className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    </div> 
+    </div>
     </>
   )
 }
