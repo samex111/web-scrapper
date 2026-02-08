@@ -196,7 +196,7 @@ export default function LeadTable() {
                     className={cn(
                       "flex cursor-pointer transition-all duration-150 border-b border-white/5",
                       isSelected
-                        ? "bg-blue-500/20 hover:bg-blue-500/30"
+                        ? "bg-gray-700/50"
                         : "hover:bg-white/5"
                     )}
                   >
@@ -322,7 +322,7 @@ export default function LeadTable() {
                           title="Twitter"
                         >
                           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                           </svg>
                         </a>
                       )}
@@ -370,7 +370,7 @@ export default function LeadTable() {
                 onClick={() => {
                   setSelected(null);
                 }}
-                className="absolute top-2 right-2 z-10 p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors"
+                className="absolute top-2 right-2 z-10 p-2 rounded-lg  text-black hover:text-gray-700 transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
