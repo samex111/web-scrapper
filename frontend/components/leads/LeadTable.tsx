@@ -124,8 +124,7 @@ export default function LeadTable() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-8rem)] rounded-xl bg-gradient-to-br from-[#0B0D12] via-[#0F1117] to-[#0B0D12] border border-white/10 shadow-2xl overflow-hidden">
-      {/* Main Container with Horizontal Scroll */}
+    <div className="relative h-[calc(100vh-7rem)] rounded-xl bg-gradient-to-br from-[#0B0D12] via-[#0F1117] to-[#0B0D12] border border-white/10 shadow-2xl overflow-hidden">
       <div
         ref={scrollContainerRef}
         className="h-full overflow-auto"
