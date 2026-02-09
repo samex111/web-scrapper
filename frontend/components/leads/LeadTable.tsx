@@ -124,7 +124,7 @@ export default function LeadTable() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-7rem)] rounded-xl bg-gradient-to-br from-[#0B0D12] via-[#0F1117] to-[#0B0D12] border border-white/10 shadow-2xl overflow-hidden">
+    <div className="relative scroll-smooth h-[calc(100vh-7rem)] rounded-xl bg-gradient-to-br from-[#0B0D12] via-[#0F1117] to-[#0B0D12] border border-white/10 shadow-2xl overflow-hidden">
       <div
         ref={scrollContainerRef}
         className="h-full overflow-auto"
@@ -164,7 +164,7 @@ export default function LeadTable() {
           {/* ================= VIRTUALIZED BODY ================= */}
           <div
             ref={parentRef}
-            className="relative overflow-y-auto overflow-x-hidden"
+            className="relative scroll-smooth overflow-y-auto overflow-x-hidden"
             style={{ height: "calc(100% - 57px)" }}
           >
             <div
@@ -193,7 +193,7 @@ export default function LeadTable() {
                       setActiveIndex(virtualRow.index);
                     }}
                     className={cn(
-                      "flex cursor-pointer transition-all duration-150 border-b border-white/5",
+                      "flex cursor-pointer scroll-smooth transition-all duration-150 border-b border-white/5",
                       isSelected
                         ? "bg-gray-700/50"
                         : "hover:bg-white/5"
