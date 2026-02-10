@@ -88,14 +88,14 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
               </div>
               <p className="text-white mb-3">{lead.description}</p>
               <div className="flex flex-wrap gap-2 items-center">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getPriorityColor(lead.priority)}`}>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium  border ${getPriorityColor(lead.priority)}`}>
                   {lead.priority} Priority
                 </span>
-                <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                <span className="px-3 py-1 rounded-full text-sm font-medium  bg-blue-100 text-blue-800 border border-blue-200">
                   {lead.businessType}
                 </span>
                 {lead.technologies.map((tech, idx) => (
-                  <span key={idx} className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                  <span key={idx} className="px-3 py-1 rounded-full text-sm font-medium  bg-purple-100 text-purple-800 border border-purple-200">
                     {tech}
                   </span>
                 ))}
@@ -237,31 +237,31 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-white/80 mb-4">SEO Metrics</h2>
           <div className="space-y-3">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between gap-10 items-center">
               <span className="text-white">Title</span>
-              <span className="font-medium">{lead.seo.title}</span>
+              <span className="font-medium text-white/70">{lead.seo.title}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-white">H1 Count</span>
-              <span className="font-medium">{lead.seo.h1Count}</span>
+              <span className="font-medium text-white/70">{lead.seo.h1Count}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-white">Links</span>
-              <span className="font-medium">{lead.seo.linkCount}</span>
+              <span className="text-white ">Links</span>
+              <span className="font-medium  text-white/70">{lead.seo.linkCount}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-white">Images</span>
-              <span className="font-medium">{lead.seo.imageCount}</span>
+              <span className="font-medium text-white/70">{lead.seo.imageCount}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-white">OG Tags</span>
-              <span className={`px-2 py-1 rounded text-sm ${lead.seo.hasOgTags ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              <span className={`px-2 py-1 rounded  text-sm ${lead.seo.hasOgTags ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                 {lead.seo.hasOgTags ? 'Yes' : 'No'}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-white">Twitter Card</span>
-              <span className={`px-2 py-1 rounded text-sm ${lead.seo.hasTwitterCard ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              <span className={`px-2 py-1  rounded text-sm ${lead.seo.hasTwitterCard ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                 {lead.seo.hasTwitterCard ? 'Yes' : 'No'}
               </span>
             </div>
@@ -273,15 +273,15 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-white">DOM Nodes</span>
-              <span className="font-medium">{lead.performance.nodes.toLocaleString()}</span>
+              <span className="font-medium text-white/70">{lead.performance.nodes.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-white">JS Heap Size</span>
-              <span className="font-medium">{(lead.performance.jsHeap / 1024 / 1024).toFixed(2)} MB</span>
+              <span className="font-medium text-white/70 ">{(lead.performance.jsHeap / 1024 / 1024).toFixed(2)} MB</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-white">Documents</span>
-              <span className="font-medium">{lead.performance.documents}</span>
+              <span className="font-medium text-white/70">{lead.performance.documents}</span>
             </div>
           </div>
         </div>
