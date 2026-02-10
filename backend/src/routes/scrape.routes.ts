@@ -89,3 +89,18 @@ scrapeRoutes.get('/job/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+scrapeRoutes.get('/jobs',requireAuthOrApiKey, async (req, res) => { 
+  try {
+   const user = req.user;
+   const jobs = await prisma.job.findMany({
+     where : {userId:user.id} 
+   })
+   res.status(200).json({
+    total: jobs.length,
+    jobs
+   })
+  }catch(e){
+    res.status(404).json('Error in geeting all jobs and the error : '+ e)
+  }
+
+})
