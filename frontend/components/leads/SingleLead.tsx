@@ -62,21 +62,21 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="max-w-6xl bg-transparentmx-auto p-6 space-y-6">
       {/* Header Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4 flex-1">
             {lead.logo && (
               <img 
                 src={lead.logo} 
                 alt={`${lead.name} logo`}
-                className="w-20 h-20 rounded-lg object-cover border"
+                className="w-20 h-20 rounded-lg border"
               />
             )}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-gray-900">{lead.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-600">{lead.name}</h1>
                 <button 
                   onClick={toggleFavorite}
                   className="transition-colors"
@@ -107,7 +107,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-medium text-gray-600">Lead Score</span>
@@ -121,7 +121,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-5 h-5 text-green-600" />
             <span className="text-sm font-medium text-gray-600">Confidence</span>
@@ -135,7 +135,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <Award className="w-5 h-5 text-purple-600" />
             <span className="text-sm font-medium text-gray-600">Export Count</span>
@@ -143,7 +143,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           <div className="text-2xl font-bold text-gray-900">{lead.exportCount}</div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <Calendar className="w-5 h-5 text-orange-600" />
             <span className="text-sm font-medium text-gray-600">Created</span>
@@ -155,7 +155,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
       </div>
 
       {/* Contact Information */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-3">
@@ -190,7 +190,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
       </div>
 
       {/* Social Media */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Social Media</h2>
         <div className="flex flex-wrap gap-3">
           {Object.entries(lead.socials).map(([platform, url]) => 
@@ -212,7 +212,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
       </div>
 
       {/* Pages */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Important Pages</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {Object.entries(lead.pages).map(([page, url]) => 
@@ -234,7 +234,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
 
       {/* SEO & Performance */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">SEO Metrics</h2>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
@@ -268,7 +268,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Performance</h2>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
@@ -288,7 +288,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
       </div>
 
       {/* Notes Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900">Notes</h2>
           {!isEditingNotes && (
