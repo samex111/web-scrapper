@@ -12,7 +12,7 @@ async function apiFetch(
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
-    ...options,
+    ...options,         
   });
 
   if (!res.ok) {
@@ -22,7 +22,9 @@ async function apiFetch(
     } catch (e) {
       throw new Error("Something went wrong : "+e);
     }
-    throw new Error(error?.error || "Request failed");
+    console.error("API Error:", error);
+
+    throw new Error(error?.error || "Request failed");  
   }
 
   return res;
@@ -65,6 +67,19 @@ export async function getStats() {
 export async function getLeads() {
   const res = await apiFetch(`/api/leads/allLeads`);
   return res.json();
+}
+export async function getSingleLead(leadId: string) {
+  try {
+  const res = await fetch(`http://localhost:3001/api/leads/lead/cmkv4rwmr00091048oeqieb17`,{credentials: "include" ,headers: {'Content-Type': 'application/json' , }});
+    if (res.ok) {
+      console.log("Raw response from getSingleLead:", await res.json()); // Debug log to check the raw response
+  return await res.json();
+    }
+    throw new Error("Failed to fetch single lead");
+   }catch(e){
+    console.log("Error fetching single lead:", e);
+   }
+  
 }
 export async function exportCSV(jobId?: string) {
   const query = jobId ? `?jobId=${jobId}` : "";

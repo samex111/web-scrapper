@@ -35,7 +35,7 @@ export default function LeadCard({ lead }: any) {
         </Avatar>
 
         <div className="flex gap-1">
-          {lead?.socials?.twitter && (
+          {lead?.socials?.twitter  && (
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <a
                 href={lead.socials.twitter}
@@ -121,6 +121,7 @@ export default function LeadCard({ lead }: any) {
       {/* See more */}
       <Link
         href={`/leads/${lead.id}`}
+        onClick={() => localStorage.setItem("selectedLeadId", lead.id)}
         className="mt-2 text-sm font-medium text-primary underline underline-offset-2"
       >
         See more

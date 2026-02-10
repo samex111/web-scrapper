@@ -22,7 +22,6 @@ authRoutes.post("/google", async (req, res) => {
       return res.status(400).json({ error: "Missing Google token" });
     }
 
-    // 1️⃣ Verify Google token
     const ticket = await googleClient.verifyIdToken({
       idToken,
       audience: config.GoogleClient.ID as string,
@@ -38,7 +37,6 @@ authRoutes.post("/google", async (req, res) => {
     const name = payload.name ?? "User";
     const avatar = payload.picture ?? null;
 
-    // 2️⃣ Atomic DB logic
     const user = await prisma.$transaction(async (tx) => {
       let user = await tx.user.findUnique({
         where: { googleId },
