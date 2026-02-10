@@ -62,21 +62,21 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
   };
 
   return (
-    <div className="max-w-6xl bg-transparentmx-auto p-6 space-y-6">
+    <div className="max-w-6xl  bg-transparentmx-auto p-6 space-y-6">
       {/* Header Section */}
-      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
+      <div className="rounded-xl  bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4 flex-1">
             {lead.logo && (
               <img 
                 src={lead.logo} 
                 alt={`${lead.name} logo`}
-                className="w-20 h-20 rounded-lg border"
+                className="w-20 h-20 bg-white rounded-lg border"
               />
             )}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-gray-600">{lead.name}</h1>
+                <h1 className="text-3xl font-bold text-white">{lead.name}</h1>
                 <button 
                   onClick={toggleFavorite}
                   className="transition-colors"
@@ -86,7 +86,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
                   />
                 </button>
               </div>
-              <p className="text-gray-600 mb-3">{lead.description}</p>
+              <p className="text-white mb-3">{lead.description}</p>
               <div className="flex flex-wrap gap-2 items-center">
                 <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getPriorityColor(lead.priority)}`}>
                   {lead.priority} Priority
@@ -110,9 +110,9 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-5 h-5 text-blue-600" />
-            <span className="text-sm font-medium text-gray-600">Lead Score</span>
+            <span className="text-sm font-medium text-white">Lead Score</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">{lead.leadScore}</div>
+          <div className="text-2xl font-bold text-white/80">{lead.leadScore}</div>
           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
             <div 
               className="bg-blue-600 h-2 rounded-full" 
@@ -124,9 +124,9 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-5 h-5 text-green-600" />
-            <span className="text-sm font-medium text-gray-600">Confidence</span>
+            <span className="text-sm font-medium text-white">Confidence</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">{lead.confidence}%</div>
+          <div className="text-2xl font-bold text-white/80">{lead.confidence}%</div>
           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
             <div 
               className="bg-green-600 h-2 rounded-full" 
@@ -138,17 +138,17 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <Award className="w-5 h-5 text-purple-600" />
-            <span className="text-sm font-medium text-gray-600">Export Count</span>
+            <span className="text-sm font-medium text-white">Export Count</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">{lead.exportCount}</div>
+          <div className="text-2xl font-bold text-white/80">{lead.exportCount}</div>
         </div>
 
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">
             <Calendar className="w-5 h-5 text-orange-600" />
-            <span className="text-sm font-medium text-gray-600">Created</span>
+            <span className="text-sm font-medium text-white">Created</span>
           </div>
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-sm font-semibold text-white/80">
             {new Date(lead.createdAt).toLocaleDateString()}
           </div>
         </div>
@@ -156,10 +156,10 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
 
       {/* Contact Information */}
       <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
+        <h2 className="text-xl font-bold text-white/80 mb-4">Contact Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-3">
-            <Globe className="w-5 h-5 text-gray-600" />
+            <Globe className="w-5 h-5 text-white" />
             <a 
               href={lead.website} 
               target="_blank" 
@@ -172,7 +172,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           </div>
           {lead.email && (
             <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5 text-gray-600" />
+              <Mail className="w-5 h-5 text-white" />
               <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">
                 {lead.email}
               </a>
@@ -180,7 +180,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           )}
           {lead.phone && (
             <div className="flex items-center gap-3">
-              <Phone className="w-5 h-5 text-gray-600" />
+              <Phone className="w-5 h-5 text-white" />
               <a href={`tel:${lead.phone}`} className="text-blue-600 hover:underline">
                 {lead.phone}
               </a>
@@ -191,7 +191,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
 
       {/* Social Media */}
       <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Social Media</h2>
+        <h2 className="text-xl font-bold text-white/80 mb-4">Social Media</h2>
         <div className="flex flex-wrap gap-3">
           {Object.entries(lead.socials).map(([platform, url]) => 
             url && (
@@ -213,7 +213,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
 
       {/* Pages */}
       <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Important Pages</h2>
+        <h2 className="text-xl font-bold text-white/80 mb-4">Important Pages</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {Object.entries(lead.pages).map(([page, url]) => 
             url && (
@@ -235,32 +235,32 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
       {/* SEO & Performance */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">SEO Metrics</h2>
+          <h2 className="text-xl font-bold text-white/80 mb-4">SEO Metrics</h2>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Title</span>
+              <span className="text-white">Title</span>
               <span className="font-medium">{lead.seo.title}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">H1 Count</span>
+              <span className="text-white">H1 Count</span>
               <span className="font-medium">{lead.seo.h1Count}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Links</span>
+              <span className="text-white">Links</span>
               <span className="font-medium">{lead.seo.linkCount}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Images</span>
+              <span className="text-white">Images</span>
               <span className="font-medium">{lead.seo.imageCount}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">OG Tags</span>
+              <span className="text-white">OG Tags</span>
               <span className={`px-2 py-1 rounded text-sm ${lead.seo.hasOgTags ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                 {lead.seo.hasOgTags ? 'Yes' : 'No'}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Twitter Card</span>
+              <span className="text-white">Twitter Card</span>
               <span className={`px-2 py-1 rounded text-sm ${lead.seo.hasTwitterCard ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                 {lead.seo.hasTwitterCard ? 'Yes' : 'No'}
               </span>
@@ -269,18 +269,18 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
         </div>
 
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Performance</h2>
+          <h2 className="text-xl font-bold text-white/80 mb-4">Performance</h2>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">DOM Nodes</span>
+              <span className="text-white">DOM Nodes</span>
               <span className="font-medium">{lead.performance.nodes.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">JS Heap Size</span>
+              <span className="text-white">JS Heap Size</span>
               <span className="font-medium">{(lead.performance.jsHeap / 1024 / 1024).toFixed(2)} MB</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Documents</span>
+              <span className="text-white">Documents</span>
               <span className="font-medium">{lead.performance.documents}</span>
             </div>
           </div>
@@ -290,7 +290,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
       {/* Notes Section */}
       <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Notes</h2>
+          <h2 className="text-xl font-bold text-white/80">Notes</h2>
           {!isEditingNotes && (
             <button
               onClick={() => setIsEditingNotes(true)}
@@ -328,7 +328,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
             </div>
           </div>
         ) : (
-          <p className="text-gray-600">{notes || 'No notes added yet.'}</p>
+          <p className="text-white">{notes || 'No notes added yet.'}</p>
         )}
       </div>
     </div>
