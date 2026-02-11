@@ -126,3 +126,20 @@ export async function exportCSV(jobId?: string) {
     // router.push("/dashboard");
 
   }
+ export async function handleViewResults(jobId:number){
+   try{
+    const res = await fetch(`${API_URL}/api/leads/lead/jobId/${jobId}`,{
+      method:"GET",
+      credentials:"include",
+      headers:{"Content-type":"application/json"}
+    });
+    const data:resultLead[] = await res.json();
+    return data;
+   }catch(e){
+    console.error("Error in view resluts: "+e)
+    throw new Error("Error in handle view results")
+   }
+ }
+ interface resultLead {
+  leadId:string
+ }

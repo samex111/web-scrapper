@@ -22,7 +22,7 @@ export interface JobResult {
 }
 
 export interface Job {
-  id: string;
+  id: number;
   userId: string;
   name: string | null;
   status: 'COMPLETED' | 'PROCESSING' | 'PENDING' | 'QUEUED' | 'FAILED';

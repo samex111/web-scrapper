@@ -1,15 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { Job } from '@/types/job';
 import { JobsResponse } from '@/types/job';
+import { handleViewResults } from '@/lib/api';
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { JobSkeleton } from '@/dashboardskeleton/JobSkeleton';
 
 // Types based on your API response
 
 
 export default function JobsDashboard() {
+  const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const LeadId  = useRef<string|null>(null);
   const [stats, setStats] = useState({
     total: 0,
     PROCESSING: 0,
@@ -18,9 +24,9 @@ export default function JobsDashboard() {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     fetchJobs();
+    handleClick(1);
   }, []);
 
   const fetchJobs = async () => {
@@ -103,10 +109,19 @@ export default function JobsDashboard() {
     return `${seconds}s`;
   };
 
-  const filteredJobs = jobs.filter(job => 
+  const filteredJobs =  jobs.filter(job => 
     job.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     job.urls.some(url => url.toLowerCase().includes(searchQuery.toLowerCase()))
   );
+  
+  const handleClick = async (jobId:number)=>{
+    const data = await handleViewResults(jobId);
+    if(data.leadId[0]){
+     
+     router.push(`/leads/${data.leadId[0]}`)
+    }
+    console.log("No id ")
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0e1a] text-white p-8">
@@ -202,7 +217,7 @@ export default function JobsDashboard() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                      Loading jobs...
+                   loading...
                     </td>
                   </tr>
                 ) : filteredJobs.length === 0 ? (
@@ -265,8 +280,8 @@ export default function JobsDashboard() {
                         <div className="flex items-center gap-2">
                           {job.status === 'COMPLETED' && (
                             <>
-                              <button className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
-                                View Results
+                              <button onClick={()=>handleClick(job.id)} className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
+                                View Results 
                               </button>
                               <button className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
                                 Export
