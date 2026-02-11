@@ -6,24 +6,24 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import LeadCard from "./LeadCard";
 import { useLeads } from "@/hooks/useLeads";
 import LeadsSkeleton from "@/LeadsSkeleton/LeadsSkeleton";
+import {Lead} from "@/types/lead";
 
-
-interface Lead {
-  id: string;
-  website: string;
-  name: string;
-  businessType: string;
-  email: string;
-  leadScore: number;
-  priority: "LOW" | "MEDIUM" | "HIGH";
-  socials: {
-    github?: string;
-    linkedin?: string;
-    twitter?: string;
-    facebook?: string;
-  };
-  createdAt: string;
-}
+// interface Lead {
+//   id: string;
+//   website: string;
+//   name: string;
+//   businessType: string;
+//   email: string;
+//   leadScore: number;
+//   priority: "LOW" | "MEDIUM" | "HIGH";
+//   socials: {
+//     github?: string;
+//     linkedin?: string;
+//     twitter?: string;
+//     facebook?: string;
+//   };
+//   createdAt: string;
+// }
 
 export default function LeadTable() {
   const parentRef = useRef<HTMLDivElement>(null);
