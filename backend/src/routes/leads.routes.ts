@@ -46,3 +46,25 @@ leadsRoutes.get('/lead/:id', requireAuthOrApiKey ,async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+leadsRoutes.get('/lead/jobId/:id',requireAuthOrApiKey, async(req,res)=>{
+  try{
+    const {id} = req.params as unknown as any;
+    const where :any = {jobId:id}
+    const lead = await prisma.lead.findMany({
+      where 
+    })
+    if(!lead){
+      return res.status(404).json({
+        msg:"Lead not found"
+      })
+    }
+    res.json(
+      {leadId:lead.map(l=>l.id)}
+    )
+  }
+  catch(e){
+    res.status(500).json({
+      msg:"error in fincodng lead id via job id : "+e
+    })
+  }
+})
