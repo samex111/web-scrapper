@@ -2,53 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
+import { Job } from '@/types/job';
+import { JobsResponse } from '@/types/job';
 
 // Types based on your API response
-interface JobResult {
-  seo: {
-    title: string;
-    h1Count: number;
-    hasOgTags: boolean;
-    linkCount: number;
-    imageCount: number;
-    hasTwitterCard: boolean;
-    metaDescription: string;
-  };
-  logo: string;
-  name: string;
-  email: string;
-  website: string;
-  priority: string;
-  leadScore: number;
-  scrapedAt: string;
-  confidence: number;
-  description: string;
-  businessType: string;
-  technologies: string[];
-}
 
-interface Job {
-  id: string;
-  userId: string;
-  name: string | null;
-  status: 'COMPLETED' | 'PROCESSING' | 'PENDING' | 'QUEUED' | 'FAILED';
-  urls: string[];
-  totalUrls: number;
-  completed: number;
-  failed: number;
-  results: JobResult[];
-  errors: any;  
-  source: string;
-  priority: string;
-  createdAt: string;
-  startedAt: string;
-  completedAt: string;
-}
-
-interface JobsResponse {
-  total: number;
-  jobs: Job[];
-}
 
 export default function JobsDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
