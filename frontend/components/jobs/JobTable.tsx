@@ -8,6 +8,7 @@ import { handleViewResults } from '@/lib/api';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { JobSkeleton } from '@/dashboardskeleton/JobSkeleton';
+import { DashboardSkeleton } from '@/dashboardskeleton/DashboardSkeleton';
 
 // Types based on your API response
 
@@ -217,7 +218,7 @@ export default function JobsDashboard() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                   loading...
+                    <DashboardSkeleton/>
                     </td>
                   </tr>
                 ) : filteredJobs.length === 0 ? (
