@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { JobSkeleton } from '@/dashboardskeleton/JobSkeleton';
 import { DashboardSkeleton } from '@/dashboardskeleton/DashboardSkeleton';
+import { Button } from '../ui/button';
+import JobsSkeleton from '../jobsSkeleton/jobtableskeleton';
 
 // Types based on your API response
 
@@ -223,7 +225,7 @@ export default function JobsDashboard() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                      <DashboardSkeleton />
+                      <JobsSkeleton />
                     </td>
                   </tr>
                 ) : filteredJobs.length === 0 ? (
@@ -285,9 +287,9 @@ export default function JobsDashboard() {
                         <div className="flex items-center gap-2">
                           {job.status === 'COMPLETED' && (
                             <>
-                              <button disabled={!job?.leads[0]?.id} onClick={() => router.push(`/leads/${job.leads[0].id}`)} className="text-emerald-400 disabled:text-red-400 hover:text-emerald-200 text-sm font-medium transition-colors">
+                              <Button variant={'ghost'} disabled={!job?.leads[0]?.id} onClick={() => router.push(`/leads/${job.leads[0].id}`)} className="text-emerald-400 disabled:text-red-400 hover:bg-transparent hover:text-emerald-200 text-sm font-medium transition-colors">
                                 View Results
-                              </button>
+                              </Button>
                               <button className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
                                 Export
                               </button>

@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
  
   if (loading) {
-    return <DashboardSkeleton />;
+    return <DashboardSkeleton/>;
   }
 
 
