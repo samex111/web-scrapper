@@ -157,7 +157,7 @@ export async function getCSV(jobId: number) {
       throw new Error("Failed to export CSV");
     }
 
-    const blob = await res.blob(); // ✅ IMPORTANT
+    const blob = await res.blob(); 
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement("a");

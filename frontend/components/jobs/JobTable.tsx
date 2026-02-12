@@ -5,10 +5,7 @@ import { Search, ChevronDown } from 'lucide-react';
 import { Job } from '@/types/job';
 import { JobsResponse } from '@/types/job';
 import { getCSV, handleViewResults } from '@/lib/api';
-import Link from 'next/link';
 import { useRouter } from "next/navigation";
-import { JobSkeleton } from '@/dashboardskeleton/JobSkeleton';
-import { DashboardSkeleton } from '@/dashboardskeleton/DashboardSkeleton';
 import { Button } from '../ui/button';
 import JobsSkeleton from '../jobsSkeleton/jobtableskeleton';
 
@@ -118,18 +115,6 @@ export default function JobsDashboard() {
     job.urls.some(url => url.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-
-  // const handleClick = async (jobId: number) => {
-
-  //   // const data = await handleViewResults(jobId);
-  //   // setLoadingJobId(data.leadId[0]);
-  //   // if (data?.leadId[0]) {
-
-  //     return;
-  //   // }
-
-  //   // setLoadingJobId(null);
-  // };
 
   return (
     <div className="min-h-screen bg-[#0a0e1a] text-white p-8">
