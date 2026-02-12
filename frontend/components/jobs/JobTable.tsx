@@ -275,9 +275,9 @@ export default function JobsDashboard() {
                               <Button variant={'ghost'} disabled={!job?.leads[0]?.id} onClick={() => router.push(`/leads/${job.leads[0].id}`)} className="text-emerald-400 disabled:text-red-400 hover:bg-transparent hover:text-emerald-200 text-sm font-medium transition-colors">
                                 View Results
                               </Button>
-                              <button onClick={()=>getCSV(job.id)} className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
+                              <Button disabled={!job?.leads[0]?.id} variant={'ghost'} onClick={()=>getCSV(job.id)} className="text-gray-400 hover:text-gray-300 text-sm font-medium hover:bg-transparent transition-colors">
                                 Export
-                              </button>
+                              </Button>
                             </>
                           )}
                           {job?.status === 'PROCESSING' && (
