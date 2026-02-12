@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { Job } from '@/types/job';
 import { JobsResponse } from '@/types/job';
-import { handleViewResults } from '@/lib/api';
+import { getCSV, handleViewResults } from '@/lib/api';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { JobSkeleton } from '@/dashboardskeleton/JobSkeleton';
@@ -285,17 +285,17 @@ export default function JobsDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          {job.status === 'COMPLETED' && (
+                          {job?.status === 'COMPLETED' && (
                             <>
                               <Button variant={'ghost'} disabled={!job?.leads[0]?.id} onClick={() => router.push(`/leads/${job.leads[0].id}`)} className="text-emerald-400 disabled:text-red-400 hover:bg-transparent hover:text-emerald-200 text-sm font-medium transition-colors">
                                 View Results
                               </Button>
-                              <button className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
+                              <button onClick={()=>getCSV(job.id)} className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
                                 Export
                               </button>
                             </>
                           )}
-                          {job.status === 'PROCESSING' && (
+                          {job?.status === 'PROCESSING' && (
                             <>
                               <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
                                 View Progress
@@ -305,22 +305,22 @@ export default function JobsDashboard() {
                               </button>
                             </>
                           )}
-                          {job.status === 'PENDING' && (
+                          {job?.status === 'PENDING' && (
                             <button className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">
                               Cancel
                             </button>
                           )}
-                          {job.status === 'QUEUED' && (
+                          {job?.status === 'QUEUED' && (
                             <>
                               <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
                                 View Results
                               </button>
-                              <button className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
+                              <button  className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
                                 Export
                               </button>
                             </>
                           )}
-                          {job.status === 'FAILED' && (
+                          {job?.status === 'FAILED' && (
                             <>
                               <button className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
                                 Retry

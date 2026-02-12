@@ -7,22 +7,22 @@ export const exportRoutes = Router();
 // Export leads as CSV
 exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
   try {
-    const { apiKey, jobId } = req.query;
+    const {  jobId } = req.query;
 
-    if (!apiKey) {
-      return res.status(401).json({ error: 'API key required' });
-    }
+    // if (!apiKey) {
+    //   return res.status(401).json({ error: 'API key required' });
+    // }
 
-    const user = await prisma.user.findUnique({
-      where: { apiKey: apiKey as string },
-    });
+    // const user = await prisma.user.findUnique({
+    //   where: { apiKey: apiKey as string },
+    // });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid API key' });
-    }
+    // if (!user) {
+    //   return res.status(401).json({ error: 'Invalid API key' });
+    // }
 
-    const where: any = { userId: user.id };
-    if (jobId) where.jobId = jobId;
+    const where: any = { jobId: jobId };
+    
 
     const leads = await prisma.lead.findMany({
       where,

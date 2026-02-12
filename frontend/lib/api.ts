@@ -143,3 +143,33 @@ export async function exportCSV(jobId?: string) {
  interface resultLead {
   leadId:string
  }
+export async function getCSV(jobId: number) {
+  try {
+    const res = await fetch(
+      `${API_URL}/api/export/csv?jobId=${jobId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to export CSV");
+    }
+
+    const blob = await res.blob(); // ✅ IMPORTANT
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-${jobId}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (e) {
+    console.log("Error in get csv", e);
+  }
+}
+ 
