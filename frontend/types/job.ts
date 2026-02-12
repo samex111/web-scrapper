@@ -37,9 +37,13 @@ export interface Job {
   createdAt: string;
   startedAt: string;
   completedAt: string;
+  leads : Leads[]
 }
 
 export interface JobsResponse {
   total: number;
   jobs: Job[];
+}
+interface Leads{
+  id:string
 }

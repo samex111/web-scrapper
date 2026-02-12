@@ -16,38 +16,39 @@ import { DashboardSkeleton } from '@/dashboardskeleton/DashboardSkeleton';
 export default function JobsDashboard() {
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
-  const LeadId  = useRef<string|null>(null);
+  const LeadId = useRef<string | null>(null);
   const [stats, setStats] = useState({
     total: 0,
     PROCESSING: 0,
     completed: 0,
     failed: 0,
   });
+  const [loadingJobId, setLoadingJobId] = useState<number | null>(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchJobs();
-    handleClick(1);
   }, []);
 
   const fetchJobs = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:3001/api/scrape/jobs' ,{
+      const response = await fetch('http://localhost:3001/api/scrape/jobs', {
         headers: {
-          'Content-Type': 'application/json',        
-    },
-    credentials:"include"
-});
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
+      });
       const data: JobsResponse = await response.json();
       console.log(data)
       setJobs(data.jobs);
-      
+
       // Calculate stats
       const PROCESSING = data.jobs.filter(job => job?.status === 'PROCESSING').length;
       const completed = data.jobs.filter(job => job?.status === 'COMPLETED').length;
       const failed = data.jobs.filter(job => job?.status === 'FAILED').length;
-      
+
       setStats({
         total: data.total,
         PROCESSING,
@@ -81,18 +82,18 @@ export default function JobsDashboard() {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const today = new Date();
-    
+
     if (date.toDateString() === today.toDateString()) {
-      return `Today, ${date.toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
+      return `Today, ${date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
         minute: '2-digit',
-        hour12: true 
+        hour12: true
       })}`;
     }
-    
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
     });
   };
 
@@ -100,29 +101,33 @@ export default function JobsDashboard() {
     const start = new Date(startedAt);
     const end = new Date(completedAt);
     const diffMs = end.getTime() - start.getTime();
-    
+
     const minutes = Math.floor(diffMs / 60000);
     const seconds = Math.floor((diffMs % 60000) / 1000);
-    
+
     if (minutes > 0) {
       return `${minutes}m ${seconds}s`;
     }
     return `${seconds}s`;
   };
 
-  const filteredJobs =  jobs.filter(job => 
+  const filteredJobs = jobs.filter(job =>
     job.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     job.urls.some(url => url.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-  
-  const handleClick = async (jobId:number)=>{
-    const data = await handleViewResults(jobId);
-    if(data.leadId[0]){
-     
-     router.push(`/leads/${data.leadId[0]}`)
-    }
-    console.log("No id ")
-  }
+
+
+  // const handleClick = async (jobId: number) => {
+
+  //   // const data = await handleViewResults(jobId);
+  //   // setLoadingJobId(data.leadId[0]);
+  //   // if (data?.leadId[0]) {
+
+  //     return;
+  //   // }
+
+  //   // setLoadingJobId(null);
+  // };
 
   return (
     <div className="min-h-screen bg-[#0a0e1a] text-white p-8">
@@ -133,7 +138,7 @@ export default function JobsDashboard() {
             <div className="text-gray-400 text-sm mb-2">Total Jobs</div>
             <div className="text-3xl font-bold">{stats.total}</div>
           </div>
-          
+
           <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-blue-400"></div>
@@ -141,7 +146,7 @@ export default function JobsDashboard() {
             </div>
             <div className="text-3xl font-bold">{stats.PROCESSING}</div>
           </div>
-          
+
           <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
@@ -149,7 +154,7 @@ export default function JobsDashboard() {
             </div>
             <div className="text-3xl font-bold">{stats.completed}</div>
           </div>
-          
+
           <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-red-400"></div>
@@ -167,7 +172,7 @@ export default function JobsDashboard() {
               Job Name
               <ChevronDown className="w-4 h-4" />
             </button>
-            
+
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
@@ -218,7 +223,7 @@ export default function JobsDashboard() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                    <DashboardSkeleton/>
+                      <DashboardSkeleton />
                     </td>
                   </tr>
                 ) : filteredJobs.length === 0 ? (
@@ -227,10 +232,10 @@ export default function JobsDashboard() {
                       <div className="flex flex-col items-center justify-center">
                         <div className="mb-4">
                           <svg className="w-32 h-32 text-gray-700" viewBox="0 0 200 200" fill="none">
-                            <rect x="60" y="80" width="80" height="60" rx="4" fill="currentColor" opacity="0.3"/>
-                            <rect x="70" y="100" width="20" height="30" rx="2" fill="currentColor" opacity="0.5"/>
-                            <rect x="110" y="100" width="20" height="30" rx="2" fill="currentColor" opacity="0.5"/>
-                            <path d="M80 50 L120 50 L100 70 Z" fill="currentColor" opacity="0.4"/>
+                            <rect x="60" y="80" width="80" height="60" rx="4" fill="currentColor" opacity="0.3" />
+                            <rect x="70" y="100" width="20" height="30" rx="2" fill="currentColor" opacity="0.5" />
+                            <rect x="110" y="100" width="20" height="30" rx="2" fill="currentColor" opacity="0.5" />
+                            <path d="M80 50 L120 50 L100 70 Z" fill="currentColor" opacity="0.4" />
                           </svg>
                         </div>
                         <h3 className="text-xl font-semibold mb-2">No scraping jobs yet</h3>
@@ -254,15 +259,14 @@ export default function JobsDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(job.status)}`}>
-                          <div className={`w-1.5 h-1.5 rounded-full ${
-                            job.status === 'COMPLETED' ? 'bg-emerald-400' :
-                            job.status === 'PROCESSING' ? 'bg-blue-400' :
-                            job.status === 'PENDING' ? 'bg-amber-400' :
-                            job.status === 'QUEUED' ? 'bg-purple-400' :
-                            'bg-red-400'
-                          }`}></div>
-                          {job.status === 'PROCESSING' 
-                            ? `Processing ${job.completed} / ${job.totalUrls}` 
+                          <div className={`w-1.5 h-1.5 rounded-full ${job.status === 'COMPLETED' ? 'bg-emerald-400' :
+                              job.status === 'PROCESSING' ? 'bg-blue-400' :
+                                job.status === 'PENDING' ? 'bg-amber-400' :
+                                  job.status === 'QUEUED' ? 'bg-purple-400' :
+                                    'bg-red-400'
+                            }`}></div>
+                          {job.status === 'PROCESSING'
+                            ? `Processing ${job.completed} / ${job.totalUrls}`
                             : job.status.charAt(0) + job.status.slice(1).toLowerCase()}
                         </span>
                       </td>
@@ -270,9 +274,9 @@ export default function JobsDashboard() {
                         {formatDate(job.createdAt)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                        {job.status === 'PROCESSING' 
+                        {job.status === 'PROCESSING'
                           ? `⏱️ ${Math.floor((new Date().getTime() - new Date(job.startedAt).getTime()) / 1000)}s left`
-                          : job.completedAt 
+                          : job.completedAt
                             ? formatDuration(job.startedAt, job.completedAt)
                             : '-'
                         }
@@ -281,8 +285,8 @@ export default function JobsDashboard() {
                         <div className="flex items-center gap-2">
                           {job.status === 'COMPLETED' && (
                             <>
-                              <button onClick={()=>handleClick(job.id)} className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
-                                View Results 
+                              <button disabled={!job?.leads[0]?.id} onClick={() => router.push(`/leads/${job.leads[0].id}`)} className="text-emerald-400 disabled:text-red-400 hover:text-emerald-200 text-sm font-medium transition-colors">
+                                View Results
                               </button>
                               <button className="text-gray-400 hover:text-gray-300 text-sm font-medium transition-colors">
                                 Export
