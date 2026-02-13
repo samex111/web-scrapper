@@ -61,10 +61,10 @@ export default function Export() {
     to: undefined,
   });
 
-  const [format, setFormat] = useState<ExportFormat>('CSV');
+  const [exportformat, setFormat] = useState<ExportFormat>('CSV');
   const [onlyWithEmail, setOnlyWithEmail] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [matchingLeads, setMatchingLeads] = useState(950);
+  // const [matchingLeads, setMatchingLeads] = useState(950);
 
   // Handle date selection
   const handleDateSelect = (field: 'from' | 'to', date: Date | undefined) => {
@@ -107,7 +107,7 @@ export default function Export() {
   }      
 
   return (
-    <div className="min-h-fit  text-white p-8">
+    <div className="min-h-fit  text-white ">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Export Leads</h1>
 
@@ -245,12 +245,12 @@ export default function Export() {
                           <input
                             type="radio"
                             name="format-right"
-                            checked={format === fmt}
+                            checked={exportformat === fmt}
                             onChange={() => setFormat(fmt)}
                             className="sr-only peer"
                           />
                           <div className="w-5 h-5 rounded-full border-2 border-[#333] bg-[#0a0a0a] peer-checked:border-teal-500 transition-all flex items-center justify-center">
-                            {format === fmt && <div className="w-2.5 h-2.5 rounded-full bg-teal-500" />}
+                            {exportformat === fmt && <div className="w-2.5 h-2.5 rounded-full bg-teal-500" />}
                           </div>
                         </div>
                         <span className="text-sm text-gray-300 group-hover:text-white transition-colors">{fmt}</span>
