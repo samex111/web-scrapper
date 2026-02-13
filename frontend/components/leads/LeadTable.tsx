@@ -124,7 +124,7 @@ export default function LeadTable() {
   }
 
   return (
-    <div className="relative scroll-smooth h-[calc(100vh-7rem)] rounded-xl bg-gradient-to-br from-[#0B0D12] via-[#0F1117] to-[#0B0D12] border border-white/10 shadow-2xl overflow-hidden">
+    <div className="relative scroll-smooth h-[calc(100vh-7rem)] rounded-xl  border border-[#2a2a2a] shadow-2xl overflow-hidden">
       <div
         ref={scrollContainerRef}
         className="h-full overflow-auto"
@@ -135,7 +135,7 @@ export default function LeadTable() {
       >
         <div className="min-w-max">
           {/* ================= FIXED HEADER ================= */}
-          <div className="sticky top-0 z-40 bg-[#0B0D12] border-b border-white/10 shadow-lg">
+          <div className="sticky top-0 z-40 bg-[#1a1a1a] border-b border-[#2a2a2a] shadow-lg">
             <div className="flex">
               {columns.map((col) => (
                 <div
@@ -143,7 +143,7 @@ export default function LeadTable() {
                   style={{ width: colWidth[col.key] }}
                   className={cn(
                     "relative px-4 py-4 text-xs font-semibold text-white/90 uppercase tracking-wider border-r border-white/5 last:border-r-0",
-                    col.key === "index" && "sticky left-0 z-50 bg-[#0B0D12] border-r border-white/10"
+                    col.key === "index" && "sticky left-0 z-50 bg-[#1a1a1a] border-r border-[#2a2a2a]"
                   )}
                 >
                   {col.label}
@@ -164,7 +164,7 @@ export default function LeadTable() {
           {/* ================= VIRTUALIZED BODY ================= */}
           <div
             ref={parentRef}
-            className="relative scroll-smooth overflow-y-auto overflow-x-hidden"
+            className="relative bg-[#1a1a1a] scroll-smooth overflow-y-auto overflow-x-hidden"
             style={{ height: "calc(100% - 57px)" }}
           >
             <div
@@ -202,7 +202,7 @@ export default function LeadTable() {
                     {/* Index - Sticky Column */}
                     <div
                       style={{ width: colWidth.index }}
-                      className="sticky left-0 z-30 bg-[#0B0D12] flex items-center justify-center px-4 text-white/70 font-medium border-r border-white/10"
+                      className="sticky left-0 z-30 bg-[#1a1a1a] flex items-center justify-center px-4 text-white/70 font-medium border-r border-[#2a2a2a]"
                     >
                       {virtualRow.index + 1}
                     </div>

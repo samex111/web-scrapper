@@ -117,16 +117,16 @@ export default function JobsDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-white p-8">
+    <div className="min-h-screen  text-white p-8">
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111827] border rounded-lg p-6 flex items-center justify-between  border-gray-800">
+        <div className=" grid grid-cols-4 gap-4 mb-8">
+          <div className="bg-[#1a1a1a] border rounded-lg p-6 flex items-center justify-between  border-[#2a2a2a]">
             <div className="text-gray-400 text-sm mb-2">Total Jobs</div>
             <div className="text-3xl font-bold">{stats.total}</div>
           </div>
 
-          <div className="bg-[#111827] flex items-center justify-between rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#1a1a1a] flex items-center justify-between rounded-lg p-6 border border-[#2a2a2a]">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-blue-400"></div>
               <span className="text-gray-400">PROCESSING</span>
@@ -134,7 +134,7 @@ export default function JobsDashboard() {
             <div className="text-3xl font-bold">{stats.PROCESSING}</div>
           </div>
 
-          <div className="bg-[#111827] flex items-center justify-between rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#1a1a1a] flex items-center justify-between rounded-lg p-6 border border-[#2a2a2a]">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
               <span className="text-gray-400">Completed</span>
@@ -142,7 +142,7 @@ export default function JobsDashboard() {
             <div className="text-3xl font-bold">{stats.completed}</div>
           </div>
 
-          <div className="bg-[#111827] flex items-center justify-between rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#1a1a1a] flex items-center justify-between rounded-lg p-6 border border-[#2a2a2a]">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-red-400"></div>
               <span className="text-gray-400">Failed</span>
@@ -152,9 +152,9 @@ export default function JobsDashboard() {
         </div>
 
         {/* Jobs Table */}
-        <div className="bg-[#111827] rounded-lg border border-gray-800">
+        <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
           {/* Table Header */}
-          <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+          <div className="p-4 border-b border-[#2a2a2a] flex items-center justify-between">
             <button className="flex items-center gap-2 text-sm font-medium">
               Job Name
               <ChevronDown className="w-4 h-4" />
@@ -176,7 +176,7 @@ export default function JobsDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-800">
+                <tr className="border-b border-[#2a2a2a]">
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <button className="flex items-center gap-1">
                       Job Name
