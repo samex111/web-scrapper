@@ -175,33 +175,31 @@ export async function getCSV(jobId: number) {
     console.log("Error in get csv", e);
   }
 }
- export async function getAllCSV(props: exportTypes) {
+ export async function getAllCSV(queryParams: any) {
   try {
-    const res = await fetch(
-      `${API_URL}/api/export/leads?businessType=${props.businesstype}&isEmail=${props.isEmail}&from=${props.from}&to=${props.to}today=${props.today}`,
-      {
-        method: "GET",
-        credentials: "include",
+   const response = await fetch(`http://localhost:3001/api/export/leads?${queryParams.toString()}`, {
+        method: 'GET',
+        credentials:'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Export failed');
       }
-    );
 
-    if (!res.ok) {
-      throw new Error("Failed to export CSV");
+      // Create download link
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `leads-${Date.now()}.csv}`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('Failed to export leads. Please try again.');
     }
-
-    const blob = await res.blob(); 
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `leads-${randomInt()}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    window.URL.revokeObjectURL(url);
-  } catch (e) {
-    console.log("Error in get csv", e);
-  }
+  
 }
  

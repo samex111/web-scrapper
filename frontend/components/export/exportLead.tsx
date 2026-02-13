@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import { getAllCSV } from '@/lib/api';
 
 // Types
 export interface ExportFormData {
@@ -97,32 +98,13 @@ export default function Export() {
       if (formData.from) queryParams.append('from', formData.from.toISOString());
       if (formData.to) queryParams.append('to', formData.to.toISOString());
 
-      const response = await fetch(`http://localhost:3001/api/export/leads?${queryParams.toString()}`, {
-        method: 'GET',
-        credentials:'include'
-      });
-
-      if (!response.ok) {
-        throw new Error('Export failed');
-      }
-
-      // Create download link
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `leads-${Date.now()}.${format.toLowerCase()}`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Export error:', error);
-      alert('Failed to export leads. Please try again.');
+      await getAllCSV(queryParams)
+    }catch(e){
+      console.log(e)
     } finally {
-      setIsExporting(false);
+      setIsExporting(false)
     }
-  };
+  }      
 
   return (
     <div className="min-h-fit  text-white p-8">
@@ -166,7 +148,7 @@ export default function Export() {
                             nav_button: "text-white hover:bg-[#2a2a2a]",
                             head_cell: "text-gray-400",
                             cell: "text-white",
-                            day: "text-white hover:bg-teal-500/20 hover:text-teal-400",
+                            day: "",
                             day_selected: "bg-teal-500 text-white hover:bg-teal-600",
                             day_today: "bg-[#2a2a2a] text-white",
                             day_outside: "text-gray-600",
@@ -201,7 +183,7 @@ export default function Export() {
                             nav_button: "text-white hover:bg-[#2a2a2a]",
                             head_cell: "text-gray-400",
                             cell: "text-white",
-                            day: "text-white hover:bg-teal-500/20 hover:text-teal-400",
+                            day: "",
                             day_selected: "bg-teal-500 text-white hover:bg-teal-600",
                             day_today: "bg-[#2a2a2a] text-white",
                             day_outside: "text-gray-600",
