@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { prisma } from '../db/client.js';
 import { requireApiKey, requireAuthOrApiKey } from '../middleware/auth.middleware.js';
+import { exportSchema } from './zod.routes.js';
 
 export const exportRoutes = Router();
 
@@ -95,65 +96,99 @@ exportRoutes.get('/json', requireAuthOrApiKey, async (req, res) => {
 });
 exportRoutes.get('/leads', requireAuthOrApiKey, async (req, res) => {
   try {
-    const { isEmail, businessType, minLeadScore , from , to  } = req.query;
+    // ✅ safe parsing
+    const parsed = exportSchema.safeParse(req.query);
 
+    if (!parsed.success) {
+      return res.status(400).json(parsed.error.format());
+    }
+
+    const {
+      isEmail,
+      businessType,
+      minLeadScore,
+      from,
+      to,
+      lastSevenDays,
+      today,
+    } = parsed.data;
+
+    // ✅ base filter
     const where: any = {
       userId: req.user.id,
     };
-    console.log(isEmail, typeof isEmail)
-    // "true"  string
-
 
     // ✅ email filter
-    if (isEmail === 'true') {
-      where.email = {
-        contains: '@',
-      };
+    if (isEmail) {
+      where.email = { contains: '@' };
     }
-  
-   
 
+    // ✅ lead score
+    if (minLeadScore !== undefined) {
+      where.leadScore = { gt: minLeadScore };
+    }
 
-
-
-    // ✅ business type filter
+    // ✅ business type
     if (businessType) {
       where.businessType = businessType;
     }
 
-    // ✅ leadScore filter
-    if (minLeadScore) {
-      where.leadScore = {
-        gt: Number(minLeadScore),
-      };
+    // ✅ date filters (priority based)
+    if (from && to) {
+      where.createdAt = { gte: from, lte: to };
+    } else if (lastSevenDays) {
+      const date = new Date();
+      date.setDate(date.getDate() - 7);
+
+      where.createdAt = { gte: date };
+    } else if (today) {
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date();
+      end.setHours(23, 59, 59, 999);
+
+      where.createdAt = { gte: start, lte: end };
     }
 
+    // ✅ fetch only required fields (performance)
     const leads = await prisma.lead.findMany({
       where,
+      select: {
+        website: true,
+        name: true,
+        businessType: true,
+        leadScore: true,
+        priority: true,
+        confidence: true,
+        email: true,
+        phone: true,
+        socials: true,
+      },
     });
 
-    // CSV generation
+    // ✅ CSV
     const headers = [
       'Website', 'Name', 'Business Type', 'Lead Score',
       'Priority', 'Confidence', 'Email', 'Phone',
       'LinkedIn', 'Twitter'
     ];
 
-    const rows = leads.map((lead: any) => [
-      lead.website,
-      lead.name || '',
-      lead.businessType || '',
-      lead.leadScore,
-      lead.priority || '',
-      lead.confidence,
-      lead.email || '',
-      lead.phone || '',
-      (lead.socials as any)?.linkedin || '',
-      (lead.socials as any)?.twitter || '',
+    const rows = leads.map((lead) => [
+      lead.website ?? '',
+      lead.name ?? '',
+      lead.businessType ?? '',
+      lead.leadScore ?? '',
+      lead.priority ?? '',
+      lead.confidence ?? '',
+      lead.email ?? '',
+      lead.phone ?? '',
+      (lead.socials as any)?.linkedin ?? '',
+      (lead.socials as any)?.twitter ?? '',
     ]);
 
     const csv = [headers, ...rows]
-      .map(row => row.map((cell: any) => `"${cell}"`).join(','))
+      .map(row => row.map(cell => `"${cell}"`).join(','))
       .join('\n');
 
     res.setHeader('Content-Type', 'text/csv');
