@@ -114,7 +114,7 @@ export default function LeadTable() {
   const getPriorityColor = (score: number) => {
     if (score >= 80) return "bg-emerald-500/20 text-emerald-400 border-emerald-500/40";
     if (score >= 60) return "bg-amber-500/20 text-amber-400 border-amber-500/40";
-    return "bg-rose-500/20 text-rose-400 border-rose-500/40";
+    return "bg-rose-500/20 text-rose-400 ose-500/40";
   };
     if(loading) {
 
@@ -124,7 +124,7 @@ export default function LeadTable() {
   }
 
   return (
-    <div className="relative scroll-smooth h-[calc(100vh-7rem)] rounded-xl  border border-[#2a2a2a] shadow-2xl overflow-hidden">
+    <div className="relative scroll-smooth h-[calc(100vh-7rem)] rounded-xl  border border-[#2a2a2a]  shadow-2xl overflow-hidden">
       <div
         ref={scrollContainerRef}
         className="h-full overflow-auto"
@@ -135,15 +135,15 @@ export default function LeadTable() {
       >
         <div className="min-w-max">
           {/* ================= FIXED HEADER ================= */}
-          <div className="sticky top-0 z-40 bg-[#1a1a1a] border-b border-[#2a2a2a] shadow-lg">
+          <div className="sticky top-0 z-40 bg-[#1a1a1a]    shadow-lg">
             <div className="flex">
               {columns.map((col) => (
                 <div
                   key={col.key}
                   style={{ width: colWidth[col.key] }}
                   className={cn(
-                    "relative px-4 py-4 text-xs font-semibold text-white/90 uppercase tracking-wider border-r border-white/5 last:border-r-0",
-                    col.key === "index" && "sticky left-0 z-50 bg-[#1a1a1a] border-r border-[#2a2a2a]"
+                    "relative px-4 py-4 text-xs font-semibold text-white uppercase tracking-wider  border-white/5 last:-0",
+                    col.key === "index" && "sticky left-0 z-50 bg-[#1a1a1a]  "
                   )}
                 >
                   {col.label}
@@ -193,7 +193,7 @@ export default function LeadTable() {
                       setActiveIndex(virtualRow.index);
                     }}
                     className={cn(
-                      "flex cursor-pointer scroll-smooth transition-all duration-150 border-b border-white/5",
+                      "flex cursor-pointer scroll-smooth transition-all duration-150  border-white/5",
                       isSelected
                         ? "bg-gray-700/50"
                         : "hover:bg-white/5"
@@ -202,7 +202,7 @@ export default function LeadTable() {
                     {/* Index - Sticky Column */}
                     <div
                       style={{ width: colWidth.index }}
-                      className="sticky left-0 z-30 bg-[#1a1a1a] flex items-center justify-center px-4 text-white/70 font-medium border-r border-[#2a2a2a]"
+                      className="sticky left-0 z-30 bg-[#1a1a1a] flex items-center justify-center px-4 text-white/70 font-medium  "
                     >
                       {virtualRow.index + 1}
                     </div>
@@ -210,7 +210,7 @@ export default function LeadTable() {
                     {/* Website */}
                     <div
                       style={{ width: colWidth.website }}
-                      className="flex items-center px-4 border-r border-white/5"
+                      className="flex items-center px-4  border-white/5"
                     >
                       {lead.website ? (
                         <a
@@ -230,7 +230,7 @@ export default function LeadTable() {
                     {/* Name */}
                     <div
                       style={{ width: colWidth.name }}
-                      className="flex items-center px-4 text-white font-medium border-r border-white/5 truncate text-sm"
+                      className="flex items-center px-4 text-white font-medium  border-white/5 truncate text-sm"
                     >
                       {lead.name}
                     </div>
@@ -238,7 +238,7 @@ export default function LeadTable() {
                     {/* Business Type */}
                     <div
                       style={{ width: colWidth.business }}
-                      className="flex items-center px-4 border-r border-white/5"
+                      className="flex items-center px-4  border-white/5"
                     >
                       <span className="px-2.5 py-1 rounded-md bg-white/10 text-white/80 text-xs font-medium truncate">
                         {lead.businessType}
@@ -248,7 +248,7 @@ export default function LeadTable() {
                     {/* Email */}
                     <div
                       style={{ width: colWidth.email }}
-                      className="flex items-center px-4 border-r border-white/5"
+                      className="flex items-center px-4  border-white/5"
                     >
                       {lead.email ? (
                         <a
@@ -266,7 +266,7 @@ export default function LeadTable() {
                     {/* Score */}
                     <div
                       style={{ width: colWidth.score }}
-                      className="flex items-center justify-center px-4 border-r border-white/5"
+                      className="flex items-center justify-center px-4  border-white/5"
                     >
                       <span
                         className={cn(
@@ -281,7 +281,7 @@ export default function LeadTable() {
                     {/* Socials */}
                     <div
                       style={{ width: colWidth.socials }}
-                      className="flex items-center px-4 gap-3 border-r border-white/5"
+                      className="flex items-center px-4 gap-3  border-white/5"
                     >
                       {lead.socials?.github && (
                         <a

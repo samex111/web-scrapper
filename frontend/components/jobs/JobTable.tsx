@@ -227,7 +227,7 @@ export default function JobsDashboard() {
                         </div>
                         <h3 className="text-xl font-semibold mb-2">No scraping jobs yet</h3>
                         <p className="text-gray-400 mb-6">Create your first job to start extracting leads.</p>
-                        <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        <button onClick={()=>router.push('/jobs/new')} className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                           + Create New Job
                         </button>
                       </div>
