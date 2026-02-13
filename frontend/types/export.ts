@@ -6,7 +6,7 @@ export interface exportTypes {
     to?: Date,
     today?: Date
 }
-enum type {
+export enum type {
     "Developer Platform",
     "General Business",
     "B2B SaaS",

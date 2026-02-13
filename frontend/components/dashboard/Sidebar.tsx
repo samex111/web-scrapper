@@ -44,7 +44,7 @@ export const sidebarNav = [
     icon: Users,
     children: [
       { label: "All Leads", href: "/leads", icon: ListChecks },
-      { label: "Export", href: "/regulatory", icon: FileDown },
+      { label: "Export", href: "/export", icon: FileDown },
     ],
   },
   {

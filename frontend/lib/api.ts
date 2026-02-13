@@ -175,7 +175,7 @@ export async function getCSV(jobId: number) {
     console.log("Error in get csv", e);
   }
 }
- export async function getAllCSV(props:exportTypes) {
+ export async function getAllCSV(props: exportTypes) {
   try {
     const res = await fetch(
       `${API_URL}/api/export/leads?businessType=${props.businesstype}&isEmail=${props.isEmail}&from=${props.from}&to=${props.to}today=${props.today}`,
