@@ -121,12 +121,12 @@ export default function JobsDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
         <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#111827] border rounded-lg p-6 flex items-center justify-between  border-gray-800">
             <div className="text-gray-400 text-sm mb-2">Total Jobs</div>
             <div className="text-3xl font-bold">{stats.total}</div>
           </div>
 
-          <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#111827] flex items-center justify-between rounded-lg p-6 border border-gray-800">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-blue-400"></div>
               <span className="text-gray-400">PROCESSING</span>
@@ -134,7 +134,7 @@ export default function JobsDashboard() {
             <div className="text-3xl font-bold">{stats.PROCESSING}</div>
           </div>
 
-          <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#111827] flex items-center justify-between rounded-lg p-6 border border-gray-800">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
               <span className="text-gray-400">Completed</span>
@@ -142,7 +142,7 @@ export default function JobsDashboard() {
             <div className="text-3xl font-bold">{stats.completed}</div>
           </div>
 
-          <div className="bg-[#111827] rounded-lg p-6 border border-gray-800">
+          <div className="bg-[#111827] flex items-center justify-between rounded-lg p-6 border border-gray-800">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-red-400"></div>
               <span className="text-gray-400">Failed</span>
