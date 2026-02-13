@@ -5,9 +5,9 @@ import { requireApiKey, requireAuthOrApiKey } from '../middleware/auth.middlewar
 export const exportRoutes = Router();
 
 // Export leads as CSV
-exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
+exportRoutes.get('/csv', requireAuthOrApiKey, async (req, res) => {
   try {
-    const {  jobId } = req.query;
+    const { jobId } = req.query;
 
     // if (!apiKey) {
     //   return res.status(401).json({ error: 'API key required' });
@@ -22,7 +22,7 @@ exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
     // }
 
     const where: any = { jobId: jobId };
-    
+
 
     const leads = await prisma.lead.findMany({
       where,
@@ -31,12 +31,12 @@ exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
 
     // Generate CSV
     const headers = [
-      'Website', 'Name', 'Business Type', 'Lead Score', 
-      'Priority', 'Confidence', 'Email', 'Phone', 
+      'Website', 'Name', 'Business Type', 'Lead Score',
+      'Priority', 'Confidence', 'Email', 'Phone',
       'LinkedIn', 'Twitter'
     ];
 
-    const rows = leads.map((lead:any) => [
+    const rows = leads.map((lead: any) => [
       lead.website,
       lead.name || '',
       lead.businessType || '',
@@ -50,7 +50,7 @@ exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
     ]);
 
     const csv = [headers, ...rows]
-      .map(row => row.map((cell:any) => `"${cell}"`).join(','))
+      .map(row => row.map((cell: any) => `"${cell}"`).join(','))
       .join('\n');
 
     res.setHeader('Content-Type', 'text/csv');
@@ -63,7 +63,7 @@ exportRoutes.get('/csv',requireAuthOrApiKey , async (req, res) => {
 });
 
 // Export as JSON
-exportRoutes.get('/json',requireAuthOrApiKey, async (req, res) => {
+exportRoutes.get('/json', requireAuthOrApiKey, async (req, res) => {
   try {
     const { apiKey, jobId } = req.query;
 
@@ -88,6 +88,81 @@ exportRoutes.get('/json',requireAuthOrApiKey, async (req, res) => {
     });
 
     res.json({ total: leads.length, leads });
+
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+exportRoutes.get('/leads', requireAuthOrApiKey, async (req, res) => {
+  try {
+    const { isEmail, businessType, minLeadScore , from , to  } = req.query;
+
+    const where: any = {
+      userId: req.user.id,
+    };
+    console.log(isEmail, typeof isEmail)
+    // "true"  string
+
+
+    // ✅ email filter
+    if (isEmail === 'true') {
+      where.email = {
+        contains: '@',
+      };
+    }
+  
+   
+
+
+
+
+    // ✅ business type filter
+    if (businessType) {
+      where.businessType = businessType;
+    }
+
+    // ✅ leadScore filter
+    if (minLeadScore) {
+      where.leadScore = {
+        gt: Number(minLeadScore),
+      };
+    }
+
+    const leads = await prisma.lead.findMany({
+      where,
+    });
+
+    // CSV generation
+    const headers = [
+      'Website', 'Name', 'Business Type', 'Lead Score',
+      'Priority', 'Confidence', 'Email', 'Phone',
+      'LinkedIn', 'Twitter'
+    ];
+
+    const rows = leads.map((lead: any) => [
+      lead.website,
+      lead.name || '',
+      lead.businessType || '',
+      lead.leadScore,
+      lead.priority || '',
+      lead.confidence,
+      lead.email || '',
+      lead.phone || '',
+      (lead.socials as any)?.linkedin || '',
+      (lead.socials as any)?.twitter || '',
+    ]);
+
+    const csv = [headers, ...rows]
+      .map(row => row.map((cell: any) => `"${cell}"`).join(','))
+      .join('\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="leads-${Date.now()}.csv"`
+    );
+
+    res.send(csv);
 
   } catch (error: any) {
     res.status(500).json({ error: error.message });

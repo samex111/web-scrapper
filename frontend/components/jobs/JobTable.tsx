@@ -262,7 +262,7 @@ export default function JobsDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
                         {job.status === 'PROCESSING'
-                          ? `⏱️ ${Math.floor((new Date().getTime() - new Date(job.startedAt).getTime()) / 1000)}s left`
+                          ? `⏱ ${Math.floor((new Date().getTime() - new Date(job.startedAt).getTime()) / 1000)}s left`
                           : job.completedAt
                             ? formatDuration(job.startedAt, job.completedAt)
                             : '-'
