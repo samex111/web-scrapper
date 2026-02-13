@@ -96,7 +96,6 @@ exportRoutes.get('/json', requireAuthOrApiKey, async (req, res) => {
 });
 exportRoutes.get('/leads', requireAuthOrApiKey, async (req, res) => {
   try {
-    // ✅ safe parsing
     const parsed = exportSchema.safeParse(req.query);
 
     if (!parsed.success) {
@@ -113,27 +112,22 @@ exportRoutes.get('/leads', requireAuthOrApiKey, async (req, res) => {
       today,
     } = parsed.data;
 
-    // ✅ base filter
     const where: any = {
       userId: req.user.id,
     };
 
-    // ✅ email filter
     if (isEmail) {
       where.email = { contains: '@' };
     }
 
-    // ✅ lead score
     if (minLeadScore !== undefined) {
       where.leadScore = { gt: minLeadScore };
     }
 
-    // ✅ business type
     if (businessType) {
       where.businessType = businessType;
     }
 
-    // ✅ date filters (priority based)
     if (from && to) {
       where.createdAt = { gte: from, lte: to };
     } else if (lastSevenDays) {
@@ -151,7 +145,6 @@ exportRoutes.get('/leads', requireAuthOrApiKey, async (req, res) => {
       where.createdAt = { gte: start, lte: end };
     }
 
-    // ✅ fetch only required fields (performance)
     const leads = await prisma.lead.findMany({
       where,
       select: {
@@ -167,7 +160,6 @@ exportRoutes.get('/leads', requireAuthOrApiKey, async (req, res) => {
       },
     });
 
-    // ✅ CSV
     const headers = [
       'Website', 'Name', 'Business Type', 'Lead Score',
       'Priority', 'Confidence', 'Email', 'Phone',
