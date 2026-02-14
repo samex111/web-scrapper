@@ -287,50 +287,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
         </div>
       </div>
 
-      {/* Notes Section */}
-      <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white/80">Notes</h2>
-          {!isEditingNotes && (
-            <button
-              onClick={() => setIsEditingNotes(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Edit Notes
-            </button>
-          )}
-        </div>
-        {isEditingNotes ? (
-          <div className="space-y-3">
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows={4}
-              placeholder="Add notes about this lead..."
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={saveNotes}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => {
-                  setNotes(lead.notes || '');
-                  setIsEditingNotes(false);
-                }}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <p className="text-white">{notes || 'No notes added yet.'}</p>
-        )}
-      </div>
+    
     </div>
   );
 }
