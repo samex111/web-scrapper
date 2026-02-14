@@ -14,8 +14,7 @@ interface LeadDetailProps {
 
 export default function LeadDetail({ lead }: LeadDetailProps) {
   const [isFavorite, setIsFavorite] = useState(lead.isFavorite);
-  const [notes, setNotes] = useState(lead.notes || '');
-  const [isEditingNotes, setIsEditingNotes] = useState(false);
+
 
   const toggleFavorite = async () => {
     try {
@@ -30,18 +29,6 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
     }
   };
 
-  const saveNotes = async () => {
-    try {
-      await fetch(`/api/leads/${lead.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes })
-      });
-      setIsEditingNotes(false);
-    } catch (error) {
-      console.error('Error saving notes:', error);
-    }
-  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
