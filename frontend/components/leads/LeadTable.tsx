@@ -135,7 +135,7 @@ export default function LeadTable() {
       >
         <div className="min-w-max">
           {/* ================= FIXED HEADER ================= */}
-          <div className="sticky top-0 z-40 bg-[#1a1a1a]    shadow-lg">
+          <div className="sticky top-0 z-40 bg-[#1a1a1a] shadow-lg">
             <div className="flex">
               {columns.map((col) => (
                 <div
@@ -195,7 +195,7 @@ export default function LeadTable() {
                     className={cn(
                       "flex cursor-pointer scroll-smooth transition-all duration-150  border-white/5",
                       isSelected
-                        ? "bg-gray-700/50"
+                        ? "bg-[#131111] rounded-md  border-[#2a2a2a]"
                         : "hover:bg-white/5"
                     )}
                   >
