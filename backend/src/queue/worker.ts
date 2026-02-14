@@ -15,16 +15,22 @@ const worker = new Worker('scrape-jobs', async (job: Job) => {
   console.log(` URLs to scrape: ${urls.length}`);
 
   // Create job record
-  const dbJob = await prisma.job.create({
-    data: {
-      id: job.id as string,
-      userId,
-      urls,
-      totalUrls: urls.length,
-      status: 'PROCESSING',
-      startedAt: new Date(),
-    },
-  });
+ const dbJob = await prisma.job.upsert({
+  where: { id: job.id as string },
+  update: {
+    status: "PROCESSING",
+    startedAt: new Date(),
+  },
+  create: {
+    id: job.id as string,
+    userId,
+    urls,
+    totalUrls: urls.length,
+    status: "PROCESSING",
+    startedAt: new Date(),
+  },
+})
+
 
   try {
     const engine = new ScraperEngine({
