@@ -45,7 +45,6 @@ export default function DashboardPage() {
       transition={{ duration: 0.4 }}
       className="space-y-8"
     >
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold text-[#E7E9EE]">
           Dashboard
@@ -55,20 +54,13 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Usage */}
       <UsageCard />
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <StatsCard
           label="Total Leads"
           value={0}
           icon={Users}
-        />
-        <StatsCard
-          label="High Priority"
-          value={0}
-          icon={Flame}
         />
         <StatsCard
           label="Jobs This Month"
@@ -82,7 +74,6 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Recent Jobs */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-medium text-[#E7E9EE]">

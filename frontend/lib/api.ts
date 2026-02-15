@@ -126,9 +126,8 @@ export async function exportCSV(jobId?: string) {
       console.error("Google auth failed" +res);
       return;
     }
-    // router.push("/dashboard");
-
   }
+
  export async function handleViewResults(jobId:number){
    try{
     const res = await fetch(`${API_URL}/api/leads/lead/jobId/${jobId}`,{
@@ -177,7 +176,7 @@ export async function getCSV(jobId: number) {
 }
  export async function getAllCSV(queryParams: any) {
   try {
-   const response = await fetch(`http://localhost:3001/api/export/leads?${queryParams.toString()}`, {
+   const response = await fetch(`${API_URL}/api/export/leads?${queryParams.toString()}`, {
         method: 'GET',
         credentials:'include'
       });
