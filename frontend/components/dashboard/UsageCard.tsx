@@ -1,5 +1,6 @@
 "use client";
 
+import { UsageSkeleton } from "@/dashboardskeleton/UsageSkeleton";
 import { getUser } from "@/lib/api";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ export function UsageCard() {
     }
   };
 
-  if (loading) return null;
+  if (loading) return <UsageSkeleton/>;
 
   const percentage = (user.usedThisMonth / user.monthlyQuota) * 100;
 
