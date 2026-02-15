@@ -47,7 +47,7 @@ export default function NewJobPage() {
         urls: urlList,
       });
 
-      router.push(`/jobs/${job.jobId}`);
+      router.push(`/jobs`);
     } catch (err: any) {
       setError(err.message);
     } finally {
