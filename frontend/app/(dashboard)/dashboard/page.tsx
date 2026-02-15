@@ -2,41 +2,62 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { StatsCard } from '@/components/dashboard/StatsCard';
-import { UsageCard } from '@/components/dashboard/UsageCard';
-import { JobCard } from '@/components/jobs/JobCard';
-import { getJobs, getStats } from '@/lib/api';
-import { useEffect, useState } from 'react';
+import { StatsCard } from "@/components/dashboard/StatsCard";
+import { UsageCard } from "@/components/dashboard/UsageCard";
+import { JobCard } from "@/components/jobs/JobCard";
+import { getUser } from "@/lib/api";
+import { useEffect, useState } from "react";
 import { DashboardSkeleton } from "@/dashboardskeleton/DashboardSkeleton";
-import {
-  Users,
-  Flame,
-  BarChart3,
-  CheckCircle,
-} from "lucide-react";
+import { Users, BarChart3, CheckCircle } from "lucide-react";
+
+interface DashboardData {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    plan: string;
+    monthlyQuota: number;
+    usedThisMonth: number;
+  };
+  stats: {
+    totalJobs: number;
+    completedJobs: number;
+    totalLeads: number;
+    jobsThisMonth: number;
+  };
+}
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
+    loadUser();
+  }, []);
 
-    if (!userData) {
-      router.push("/auth");
-      return;
+  const loadUser = async () => {
+    try {
+      const res = await getUser();
+      setData(res); // ✅ full response store karo
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    setUser(JSON.parse(userData));
-    setLoading(false);
-  }, [router]);
+  if (loading) return <DashboardSkeleton />;
 
- 
-  if (loading) {
-    return <DashboardSkeleton/>;
-  }
+  const stats = data?.stats;
+  const profile = data?.user;
 
+  const successRate =
+    stats?.totalJobs && stats.totalJobs > 0
+      ? Math.round((stats.completedJobs / stats.totalJobs) * 100)
+      : 0;
 
   return (
     <motion.div
@@ -45,6 +66,7 @@ export default function DashboardPage() {
       transition={{ duration: 0.4 }}
       className="space-y-8"
     >
+      {/* HEADER */}
       <div>
         <h1 className="text-2xl font-semibold text-[#E7E9EE]">
           Dashboard
@@ -54,31 +76,38 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <UsageCard />
+      <UsageCard
+       
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* STATS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatsCard
           label="Total Leads"
-          value={0}
+          value={stats?.totalLeads || 0}
           icon={Users}
         />
+
         <StatsCard
           label="Jobs This Month"
-          value={0}
+          value={stats?.jobsThisMonth || 0}
           icon={BarChart3}
         />
+
         <StatsCard
           label="Success Rate"
-          value="0%"
+          value={`${successRate}%`}
           icon={CheckCircle}
         />
       </div>
 
+      {/* RECENT JOBS */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-medium text-[#E7E9EE]">
             Recent Jobs
           </h2>
+
           <button
             onClick={() => router.push("/jobs")}
             className="text-sm text-[#8B8F97] hover:text-[#E7E9EE]"
