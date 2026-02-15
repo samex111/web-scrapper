@@ -123,32 +123,54 @@ authRoutes.post("/google", async (req, res) => {
 
 authRoutes.get("/me", requireAuth, async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        avatar: true,
-        plan: true,
-        monthlyQuota: true,
-        usedThisMonth: true,
+    const userId = req.user.id;
+
+    const [
+      user,
+      totalJobs,
+      runningJobs,
+      completedJobs,
+      totalLeads,
+
+    ] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          avatar: true,
+          plan: true,
+          monthlyQuota: true,
+          usedThisMonth: true,
+        },
+      }),
+
+      prisma.job.count({ where: { userId } }),
+      prisma.job.count({ where: { userId, status: "PROCESSING" } }),
+      prisma.job.count({ where: { userId, status: "COMPLETED" } }),
+
+      prisma.lead.count({ where: { userId } }),
+
+    
+
+   
+    ]);
+
+    res.json({
+      user,
+      stats: {
+        totalJobs,
+        runningJobs,
+        completedJobs,
+        totalLeads,
       },
+    
     });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    res.json({ user });
   } catch (e) {
-    res.status(403).json({
-      error: "error in /me " + e
-    })
+    res.status(500).json({ error: "Error in /me " + e });
   }
 });
-
-
 authRoutes.post("/logout", requireAuth, async (req, res) => {
   try {
     await prisma.session.deleteMany({
