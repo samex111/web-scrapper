@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js';
 import { OAuth2Client } from "google-auth-library";
 import { requireAuth } from '../middleware/auth.middleware.js';
-import { z } from 'zod'
+import { date, z } from 'zod'
 const googleClient = new OAuth2Client(
   config.GoogleClient.ID
 );
@@ -124,6 +124,16 @@ authRoutes.post("/google", async (req, res) => {
 authRoutes.get("/me", requireAuth, async (req, res) => {
   try {
     const userId = req.user.id;
+    const now = new Date();
+
+    const last30Days = new Date();
+    last30Days.setDate(now.getDate() - 30);
+    const startOfMonth = new Date(
+  new Date().getFullYear(),
+  new Date().getMonth(),
+  1
+);
+
 
     const [
       user,
@@ -131,7 +141,7 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
       runningJobs,
       completedJobs,
       totalLeads,
-
+      jobsThisMonth
     ] = await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
@@ -151,10 +161,10 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
       prisma.job.count({ where: { userId, status: "COMPLETED" } }),
 
       prisma.lead.count({ where: { userId } }),
+      prisma.job.count({ where: { userId, createdAt: { gte: startOfMonth} } })
 
-    
 
-   
+
     ]);
 
     res.json({
@@ -164,8 +174,9 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
         runningJobs,
         completedJobs,
         totalLeads,
+        jobsThisMonth
       },
-    
+
     });
   } catch (e) {
     res.status(500).json({ error: "Error in /me " + e });
