@@ -131,7 +131,14 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
   new Date().getFullYear(),
   new Date().getMonth(),
   1
-);
+);    
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date();
+      end.setHours(23, 59, 59, 999);
+
+      
 
 
     const [
@@ -140,7 +147,8 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
       runningJobs,
       completedJobs,
       totalLeads,
-      jobsThisMonth
+      jobsThisMonth,
+      todayJobs
     ] = await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
@@ -160,9 +168,8 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
       prisma.job.count({ where: { userId, status: "COMPLETED" } }),
 
       prisma.lead.count({ where: { userId } }),
-      prisma.job.count({ where: { userId, createdAt: { gte: startOfMonth} } })
-
-
+      prisma.job.count({ where: { userId, createdAt: { gte: startOfMonth} } }),
+      prisma.job.count({ where: { userId, createdAt: { gte: start , lte :end } } }),
 
     ]);
 
@@ -173,7 +180,8 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
         runningJobs,
         completedJobs,
         totalLeads,
-        jobsThisMonth
+        jobsThisMonth,
+        todayJobs
       },
 
     });
