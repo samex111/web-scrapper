@@ -25,6 +25,7 @@ interface DashboardData {
     completedJobs: number;
     totalLeads: number;
     jobsThisMonth: number;
+    todayJobs : number;
   };
 }
 
@@ -48,7 +49,7 @@ export default function DashboardPage() {
       setLoading(false);
     }
   };
-
+  
   if (loading) return <DashboardSkeleton />;
 
   const stats = data?.stats;
@@ -116,7 +117,7 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        <JobCard />
+        <JobCard todayJobs={stats?.todayJobs} />
       </div>
     </motion.div>
   );
