@@ -1,5 +1,3 @@
-import { exportTypes } from "@/types/export";
-import { randomInt } from "./utils";
 
 const API_URL =  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -118,14 +116,14 @@ export async function exportCSV(jobId?: string) {
       credentials: "include", 
       body: JSON.stringify({ idToken }),
     });
-    const data = await res.json()
-    console.log(data.user)
-  localStorage.setItem('user', JSON.stringify(data.user));
+  if (!res.ok) {
+  const err = await res.text();
+  console.error("Google auth failed:", err);
+  return;
+}
 
-    if (!res.ok) {
-      console.error("Google auth failed" +res);
-      return;
-    }
+const data = await res.json();
+localStorage.setItem("user", JSON.stringify(data.user));
   }
 
  export async function handleViewResults(jobId:number){

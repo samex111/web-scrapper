@@ -21,7 +21,7 @@ interface DashboardData {
     usedThisMonth: number;
   };
   stats: {
-    totalJobs: number;
+    totalJobs: number;  
     completedJobs: number;
     totalLeads: number;
     jobsThisMonth: number;
@@ -41,7 +41,7 @@ export default function DashboardPage() {
   const loadUser = async () => {
     try {
       const res = await getUser();
-      setData(res); // ✅ full response store karo
+      setData(res); 
     } catch (err) {
       console.error(err);
     } finally {

@@ -80,7 +80,6 @@ authRoutes.post("/google", async (req, res) => {
       });
     });
 
-    // 3️⃣ Create JWT
     const token = jwt.sign(
       { userId: user.id },
       config.jwtSercret.JWT_SECRET,
@@ -117,7 +116,7 @@ authRoutes.post("/google", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(401).json({ error: "Google authentication failed" });
+    res.status(401).json({ error: "Google authentication failed : "+err });
   }
 });
 
