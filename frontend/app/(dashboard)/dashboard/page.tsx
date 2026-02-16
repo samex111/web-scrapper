@@ -82,13 +82,13 @@ export default function DashboardPage() {
 
       {/* STATS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatsCard
+        <StatsCard onClick={()=>router.push('/leads')}
           label="Total Leads"
           value={stats?.totalLeads || 0}
           icon={Users}
         />
 
-        <StatsCard
+        <StatsCard onClick={()=>router.push('/jobs')}
           label="Jobs This Month"
           value={stats?.jobsThisMonth || 0}
           icon={BarChart3}

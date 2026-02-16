@@ -5,11 +5,12 @@ interface Props {
   label: string;
   value: string | number;
   icon: LucideIcon;
+  onClick?: ()=>void;
 }
 
-export function StatsCard({ label, value, icon: Icon }: Props) {
+export function StatsCard({ label, value, icon: Icon ,onClick }: Props) {
   return (
-    <motion.div
+    <motion.div onClick={onClick}
       whileHover={{ y: -2 }}
       className="rounded-xl bg-white/5 border border-white/10 p-6"
     >
