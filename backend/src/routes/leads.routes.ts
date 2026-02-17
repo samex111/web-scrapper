@@ -31,9 +31,11 @@ leadsRoutes.get('/allLeads',requireAuthOrApiKey, async (req, res) => {
 leadsRoutes.get('/lead/:id', requireAuthOrApiKey ,async (req, res) => {
   try {
     const { id } = req.params as unknown as any;
+     console.log(req.cookies)
+console.log(req.user)
 
     const lead = await prisma.lead.findUnique({
-      where: { id },
+      where: { id: id },
     });
 
     if (!lead) {

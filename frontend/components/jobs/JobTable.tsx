@@ -44,9 +44,9 @@ export default function JobsDashboard() {
       setJobs(data.jobs);
 
       // Calculate stats
-      const PROCESSING = data.jobs.filter(job => job?.status === 'PROCESSING').length;
-      const completed = data.jobs.filter(job => job?.status === 'COMPLETED').length;
-      const failed = data.jobs.filter(job => job?.status === 'FAILED').length;
+      const PROCESSING = data?.jobs?.filter(job => job?.status === 'PROCESSING').length;
+      const completed = data?.jobs?.filter(job => job?.status === 'COMPLETED').length;
+      const failed = data?.jobs?.filter(job => job?.status === 'FAILED').length;
 
       setStats({
         total: data.total,
@@ -110,9 +110,9 @@ export default function JobsDashboard() {
     return `${seconds}s`;
   };
 
-  const filteredJobs = jobs.filter(job =>
+  const filteredJobs = jobs?.filter(job =>
     job.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.urls.some(url => url.toLowerCase().includes(searchQuery.toLowerCase()))
+    job.urls?.some(url => url.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
 
@@ -213,7 +213,7 @@ export default function JobsDashboard() {
                       <JobsSkeleton />
                     </td>
                   </tr>
-                ) : filteredJobs.length === 0 ? (
+                ) : filteredJobs?.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8">
                       <div className="flex flex-col items-center justify-center">
@@ -234,7 +234,7 @@ export default function JobsDashboard() {
                     </td>
                   </tr>
                 ) : (
-                  filteredJobs.map((job) => (
+                  filteredJobs?.map((job) => (
                     <tr key={job.id} className="hover:bg-gray-800/30 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium">

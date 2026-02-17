@@ -6,7 +6,6 @@ interface PageProps {
   };
 }
 
-// ✅ Server-side data fetch
 async function getLead(id: string) {
   const res = await fetch(
     `http://localhost:3001/api/leads/lead/${id}`,
@@ -14,17 +13,18 @@ async function getLead(id: string) {
       credentials:"include",
       headers: {
         'Content-Type': 'application/json',
-         'Authorization': `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWt2MzN5dzIwMDAxZ3VlMGRhNjhnNzl3IiwiaWF0IjoxNzcwNjU0ODY5LCJleHAiOjE3NzEyNTk2Njl9.LO1V_oNpk9WpeUaesqbgKqSqJqZWbco_EjliU-67oY8'}` // Pass token if needed
+         'Authorization': `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWt2MzN5dzIwMDAxZ3VlMGRhNjhnNzl3IiwiaWF0IjoxNzcxMjU0NjMyLCJleHAiOjE3NzE4NTk0MzJ9.rTyzn4b5iYs8xaGBbpzNCtg2x6GRCkkPfycqwWjRggA'}` // Pass token if needed
       },
-      cache: "no-store", // always fresh
+      // cache: "no-store", // always fresh
     }
   );
-
+ 
   if (!res.ok) {
-    console.error("Failed to fetch lead:", await res.text());
+    const text = await res.text();
+    console.error("Failed to fetch lead:", text);
    }
   
-  return res.json();
+  return await res.json();
 }
 
 export default async function LeadPage({

@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
 
   // Redirect logic
   if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/auth', request.url));
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   if ((pathname === '/auth') && token) {

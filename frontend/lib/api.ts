@@ -35,7 +35,7 @@ export async function loginWithGoogle(googleData: any) {
     method: "POST",
     body: JSON.stringify(googleData),
   });
-  return res.json();
+  return await res.json();
 }
 
 export async function getUser() {
@@ -47,12 +47,12 @@ export async function createJob(data: { name?: string; urls: string[] }) {
     method: "POST",
     body: JSON.stringify(data),
   });
-  return res.json();
+  return await res.json();
 }
 
 export async function getJob(jobId: string) {
   const res = await apiFetch(`/api/scrape/job/${jobId}`);
-  return res.json();
+  return await res.json();
 }
 
 export async function getJobs(params?: { limit?: number; status?: string }) {
@@ -67,7 +67,7 @@ export async function getStats() {
 
 export async function getLeads() {
   const res = await apiFetch(`/api/leads/allLeads`);
-  return res.json();
+  return await res.json();
 }
 export async function getSingleLead(leadId: string) {
   try {

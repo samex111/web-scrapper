@@ -137,24 +137,34 @@ model Lead {
 
 model ApiKey {
   id          String   @id @default(cuid())
+
   userId      String
-  key         String   @unique @default(cuid())
-  name        String   // User-defined name like "Production Server"
-  permissions Json?    // { scrape: true, export: true, read: true }
-  rateLimit   Int      @default(100) // Requests per hour
-  isActive    Boolean  @default(true)
-  lastUsedAt  DateTime?
-  usageCount  Int      @default(0)
-  ipWhitelist String[] // Optional IP restriction
-  createdAt   DateTime @default(now())
-  expiresAt   DateTime? // Optional expiration
-  revokedAt   DateTime?
-  
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@index([key])
+
+  keyHash     String
+  keyPrefix   String
+
+  name        String
+  permissions Json?
+
+  rateLimit   Int      @default(100)
+
+  isActive    Boolean  @default(true)
+  usageCount  Int      @default(0)
+
+  lastUsedAt  DateTime?
+
+  ipWhitelist String[]
+
+  expiresAt   DateTime?
+  revokedAt   DateTime?
+
+  createdAt   DateTime @default(now())
+
+  @@index([keyPrefix])
   @@index([userId, isActive])
 }
+
 
 model Webhook {
   id          String   @id @default(cuid())

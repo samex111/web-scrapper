@@ -23,7 +23,7 @@ export async function requireAuth(
 ) {
   try {
     // only for dev else only cookies
-    const token =req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token =req.cookies.token ?? req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -96,7 +96,7 @@ export async function requireAuthOrApiKey(
   res: Response,
   next: NextFunction
 ) {
-  const authHeader = req.cookies.token || req.headers.authorization?.split(' ')[1]; ;
+  const authHeader = req.cookies.token ?? req.headers.authorization?.split(' ')[1]; ;
 
   if (authHeader) {
     return requireAuth(req, res, next);
