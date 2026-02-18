@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { prisma } from '../db/client.js';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { config } from '../config/config.js';
-
+import bcrypt from "bcrypt";
 
 
 // Extend Express Request type
@@ -62,32 +62,72 @@ export async function requireApiKey(
   next: NextFunction
 ) {
   try {
-    const apiKey = req.headers['x-api-key'] as string ||
-      req.query.apiKey as string;
-
-    if (!apiKey) {
-      return res.status(401).json({
-        error: 'API key required',
-        hint: 'Pass as X-API-Key header or ?apiKey query param'
-      });
+    const incomingKey = req.header("x-api-key");
+    if (!incomingKey) {
+      return res.status(401).json({ error: "API key missing" });
     }
 
-    const apiKeyRecord = await prisma.apiKey.findUnique({
-      where: { key: apiKey },
-      include: { user: true },
+    const prefix = incomingKey.slice(0, 12);
+
+    const keys = await prisma.apiKey.findMany({
+      where: {
+        keyPrefix: prefix,
+        isActive: true
+      },
+      include: { user: true }
     });
 
-    if (!apiKeyRecord || !apiKeyRecord.isActive) {
-      return res.status(401).json({ error: "Invalid API key" });
+    const apiKey = keys.find(k =>
+      bcrypt.compareSync(incomingKey, k.keyHash)
+    );
+
+    if (!apiKey) {
+      return res.status(403).json({ error: "Invalid API key" });
     }
 
-    req.user = apiKeyRecord.user;
-    req.apiKey = apiKeyRecord;
+    // if (apiKey.revokedAt || apiKey.expiresAt! < new Date()) {
+    //   return res.status(403).json({ error: "Key expired/revoked" });
+    // }
+
+    // IP whitelist
+    // const clientIp = req.ip as string;
+    // if (
+    //   apiKey.ipWhitelist.length &&
+    //   !apiKey.ipWhitelist.includes(clientIp)
+    // ) {
+    //   return res.status(403).json({ error: "IP not allowed" });
+    // }
+
+    // USER QUOTA CHECK
+    // if (
+    //   apiKey.user.usedThisMonth >= apiKey.user.monthlyQuota
+    // ) {
+    //   return res.status(429).json({ error: "Monthly quota exceeded" });
+    // }
+
+    // RATE LIMIT (per key)
+    // const rateKey = `rate:${apiKey.id}`;
+    // const current = await redis.incr(rateKey);
+
+    // if (current === 1) {
+    //   await redis.expire(rateKey, 3600); // 1 hour window
+    // }
+
+    // if (current > apiKey.rateLimit) {
+    //   return res.status(429).json({ error: "Rate limit exceeded" });
+    // }
+
+    // PERMISSION CHECK
+    // if (!apiKey.permissions?.scrape) {
+    //   return res.status(403).json({ error: "Scrape not allowed" });
+    // }
+
+    req.apiKey = apiKey;
+    req.user = apiKey.user;
 
     next();
-
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: "Auth failed" });
   }
 }
 

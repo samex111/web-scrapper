@@ -6,6 +6,7 @@ import { leadsRoutes } from './routes/leads.routes.js';
 import { exportRoutes } from './routes/export.routes.js';
 import { authRoutes } from './routes/auth.routes.js';
 import cookieParser from "cookie-parser";
+import { apiKeyRoutes } from './routes/apiKey.routes.js';
 
 
 const app = express();
@@ -14,7 +15,7 @@ const app = express();
 app.use(
   cors({
     origin: "http://localhost:3000",
-    credentials: true,
+    credentials: true, 
   })
 );
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(express.json());
 // Routes
 app.use('/api/scrape', scrapeRoutes);
+app.use('/api/api-key', apiKeyRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/auth',authRoutes);

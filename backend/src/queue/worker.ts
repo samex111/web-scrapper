@@ -137,7 +137,7 @@ const worker = new Worker('scrape-jobs', async (job: Job) => {
 }, { connection });
 
 worker.on('completed', (job) => {
-  console.log(`Worker completed job ${job.id}`);
+  console.log(`Worker completed job ${job.id} `);
 });
 
 worker.on('failed', (job, err) => {

@@ -23,9 +23,9 @@ async function apiFetch(
     } catch (e) {
       throw new Error("Something went wrong : "+e);
     }
-    console.error("API Error:", error);
+    // console.error("API Error:", error);
 
-    throw new Error(error?.error || "Request failed");  
+    throw new Error(error|| "Request failed");  
   }
 
   return res;

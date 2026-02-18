@@ -31,7 +31,7 @@ scrapeRoutes.post('/', requireAuthOrApiKey  , checkQuota, async (req, res) => {
     // Increment usage
     await incrementUsage(user.id, urls.length);
 
-    res.json({
+    res.status(200).json({
       jobId,
       status: 'queued',
       urls: urls.length,
