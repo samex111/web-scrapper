@@ -282,12 +282,10 @@ export default function JobsDashboard() {
                           )}
                           {job?.status === 'PROCESSING' && (
                             <>
-                              <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
-                                View Progress
+                              <button className="text-blue-400 ml-5 hover:text-blue-300 text-sm  font-medium transition-colors">
+                               Progressing
                               </button>
-                              <button className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">
-                                Cancel
-                              </button>
+                               
                             </>
                           )}
                           {job?.status === 'PENDING' && (
