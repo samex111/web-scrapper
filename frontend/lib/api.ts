@@ -213,3 +213,16 @@ export async function getCSV(jobId: number) {
      throw new Error("Error in generate key : --- "+ err)
    }
  }
+ export  async function getDetails(){
+   try{
+     const res = await fetch(`${API_URL}/api/api-key/get-details` , {
+      method : "GET",
+      headers : {"Content-type":'application/json'},
+      credentials : "include"
+     })
+     const data =  await res.json();
+     return data;
+   }catch(err){
+     throw new Error("Error in generate key : --- "+ err)
+   }
+ }

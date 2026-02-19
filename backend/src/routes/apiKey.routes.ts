@@ -22,7 +22,6 @@ apiKeyRoutes.post("/scrape", requireApiKey, checkQuota, async (req, res) => {
         error: "Plaese provide atleast one url"
       })
     }
-    // 🔒 basic safety limit
     if (urls.length > 5) {
       return res.status(400).json({
         success: false,
@@ -59,7 +58,6 @@ apiKeyRoutes.post("/scrape", requireApiKey, checkQuota, async (req, res) => {
       }
     }
 
-    // 📊 usage tracking (credits = number of urls)
     console.log(req.apiKey)
     console.log(req.user.id)
     await prisma.apiKey.update({
