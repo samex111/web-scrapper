@@ -200,4 +200,16 @@ export async function getCSV(jobId: number) {
     }
   
 }
- 
+ export default async function GenerateApi(){
+   try{
+     const res = await fetch(`${API_URL}/api/api-key/generate` , {
+      method : "POST",
+      headers : {"Content-type":'application/json'},
+      credentials : "include"
+     })
+     const data =  await res.json();
+     return data;
+   }catch(err){
+     throw new Error("Error in generate key : --- "+ err)
+   }
+ }

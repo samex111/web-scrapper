@@ -1,8 +1,21 @@
 'use client'
-import { useState } from "react";
-
-export default function ApiPage() {
+import GenerateApi from "@/lib/api";
+import { use, useEffect, useState } from "react";
+interface generateKeyProps{
+  message : string;
+  apiKey : string;
+}
+export default  function ApiPage() {
   const [tab, setTab] = useState("curl");
+  const [generateKeyData , setGenerateKeyData] = useState<generateKeyProps>();
+
+  async function generateApiKey(){
+    const data = await GenerateApi();
+    setGenerateKeyData(data)
+    }
+ 
+  
+
 
   return (
     <div className="flex text-gray-200">
@@ -16,11 +29,11 @@ export default function ApiPage() {
           <div className="lg:col-span-2 bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">API Keys</h2>
-              <button className="bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm">
+              <button onClick={()=>generateApiKey()} className="bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm">
                 Generate New Key
               </button>
             </div>
-
+      
             <div className="text-sm">
               <div className="grid grid-cols-5 text-gray-400 pb-2 border-b border-white/10">
                 <span>Name</span>
@@ -32,7 +45,7 @@ export default function ApiPage() {
 
               <div className="grid grid-cols-5 py-3 items-center">
                 <span>Default Key</span>
-                <span className="truncate">sk_live_xxxxxx</span>
+                <span className="truncate">{generateKeyData?.apiKey}</span>
                 <span>Aug 12</span>
                 <span>2h ago</span>
                 <div className="space-x-2">
