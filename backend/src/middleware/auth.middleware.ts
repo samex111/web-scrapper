@@ -23,7 +23,7 @@ export async function requireAuth(
 ) {
   try {
     // only for dev else only cookies
-    const token =req.cookies.token ?? req.headers.authorization?.split(" ")[1];
+    const token = req.cookies.token ?? req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -34,7 +34,7 @@ export async function requireAuth(
     const session = await prisma.session.findUnique({
       where: { sessionToken: token },
     });
- 
+
     if (!session || session.expiresAt < new Date()) {
       return res.status(401).json({ error: "Session expired" });
     }
@@ -73,61 +73,25 @@ export async function requireApiKey(
       where: {
         keyPrefix: prefix,
         isActive: true
+
       },
       include: { user: true }
     });
 
-    const apiKey = keys.find(k =>
+    const apiKey = keys.find((k) =>
       bcrypt.compareSync(incomingKey, k.keyHash)
     );
+
 
     if (!apiKey) {
       return res.status(403).json({ error: "Invalid API key" });
     }
 
-    // if (apiKey.revokedAt || apiKey.expiresAt! < new Date()) {
-    //   return res.status(403).json({ error: "Key expired/revoked" });
-    // }
-
-    // IP whitelist
-    // const clientIp = req.ip as string;
-    // if (
-    //   apiKey.ipWhitelist.length &&
-    //   !apiKey.ipWhitelist.includes(clientIp)
-    // ) {
-    //   return res.status(403).json({ error: "IP not allowed" });
-    // }
-
-    // USER QUOTA CHECK
-    // if (
-    //   apiKey.user.usedThisMonth >= apiKey.user.monthlyQuota
-    // ) {
-    //   return res.status(429).json({ error: "Monthly quota exceeded" });
-    // }
-
-    // RATE LIMIT (per key)
-    // const rateKey = `rate:${apiKey.id}`;
-    // const current = await redis.incr(rateKey);
-
-    // if (current === 1) {
-    //   await redis.expire(rateKey, 3600); // 1 hour window
-    // }
-
-    // if (current > apiKey.rateLimit) {
-    //   return res.status(429).json({ error: "Rate limit exceeded" });
-    // }
-
-    // PERMISSION CHECK
-    // if (!apiKey.permissions?.scrape) {
-    //   return res.status(403).json({ error: "Scrape not allowed" });
-    // }
-
-    req.apiKey = apiKey;
     req.user = apiKey.user;
 
     next();
   } catch (err) {
-    res.status(500).json({ error: "Auth failed" });
+    res.status(500).json({ error: "Auth failed" + err });
   }
 }
 
@@ -136,7 +100,7 @@ export async function requireAuthOrApiKey(
   res: Response,
   next: NextFunction
 ) {
-  const authHeader = req.cookies.token ?? req.headers.authorization?.split(' ')[1]; ;
+  const authHeader = req.cookies.token ?? req.headers.authorization?.split(' ')[1];;
 
   if (authHeader) {
     return requireAuth(req, res, next);

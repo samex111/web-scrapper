@@ -116,7 +116,7 @@ authRoutes.post("/google", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(401).json({ error: "Google authentication failed : "+err });
+    res.status(401).json({ error: "Google authentication failed : " + err });
   }
 });
 
@@ -128,17 +128,17 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
     const last30Days = new Date();
     last30Days.setDate(now.getDate() - 30);
     const startOfMonth = new Date(
-  new Date().getFullYear(),
-  new Date().getMonth(),
-  1
-);    
-      const start = new Date();
-      start.setHours(0, 0, 0, 0);
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      1
+    );
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
 
-      const end = new Date();
-      end.setHours(23, 59, 59, 999);
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
 
-      
+
 
 
     const [
@@ -168,8 +168,8 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
       prisma.job.count({ where: { userId, status: "COMPLETED" } }),
 
       prisma.lead.count({ where: { userId } }),
-      prisma.job.count({ where: { userId, createdAt: { gte: startOfMonth} } }),
-      prisma.job.count({ where: { userId, createdAt: { gte: start , lte :end } } }),
+      prisma.job.count({ where: { userId, createdAt: { gte: startOfMonth } } }),
+      prisma.job.count({ where: { userId, createdAt: { gte: start, lte: end } } }),
 
     ]);
 

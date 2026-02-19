@@ -12,38 +12,48 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String   @id @default(cuid())
+  email         String   @unique
   name          String?
-  avatar        String?   // Profile picture from Google
-  password      String?   // For email/password signup (hashed)
-  googleId      String?   @unique  // Google OAuth ID
-  apiKey        String    @unique @default(cuid())
-  plan          Plan      @default(FREE)
-  monthlyQuota  Int       @default(100)
-  usedThisMonth Int       @default(0)
-  resetDate     DateTime  @default(now()) // When quota resets
-  stripeCustomerId     String?   @unique
-  stripeSubscriptionId String?   @unique
-  emailVerified Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
-  jobs          Job[]
-  leads         Lead[]
-  sessions      Session[]
-   web        Webhook[]
-   api        ApiKey[]
+  avatar        String?
 
-  
+  password      String?
+  googleId      String?  @unique
+
+  plan          Plan     @default(FREE)
+
+  monthlyQuota  Int      @default(100)
+  usedThisMonth Int      @default(0)
+  totalUsage    Int      @default(0)
+
+  quotaResetAt  DateTime @default(now())
+
+  stripeCustomerId     String? @unique
+  stripeSubscriptionId String? @unique
+
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+
+  emailVerified Boolean @default(false)
+  isActive      Boolean @default(true)
+  deletedAt     DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastLoginAt   DateTime?
+
+  jobs     Job[]
+  leads    Lead[]
+  sessions Session[]
+  webhooks Webhook[]
+  apiKeys  ApiKey[]
+
   @@index([email])
   @@index([googleId])
-  @@index([apiKey])
   @@index([plan, isActive])
 }
+
 
 model Session {
   id           String   @id @default(cuid())

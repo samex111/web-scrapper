@@ -10,17 +10,6 @@ exportRoutes.get('/csv', requireAuthOrApiKey, async (req, res) => {
   try {
     const { jobId } = req.query;
 
-    // if (!apiKey) {
-    //   return res.status(401).json({ error: 'API key required' });
-    // }
-
-    // const user = await prisma.user.findUnique({
-    //   where: { apiKey: apiKey as string },
-    // });
-
-    // if (!user) {
-    //   return res.status(401).json({ error: 'Invalid API key' });
-    // }
 
     const where: any = { jobId: jobId };
 
@@ -68,19 +57,8 @@ exportRoutes.get('/json', requireAuthOrApiKey, async (req, res) => {
   try {
     const { apiKey, jobId } = req.query;
 
-    if (!apiKey) {
-      return res.status(401).json({ error: 'API key required' });
-    }
 
-    const user = await prisma.user.findUnique({
-      where: { apiKey: apiKey as string },
-    });
-
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid API key' });
-    }
-
-    const where: any = { userId: user.id };
+    const where: any = { userId: req.user.id };
     if (jobId) where.jobId = jobId;
 
     const leads = await prisma.lead.findMany({
