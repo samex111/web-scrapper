@@ -24,4 +24,7 @@ export const exportSchema = z.object({
   lastSevenDays: z.coerce.boolean().optional(),
 
 });
+export const scrapeSchema = z.object({
+  urls: z.array(z.string().url()).min(1).max(100),
+});
 

@@ -61,6 +61,7 @@ export async  function generateApiKey(req:Request , res:Response)  {
         ipWhitelist:  []
       }
     });
+
     return res.status(201).json({
       message: "API key generated successfully",
       apiKey: rawKey 

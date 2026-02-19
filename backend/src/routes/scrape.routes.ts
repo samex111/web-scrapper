@@ -4,12 +4,11 @@ import { addScrapeJob, getJobStatus } from '../queue/jobs.js';
 import { prisma } from '../db/client.js';
 import { checkQuota, incrementUsage } from '../middleware/quota.middleware.js';
 import { requireAuthOrApiKey } from '../middleware/auth.middleware.js';
+import { scrapeSchema } from './zod.routes.js';
 
 export const scrapeRoutes = Router();
 
-const scrapeSchema = z.object({
-  urls: z.array(z.string().url()).min(1).max(100),
-});
+
 
 // Start new scrape job
 scrapeRoutes.post('/', requireAuthOrApiKey  , checkQuota, async (req, res) => {

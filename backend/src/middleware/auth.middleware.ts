@@ -88,6 +88,7 @@ export async function requireApiKey(
     }
 
     req.user = apiKey.user;
+    req.apiKey = apiKey.id
 
     next();
   } catch (err) {

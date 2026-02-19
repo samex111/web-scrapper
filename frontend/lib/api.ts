@@ -50,6 +50,7 @@ export async function createJob(data: { name?: string; urls: string[] }) {
   return await res.json();
 }
 
+
 export async function getJob(jobId: string) {
   const res = await apiFetch(`/api/scrape/job/${jobId}`);
   return await res.json();
