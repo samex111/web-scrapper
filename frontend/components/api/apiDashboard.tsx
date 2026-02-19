@@ -13,10 +13,7 @@ export default  function ApiPage() {
     const data = await GenerateApi();
     setGenerateKeyData(data)
     }
- 
-  
-
-
+    
   return (
     <div className="flex text-gray-200">
       {/* MAIN */}

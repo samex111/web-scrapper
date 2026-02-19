@@ -9,17 +9,17 @@ import { checkQuota } from "../middleware/quota.middleware.js";
 export const apiKeyRoutes = Router();
 
 apiKeyRoutes.post('/generate', requireAuth, generateApiKey)
-apiKeyRoutes.post("/scrape", requireApiKey,checkQuota, async (req, res) => {
+apiKeyRoutes.post("/scrape", requireApiKey, checkQuota, async (req, res) => {
   const start = Date.now();
 
   let engine;
 
   try {
     const { urls } = scrapeSchema.parse(req.body);
-    if(urls.length == 0){
+    if (urls.length == 0) {
       return res.status(404).json({
-         success:false,
-         error :"Plaese provide atleast one url"
+        success: false,
+        error: "Plaese provide atleast one url"
       })
     }
     // 🔒 basic safety limit
@@ -54,7 +54,7 @@ apiKeyRoutes.post("/scrape", requireApiKey,checkQuota, async (req, res) => {
         failed.push({
           url,
           success: false,
-          error: err.message ,
+          error: err.message,
         });
       }
     }
@@ -68,11 +68,11 @@ apiKeyRoutes.post("/scrape", requireApiKey,checkQuota, async (req, res) => {
         usageCount: { increment: urls.length },
         lastUsedAt: new Date(),
       },
-    }); 
+    });
     await prisma.user.update({
-      where : {id: req.user.id},
-      data : { 
-          usedThisMonth : {increment : urls.length}
+      where: { id: req.user.id },
+      data: {
+        usedThisMonth: { increment: urls.length }
       }
     })
 
@@ -103,3 +103,27 @@ apiKeyRoutes.post("/scrape", requireApiKey,checkQuota, async (req, res) => {
     }
   }
 });
+apiKeyRoutes.get('/get-details', requireAuth, async (req, res) => {
+  try {
+     const userDetails = await prisma.user.findMany({
+      where : {id : req.user.id},
+      select : {
+        plan : true,
+        monthlyQuota : true,
+        usedThisMonth :true,
+        apiKeys : true
+      }
+     })
+     res.status(200).json({
+      success : true,
+      data :  userDetails
+     })
+  }
+  catch (e) {
+  res.status(500).json(
+    {
+      msg : "error in get details -- " + e
+    }
+  )
+  }
+})

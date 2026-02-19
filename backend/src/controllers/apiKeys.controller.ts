@@ -7,15 +7,12 @@ import type { Request, Response, NextFunction } from 'express';
 export const PLAN_CONFIG  = {
   FREE: {
     maxKeys: 1,
-    rateLimit: 50
   },
   PRO: {
     maxKeys: 5,
-    rateLimit: 500
   },
   BUSINESS: {
     maxKeys: 999999,
-    rateLimit: 5000
   }
 } as any;
 
