@@ -226,3 +226,13 @@ export async function getCSV(jobId: number) {
      throw new Error("Error in generate key : --- "+ err)
    }
  }
+ export async function getResponce(){
+  try{
+    const res  = await fetch(`${API_URL}/api/api-key/scape`, {
+      method :"POST",
+      headers : {"Content-type": 'application/json'}
+    })
+  }catch(e){
+    
+  }
+ }
