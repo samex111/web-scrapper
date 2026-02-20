@@ -2,14 +2,12 @@
 
 import GenerateApi, { getDetails } from "@/lib/api";
 import { useEffect, useState, useCallback } from "react";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog,  DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { formatDate, SNIPPETS } from "@/lib/utils";
 import { ApiKeyRow } from "./components/apiKeyRow";
 import { QuickStart, SectionLabel } from "./components/quickStart";
 import { StatTile } from "./components/statTile";
 
-/* ================= TYPES ================= */
 
 interface GetDetailsResponse {
   success: boolean;
@@ -32,7 +30,6 @@ export interface ApiKey {
   isActive: boolean;
 }
 
-/* ================= PAGE ================= */
 
 export default function ApiPage() {
   const [details, setDetails] = useState<GetDetailsResponse | null>(null);
@@ -65,8 +62,6 @@ export default function ApiPage() {
     setGenerating(false);
   }
 
-  // if (loading) return <PageLoader />;
-
   const used = plan?.usedThisMonth ?? 0;
   const quota = plan?.monthlyQuota ?? 0;
   const usagePercent = quota ? Math.min((used / quota) * 100, 100) : 0;
@@ -81,9 +76,15 @@ export default function ApiPage() {
       : usagePercent > 60
         ? "text-orange-400"
         : "text-emerald-400";
-  const isDisabled = details?.data?.some(
-    item => item.plan === "FREE" && item.apiKeys.length >= 1
-  );
+
+  const isDisabled =
+  details?.data?.some(item => {
+    const isFree = item.plan === "FREE";
+    const hasActiveKey = item.apiKeys.some(key => key.isActive);
+
+    return isFree && hasActiveKey;
+  }) ?? false;
+  
 const handleCopy = async () => {
   await navigator.clipboard.writeText(newKey)
   setCopied(true)
@@ -104,12 +105,10 @@ const handleCopy = async () => {
         </span>
       </div>
 
-      {/* Stat Strip */}
       <div className="grid grid-cols-3 gap-4 mb-6">
 
         <StatTile label="Plan" value={plan?.plan ?? "—"} valueClass="text-emerald-400" topBorderClass="border-t-emerald-400" />
 
-        {/* Usage tile (inline because of dynamic bar) */}
         <div className="bg-white/[0.025] border border-white/[0.07] border-t-2 border-t-orange-400 rounded-xl p-5">
           <p className="text-[10px] tracking-[0.2em] uppercase  mb-1">Usage</p>
           <h3 className={`text-xl font-medium tracking-tight mb-2 ${usageTextColor}`}>
@@ -121,20 +120,16 @@ const handleCopy = async () => {
               style={{ width: `${usagePercent}%` }}
             />
           </div>
-          <span className="text-[10px]  mt-1 block">
-            {usagePercent.toFixed(1)}% consumed
-          </span>
+     
         </div>
 
         <StatTile label="Active Keys" value={String(activeKeys)} valueClass="text-violet-400" topBorderClass="border-t-violet-400" />
 
       </div>
 
-      {/* API Keys Panel */}
       <div className="bg-white/[0.025] border border-white/[0.07] rounded-xl p-6 mb-6">
 
-        {/* Panel Header */}
-        {/* Panel Header */}
+     
         <div className="flex justify-between items-center mb-5 relative group">
 
           <SectionLabel>API Keys</SectionLabel>
@@ -142,7 +137,7 @@ const handleCopy = async () => {
           <button
             onClick={handleGenerate}
             disabled={isDisabled}
-            className="text-[11px] tracking-[0.12em] uppercase px-4 py-1.5 rounded-md border 
+            className="text-[11px] tracking-[0.12em] w-fit uppercase px-4 py-1.5 rounded-md border 
                  transition-all duration-200 font-mono
                  enabled:border-white enabled:text-white enabled:bg-white/10 enabled:hover:bg-white/20
                  disabled:border-white/20 disabled:text-white/40 disabled:cursor-not-allowed"
@@ -203,7 +198,6 @@ const handleCopy = async () => {
 
       </div>
 
-      {/* Quick Start */}
       <QuickStart />
 
     </div>
