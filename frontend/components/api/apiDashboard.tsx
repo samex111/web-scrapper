@@ -32,26 +32,17 @@ export default function ApiPage() {
   const [details, setDetails] = useState<GetDetailsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const [disable , setDisable] = useState(false);
 
   const plan = details?.data?.[0];
+
+  const loadDetails = useCallback(async () => {
+    setLoading(true);
+
+    const res = await getDetails();
+    setDetails(res);
+    setLoading(false);
+  }, []);
   
- const loadDetails = useCallback(async () => {
-  setLoading(true);
-
-  const res = await getDetails();
-  setDetails(res);
-
-  const isFreeWithKey = res?.data?.some(
-    (item:any) => item.plan === "FREE"
-  );
-
-  setDisable(isFreeWithKey);
-
-  setLoading(false);
-}, []);
- console.log(disable)
- console.log("lets -- ",)
   useEffect(() => {
     loadDetails();
   }, [loadDetails]);
@@ -62,7 +53,7 @@ export default function ApiPage() {
     await loadDetails();
     setGenerating(false);
   }
-  
+
   // if (loading) return <PageLoader />;
 
   const used = plan?.usedThisMonth ?? 0;
@@ -77,9 +68,11 @@ export default function ApiPage() {
     usagePercent > 85
       ? "text-red-400"
       : usagePercent > 60
-      ? "text-orange-400"
-      : "text-emerald-400";
-      
+        ? "text-orange-400"
+        : "text-emerald-400";
+  const isDisabled = details?.data?.some(
+  item => item.plan === "FREE" && item.apiKeys.length >= 1
+);
 
   return (
     <div className="min-h-screen  text-white p-8 font-mono">
@@ -126,29 +119,29 @@ export default function ApiPage() {
 
         {/* Panel Header */}
         {/* Panel Header */}
-  <div className="flex justify-between items-center mb-5 relative group">
+        <div className="flex justify-between items-center mb-5 relative group">
 
-    <SectionLabel>API Keys</SectionLabel>
+          <SectionLabel>API Keys</SectionLabel>
 
-    <button
-      onClick={handleGenerate}
-      disabled={disable}
-      className="text-[11px] tracking-[0.12em] uppercase px-4 py-1.5 rounded-md border 
+          <button
+            onClick={handleGenerate}
+            disabled={isDisabled}
+            className="text-[11px] tracking-[0.12em] uppercase px-4 py-1.5 rounded-md border 
                  transition-all duration-200 font-mono
                  enabled:border-white enabled:text-white enabled:bg-white/10 enabled:hover:bg-white/20
                  disabled:border-white/20 disabled:text-white/40 disabled:cursor-not-allowed"
-    >
-      {generating ? "Generating…" : "+ New Key"}
-    </button>
+          >
+            {generating ? "Generating…" : "+ New Key"}
+          </button>
 
-    {disable && (
-      <span className="absolute right-0 bottom-full mb-2 hidden group-hover:block 
+          {isDisabled && (
+            <span className="absolute right-0 bottom-full mb-2 hidden group-hover:block 
                        text-xs bg-black text-white px-2 py-1 rounded whitespace-nowrap">
-        Only one key allowed in FREE plan
-      </span>
-    )}
+              Only one key allowed in FREE plan
+            </span>
+          )}
 
-  </div>
+        </div>
 
         {/* Table Head */}
         <div className="grid grid-cols-5 pb-2 border-b border-white/[0.06] text-[10px] tracking-[0.18em] uppercase ">
@@ -174,7 +167,6 @@ export default function ApiPage() {
   );
 }
 
-/* ================= API KEY ROW ================= */
 
 function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
   const [copied, setCopied] = useState(false);
@@ -184,7 +176,7 @@ function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   }
-  
+
   return (
     <div className="grid grid-cols-5 py-3 border-b border-white/[0.04] text-xs items-center hover:bg-[#1a1a1a] transition-colors duration-150">
 
@@ -209,9 +201,8 @@ function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
           {copied ? "Copied!" : "Copy"}
         </button>
         <span
-          className={`w-1.5 h-1.5 rounded-full inline-block flex-shrink-0 ${
-            apiKey.isActive ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-red-400"
-          }`}
+          className={`w-1.5 h-1.5 rounded-full inline-block flex-shrink-0 ${apiKey.isActive ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-red-400"
+            }`}
         />
         <span className={`text-[10px] uppercase tracking-wider ${apiKey.isActive ? "text-emerald-400" : "text-red-400"}`}>
           {apiKey.isActive ? "Active" : "Revoked"}
@@ -222,7 +213,6 @@ function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
   );
 }
 
-/* ================= QUICK START ================= */
 
 const SNIPPETS = {
   curl: `curl -X POST https://api.scrappex.com/api/api-key/scrape \\
@@ -272,17 +262,15 @@ function QuickStart() {
         </button>
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-2 mb-4">
         {(["curl", "js", "python"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`text-[11px] uppercase tracking-widest px-3 py-1 rounded-md  transition-all duration-150 font-mono cursor-pointer
-              ${
-                tab === t
-                  ? " text-white bg-white/10"
-                  : " text-white  bg-transparent"
+              ${tab === t
+                ? " text-white bg-white/10"
+                : " text-white  bg-transparent"
               }`}
           >
             {t}
@@ -298,7 +286,6 @@ function QuickStart() {
   );
 }
 
-/* ================= SHARED COMPONENTS ================= */
 
 function StatTile({
   label,
@@ -329,7 +316,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 
 
-/* ================= HELPERS ================= */
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
