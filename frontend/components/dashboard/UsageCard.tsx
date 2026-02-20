@@ -27,7 +27,7 @@ export function UsageCard() {
 
   if (loading) return <UsageSkeleton/>;
 
-  const percentage = (user.usedThisMonth / user.monthlyQuota) * 100;
+  const percentage = (user?.usedThisMonth / user?.monthlyQuota) * 100;
 
   return (
     <motion.div
