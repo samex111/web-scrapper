@@ -221,8 +221,8 @@ function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
 
       <span className="text-white">{apiKey.name}</span>
 
-      <span className="inline-block w-fit bg-[#1a1a1a] text-white px-2 py-0.5 rounded tracking-wider">
-        {apiKey.keyPrefix}••••••
+      <span className="inline-block w-fit bg-[#1a1a1a] text-white  py-0.5 rounded tracking-wider">
+        {apiKey.keyPrefix}••••
       </span>
 
       <span className="text-white text-[11px]">{formatDate(apiKey.createdAt)}</span>
