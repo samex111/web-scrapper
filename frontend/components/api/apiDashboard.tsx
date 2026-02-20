@@ -2,7 +2,7 @@
 
 import GenerateApi, { getDetails } from "@/lib/api";
 import { useEffect, useState, useCallback } from "react";
-import { Dialog,  DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { ApiKeyRow } from "./components/apiKeyRow";
 import { QuickStart, SectionLabel } from "./components/quickStart";
@@ -78,19 +78,19 @@ export default function ApiPage() {
         : "text-emerald-400";
 
   const isDisabled =
-  details?.data?.some(item => {
-    const isFree = item.plan === "FREE";
-    const hasActiveKey = item.apiKeys.some(key => key.isActive);
+    details?.data?.some(item => {
+      const isFree = item.plan === "FREE";
+      const hasActiveKey = item.apiKeys.some(key => key.isActive);
 
-    return isFree && hasActiveKey;
-  }) ?? false;
-  
-const handleCopy = async () => {
-  await navigator.clipboard.writeText(newKey)
-  setCopied(true)
+      return isFree && hasActiveKey;
+    }) ?? false;
 
-  setTimeout(() => setCopied(false), 2000)
-}
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(newKey)
+    setCopied(true)
+
+    setTimeout(() => setCopied(false), 2000)
+  }
   return (
     <div className="min-h-screen  text-white p-8 font-mono">
 
@@ -120,7 +120,7 @@ const handleCopy = async () => {
               style={{ width: `${usagePercent}%` }}
             />
           </div>
-     
+
         </div>
 
         <StatTile label="Active Keys" value={String(activeKeys)} valueClass="text-violet-400" topBorderClass="border-t-violet-400" />
@@ -129,7 +129,7 @@ const handleCopy = async () => {
 
       <div className="bg-white/[0.025] border border-white/[0.07] rounded-xl p-6 mb-6">
 
-     
+
         <div className="flex justify-between items-center mb-5 relative group">
 
           <SectionLabel>API Keys</SectionLabel>
@@ -146,7 +146,7 @@ const handleCopy = async () => {
           </button>
           <Dialog open={open} onOpenChange={(v) => {
             setOpen(v)
-            if (!v) setNewKey("")   
+            if (!v) setNewKey("")
           }}>
 
             <DialogContent className="sm:max-w-md bg-[#1a1a1a] border-0 text-white">
@@ -189,7 +189,7 @@ const handleCopy = async () => {
         </div>
 
         {plan?.apiKeys?.length ? (
-          plan.apiKeys.map((key) => <ApiKeyRow key={key.id} apiKey={key}  />)
+          plan.apiKeys.map((key) => <ApiKeyRow key={key.id} apiKey={key} />)
         ) : (
           <div className="py-10 text-center  text-xs tracking-wider">
             No API keys yet — generate your first key above.

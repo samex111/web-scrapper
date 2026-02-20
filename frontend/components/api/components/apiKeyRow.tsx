@@ -1,17 +1,7 @@
 import { formatDate, formatRelative } from "@/lib/utils";
-
-import { useState } from "react";
 import { ApiKey } from "../apiDashboard";
-
-
+import { Button } from "@/components/ui/button";
 export function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
-  const [copied, setCopied] = useState(false);
-
-  function copy() {
-    navigator.clipboard.writeText(apiKey.keyPrefix);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
-  }
 
   return (
     <div className="grid grid-cols-5 py-3 border-b border-white/[0.04] text-xs items-center hover:bg-[#1a1a1a] transition-colors duration-150">
@@ -35,8 +25,9 @@ export function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
             }`}
         />
         <span className={`text-[10px] uppercase tracking-wider ${apiKey.isActive ? "text-emerald-400" : "text-red-400"}`}>
-          {apiKey.isActive ? "Active" : "Revoked"}
+          {apiKey.isActive ? "Active" : "Revoked"} 
         </span>
+           {apiKey.isActive ? <Button  variant={'ghost'} className="text-red-400 ml-5 hover:bg-transparent hover:text-red-500">Revoke</Button> : ''}
       </div>
 
     </div>
