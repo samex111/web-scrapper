@@ -40,9 +40,9 @@ export async  function generateApiKey(req:Request , res:Response)  {
     }
 
     const rawKey =
-      "sk_live_" + crypto.randomBytes(32).toString("hex");
+      "srapexx_key_" + crypto.randomBytes(32).toString("hex");
 
-    const keyPrefix = rawKey.slice(0, 12);
+    const keyPrefix = rawKey.slice(0, 15);
 
     const keyHash = await bcrypt.hash(rawKey, 10);
 

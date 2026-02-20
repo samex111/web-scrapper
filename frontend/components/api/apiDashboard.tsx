@@ -2,6 +2,8 @@
 
 import GenerateApi, { getDetails } from "@/lib/api";
 import { useEffect, useState, useCallback } from "react";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Button } from "../ui/button";
 
 /* ================= TYPES ================= */
 
@@ -32,6 +34,9 @@ export default function ApiPage() {
   const [details, setDetails] = useState<GetDetailsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [newKey, setNewKey] = useState("");
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false)
 
   const plan = details?.data?.[0];
 
@@ -42,14 +47,16 @@ export default function ApiPage() {
     setDetails(res);
     setLoading(false);
   }, []);
-  
+
   useEffect(() => {
     loadDetails();
   }, [loadDetails]);
 
   async function handleGenerate() {
     setGenerating(true);
-    await GenerateApi();
+    const res = await GenerateApi();
+    setNewKey(res.apiKey);
+    setOpen(true);
     await loadDetails();
     setGenerating(false);
   }
@@ -71,9 +78,14 @@ export default function ApiPage() {
         ? "text-orange-400"
         : "text-emerald-400";
   const isDisabled = details?.data?.some(
-  item => item.plan === "FREE" && item.apiKeys.length >= 1
-);
+    item => item.plan === "FREE" && item.apiKeys.length >= 1
+  );
+const handleCopy = async () => {
+  await navigator.clipboard.writeText(newKey)
+  setCopied(true)
 
+  setTimeout(() => setCopied(false), 2000)
+}
   return (
     <div className="min-h-screen  text-white p-8 font-mono">
 
@@ -133,6 +145,33 @@ export default function ApiPage() {
           >
             {generating ? "Generating…" : "+ New Key"}
           </button>
+          <Dialog open={open} onOpenChange={(v) => {
+            setOpen(v)
+            if (!v) setNewKey("")   
+          }}>
+
+            <DialogContent className="sm:max-w-md">
+
+              <DialogHeader>
+                <DialogTitle>API key created</DialogTitle>
+                <DialogDescription>
+                  This is the only time you’ll see this key. Store it securely.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="bg-muted rounded-md px-3 py-2 font-mono text-sm break-all">
+                {newKey}
+              </div>
+
+              <div className="flex gap-2 mt-4">
+
+                <Button onClick={handleCopy} className="w-full">
+                  {copied ? "Copied ✓" : "Copy"}
+                </Button>
+              </div>
+
+            </DialogContent>
+          </Dialog>
 
           {isDisabled && (
             <span className="absolute right-0 bottom-full mb-2 hidden group-hover:block 
@@ -183,7 +222,7 @@ function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
       <span className="text-white">{apiKey.name}</span>
 
       <span className="inline-block w-fit bg-[#1a1a1a] text-white px-2 py-0.5 rounded tracking-wider">
-        {apiKey.keyPrefix}••••••••
+        {apiKey.keyPrefix}••••••
       </span>
 
       <span className="text-white text-[11px]">{formatDate(apiKey.createdAt)}</span>
@@ -193,13 +232,7 @@ function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
       </span>
 
       <div className="flex items-center gap-2">
-        <button
-          onClick={copy}
-          className={`bg-transparent border-none text-[11px] tracking-wider cursor-pointer font-mono transition-colors duration-200
-            ${copied ? "text-gray-500" : " hover:text-white"}`}
-        >
-          {copied ? "Copied!" : "Copy"}
-        </button>
+       
         <span
           className={`w-1.5 h-1.5 rounded-full inline-block flex-shrink-0 ${apiKey.isActive ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-red-400"
             }`}
