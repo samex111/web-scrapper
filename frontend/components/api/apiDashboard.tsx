@@ -4,8 +4,10 @@ import GenerateApi, { getDetails } from "@/lib/api";
 import { useEffect, useState, useCallback } from "react";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { formatDate } from "@/lib/utils";
+import { formatDate, SNIPPETS } from "@/lib/utils";
 import { ApiKeyRow } from "./components/apiKeyRow";
+import { QuickStart, SectionLabel } from "./components/quickStart";
+import { StatTile } from "./components/statTile";
 
 /* ================= TYPES ================= */
 
@@ -207,109 +209,5 @@ const handleCopy = async () => {
     </div>
   );
 }
-
-
-
-const SNIPPETS = {
-  curl: `curl -X POST https://api.scrappex.com/api/api-key/scrape \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{"url":"https://example.com"}'`,
-  js: `const res = await fetch("https://api.scrappex.com/api/api-key/scrape", {
-  method: "POST",
-  headers: {
-    Authorization: "Bearer YOUR_API_KEY",
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ url: "https://example.com" }),
-});
-const data = await res.json();`,
-  python: `import requests
-
-response = requests.post(
-  "https://api.scrappex.com/api/api-key/scrape",
-  headers={"Authorization": "Bearer YOUR_API_KEY"},
-  json={"url": "https://example.com"},
-)
-print(response.json())`,
-};
-
-function QuickStart() {
-  const [tab, setTab] = useState<"curl" | "js" | "python">("curl");
-  const [copied, setCopied] = useState(false);
-
-  function copySnippet() {
-    navigator.clipboard.writeText(SNIPPETS[tab]);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
-  }
-
-  return (
-    <div className="bg-white/[0.025] border border-white/[0.07] rounded-xl p-6">
-
-      <div className="flex justify-between items-center mb-5">
-        <SectionLabel>Quick Start</SectionLabel>
-        <button
-          onClick={copySnippet}
-          className={`bg-transparent border-none text-[11px] tracking-widest cursor-pointer font-mono transition-colors duration-200
-            ${copied ? "text-gray-400" : " hover:text-white"}`}
-        >
-          {copied ? "Copied!" : "Copy"}
-        </button>
-      </div>
-
-      <div className="flex gap-2 mb-4">
-        {(["curl", "js", "python"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`text-[11px] uppercase tracking-widest px-3 py-1 rounded-md  transition-all duration-150 font-mono cursor-pointer
-              ${tab === t
-                ? " text-white bg-white/10"
-                : " text-white  bg-transparent"
-              }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      <pre className="m-0 px-5 py-4 bg-black/30 border border-white/[0.05] rounded-lg text-xs leading-relaxed  overflow-x-auto whitespace-pre tracking-wide">
-        {SNIPPETS[tab]}
-      </pre>
-
-    </div>
-  );
-}
-
-
-function StatTile({
-  label,
-  value,
-  valueClass,
-  topBorderClass,
-}: {
-  label: string;
-  value: string;
-  valueClass: string;
-  topBorderClass: string;
-}) {
-  return (
-    <div className={`bg-white/[0.025] border border-white/[0.07] border-t-2 ${topBorderClass} rounded-xl p-5`}>
-      <p className="text-[10px] tracking-[0.2em] uppercase  mb-1">{label}</p>
-      <h3 className={`text-xl font-medium tracking-tight ${valueClass}`}>{value}</h3>
-    </div>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-[11px] tracking-[0.2em] uppercase  font-normal m-0">
-      {children}
-    </h2>
-  );
-}
-
-
 
 

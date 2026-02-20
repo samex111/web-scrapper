@@ -50,3 +50,26 @@ export function formatRelative(date: string) {
 }
 
 
+export const SNIPPETS = {
+  curl: `curl -X POST https://api.scrappex.com/api/api-key/scrape \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"url":"https://example.com"}'`,
+  js: `const res = await fetch("https://api.scrappex.com/api/api-key/scrape", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ url: "https://example.com" }),
+});
+const data = await res.json();`,
+  python: `import requests
+
+response = requests.post(
+  "https://api.scrappex.com/api/api-key/scrape",
+  headers={"Authorization": "Bearer YOUR_API_KEY"},
+  json={"url": "https://example.com"},
+)
+print(response.json())`,
+};
