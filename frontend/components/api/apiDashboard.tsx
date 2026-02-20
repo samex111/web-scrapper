@@ -150,7 +150,7 @@ const handleCopy = async () => {
             if (!v) setNewKey("")   
           }}>
 
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md bg-[#1a1a1a] border-0 text-white">
 
               <DialogHeader>
                 <DialogTitle>API key created</DialogTitle>
@@ -159,13 +159,13 @@ const handleCopy = async () => {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="bg-muted rounded-md px-3 py-2 font-mono text-sm break-all">
+              <div className="text-white rounded-md bg-transparent px-3 py-2 font-mono text-sm break-all">
                 {newKey}
               </div>
 
               <div className="flex gap-2 mt-4">
 
-                <Button onClick={handleCopy} className="w-full">
+                <Button variant={'secondary'} onClick={handleCopy} className="w-full ">
                   {copied ? "Copied ✓" : "Copy"}
                 </Button>
               </div>
