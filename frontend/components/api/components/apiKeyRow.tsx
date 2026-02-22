@@ -24,7 +24,7 @@ export function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
           className={`w-1.5 h-1.5 rounded-full inline-block flex-shrink-0 ${apiKey.isActive ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-red-400"
             }`}
         />
-        <span className={`text-[10px] uppercase tracking-wider ${apiKey.isActive ? "text-emerald-400" : "text-red-400"}`}>
+        <span className={`text-[10px]  uppercase tracking-wider ${apiKey.isActive ? "text-emerald-400" : "text-red-400"}`}>
           {apiKey.isActive ? "Active" : "Revoked"} 
         </span>
            {apiKey.isActive ? <Button  variant={'ghost'} className="text-red-400 ml-5 hover:bg-transparent hover:text-red-500">Revoke</Button> : ''}

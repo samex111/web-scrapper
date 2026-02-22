@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requireApiKey, requireAuth } from "../middleware/auth.middleware.js";
-import { generateApiKey } from "../controllers/apiKeys.controller.js";
+import { generateApiKey, revokeApi } from "../controllers/apiKeys.controller.js";
 import { scrapeSchema } from "./zod.routes.js";
 import ScraperEngine from "../scrape/engine.js";
 import { config } from "../config/config.js";
@@ -8,7 +8,8 @@ import { prisma } from "../db/client.js";
 import { checkQuota } from "../middleware/quota.middleware.js";
 export const apiKeyRoutes = Router();
 
-apiKeyRoutes.post('/generate', requireAuth, generateApiKey)
+apiKeyRoutes.post('/generate', requireAuth, generateApiKey);
+apiKeyRoutes.patch('/revoke/:id',requireAuth,revokeApi );
 apiKeyRoutes.post("/scrape", requireApiKey, checkQuota, async (req, res) => {
   const start = Date.now();
 

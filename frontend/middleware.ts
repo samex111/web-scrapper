@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
   // Protected routes
-  const protectedRoutes = ['/dashboard', '/jobs', '/leads', '/settings', '/api-keys'];
+  const protectedRoutes = ['/dashboard', '/jobs', '/leads', '/settings', '/api'];
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
   // Redirect logic

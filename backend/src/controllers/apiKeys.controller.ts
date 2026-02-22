@@ -2,6 +2,7 @@ import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { prisma } from  "../db/client.js";
 import type { Request, Response, NextFunction } from 'express';
+import { paramsId } from "../routes/zod.routes.js";
 
  
 export const PLAN_CONFIG  = {
@@ -71,3 +72,38 @@ export async  function generateApiKey(req:Request , res:Response)  {
     });
   }
 };
+export async function revokeApi(req: Request, res: Response) {
+  try {
+    const parseData = paramsId.safeParse(req.params);
+
+    if (!parseData.success) {
+      return res.status(400).json({ msg: parseData.error });
+    }
+
+    const { id } = parseData.data;
+
+    const apiRevoke = await prisma.apiKey.update({
+      where: { id },
+      data: {
+        isActive: false,
+        revokedAt: new Date(),
+      },
+    });
+
+    return res.status(200).json({
+      msg: "revoked successfully",
+      data: apiRevoke,
+    });
+
+  } catch (e:any) {
+  if (e.code === "P2025") {
+    return res.status(404).json({ msg: "API key not found" });
+  }
+    return res.status(500).json({
+      msg: "internal server error --> " + e,
+    });
+  }
+}
+export async function scrape(req:Request,res:Response){
+  
+}
