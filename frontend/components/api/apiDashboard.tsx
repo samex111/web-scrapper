@@ -189,7 +189,7 @@ export default function ApiPage() {
         </div>
 
         {plan?.apiKeys?.length ? (
-          plan.apiKeys.map((key) => <ApiKeyRow key={key.id} apiKey={key} />)
+          plan.apiKeys.map((key) => <ApiKeyRow onClick = {loadDetails} key={key.id} apiKey={key} />)
         ) : (
           <div className="py-10 text-center  text-xs tracking-wider">
             No API keys yet — generate your first key above.

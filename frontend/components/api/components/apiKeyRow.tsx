@@ -1,10 +1,18 @@
 import { formatDate, formatRelative } from "@/lib/utils";
 import { ApiKey } from "../apiDashboard";
 import { Button } from "@/components/ui/button";
-export function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
-
+import { reovkeApiKey } from "@/lib/api";
+type ApiKeyRowProps = {
+  apiKey: ApiKey;
+  onClick: () => void;
+};
+export function ApiKeyRow({ apiKey , onClick } : ApiKeyRowProps) {
+const handleRevoke = async (id:string) => {
+  await reovkeApiKey(id);
+  onClick();
+};
   return (
-    <div className="grid grid-cols-5 py-3 border-b border-white/[0.04] text-xs items-center hover:bg-[#1a1a1a] transition-colors duration-150">
+    <div onClick={()=>onClick} className="grid grid-cols-5 py-3 border-b border-white/[0.04] text-xs items-center hover:bg-[#1a1a1a] transition-colors duration-150">
 
       <span className="text-white">{apiKey.name}</span>
 
@@ -21,13 +29,13 @@ export function ApiKeyRow({ apiKey }: { apiKey: ApiKey }) {
       <div className="flex items-center gap-2">
        
         <span
-          className={`w-1.5 h-1.5 rounded-full inline-block flex-shrink-0 ${apiKey.isActive ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-red-400"
+          className={`w-1.5 h-1.5 rounded-full inline-block shrink-0 ${apiKey.isActive ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-red-400"
             }`}
         />
         <span className={`text-[10px]  uppercase tracking-wider ${apiKey.isActive ? "text-emerald-400" : "text-red-400"}`}>
           {apiKey.isActive ? "Active" : "Revoked"} 
         </span>
-           {apiKey.isActive ? <Button  variant={'ghost'} className="text-red-400 ml-5 hover:bg-transparent hover:text-red-500">Revoke</Button> : ''}
+           {apiKey.isActive ? <Button  onClick={()=>handleRevoke(apiKey.id)}  variant={'ghost'} className="text-red-400 ml-5 hover:bg-transparent hover:text-red-500">Revoke</Button> : ''}
       </div>
 
     </div>

@@ -236,3 +236,19 @@ export async function getCSV(jobId: number) {
     
   }
  }
+ export async function reovkeApiKey(id:string){
+  try{
+    const res = await fetch(`${API_URL}/api/api-key/revoke/${id}` , {
+      method : "PATCH",
+      headers :{'Content-type': 'application/json'},
+      credentials:"include"
+    })
+    if(!res.ok){
+       throw new Error("Api key not revoked:--"+ res.text)
+    }
+    const data = await res.json();
+    return data
+  }catch(e){
+    throw new Error("error in revoke api key --"+ e)
+  }
+}
