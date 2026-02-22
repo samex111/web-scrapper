@@ -46,7 +46,7 @@ export async  function generateApiKey(req:Request , res:Response)  {
     const keyPrefix = rawKey.slice(0, 16);
 
     const keyHash = await bcrypt.hash(rawKey, 10);
-
+    
     await prisma.apiKey.create({
       data: {
         userId,
@@ -59,7 +59,6 @@ export async  function generateApiKey(req:Request , res:Response)  {
         ipWhitelist:  []
       }
     });
-
     return res.status(201).json({
       message: "API key generated successfully",
       apiKey: rawKey 

@@ -9,7 +9,7 @@ type ApiKeyRowProps = {
 export function ApiKeyRow({ apiKey , onClick } : ApiKeyRowProps) {
 const handleRevoke = async (id:string) => {
   await reovkeApiKey(id);
-  onClick();
+  onClick(); 
 };
   return (
     <div onClick={()=>onClick} className="grid grid-cols-5 py-3 border-b border-white/[0.04] text-xs items-center hover:bg-[#1a1a1a] transition-colors duration-150">

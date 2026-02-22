@@ -67,7 +67,7 @@ export async function requireApiKey(
       return res.status(401).json({ error: "API key missing" });
     }
 
-    const prefix = incomingKey.slice(0, 12);
+    const prefix = incomingKey.slice(0, 16);
 
     const keys = await prisma.apiKey.findMany({
       where: {
@@ -81,7 +81,6 @@ export async function requireApiKey(
     const apiKey = keys.find((k) =>
       bcrypt.compareSync(incomingKey, k.keyHash)
     );
-
 
     if (!apiKey) {
       return res.status(403).json({ error: "Invalid API key" });
