@@ -21,7 +21,6 @@ export function JobCard({ todayJobs }: JobCardProps) {
 
         <span className="text-xs text-emerald-400">COMPLETED</span>
       </div>
-
       <p className="text-sm text-[#8B8F97] mb-4">
         {todayJobs} • Completed successfully
       </p>

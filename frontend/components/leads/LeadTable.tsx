@@ -8,29 +8,11 @@ import { useLeads } from "@/hooks/useLeads";
 import LeadsSkeleton from "@/LeadsSkeleton/LeadsSkeleton";
 import {Lead} from "@/types/lead";
 
-// interface Lead {
-//   id: string;
-//   website: string;
-//   name: string;
-//   businessType: string;
-//   email: string;
-//   leadScore: number;
-//   priority: "LOW" | "MEDIUM" | "HIGH";
-//   socials: {
-//     github?: string;
-//     linkedin?: string;
-//     twitter?: string;
-//     facebook?: string;
-//   };
-//   createdAt: string;
-// }
-
 export default function LeadTable() {
   const parentRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
  const { leads, loading, error } = useLeads();
 
-/* -------------------- STATE -------------------- */
   const [selected, setSelected] = useState<Lead | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -45,7 +27,6 @@ export default function LeadTable() {
     date: 140,
   });
 
-  /* -------------------- VIRTUALIZATION -------------------- */
   const rowVirtualizer = useVirtualizer({
     count: leads.length,
     getScrollElement: () => parentRef.current,
@@ -53,7 +34,6 @@ export default function LeadTable() {
     overscan: 10,
   });
 
-  /* -------------------- KEYBOARD NAV -------------------- */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown") {
@@ -76,7 +56,6 @@ export default function LeadTable() {
     return () => window.removeEventListener("keydown", onKey);
   }, [activeIndex, leads]);
 
-  /* -------------------- RESIZE HANDLER -------------------- */
   const startResize = (key: keyof typeof colWidth, startX: number) => {
     const startWidth = colWidth[key];
 
@@ -134,7 +113,6 @@ export default function LeadTable() {
         }}
       >
         <div className="min-w-max">
-          {/* ================= FIXED HEADER ================= */}
           <div className="sticky top-0 z-40 bg-[#1a1a1a] shadow-lg">
             <div className="flex">
               {columns.map((col) => (
@@ -148,7 +126,6 @@ export default function LeadTable() {
                 >
                   {col.label}
 
-                  {/* Resize Handle */}
                   <div
                     className="absolute right-0 top-0 h-full w-1.5 cursor-col-resize hover:bg-blue-500/50 active:bg-blue-500 transition-colors"
                     onMouseDown={(e) => {
@@ -161,7 +138,6 @@ export default function LeadTable() {
             </div>
           </div>
 
-          {/* ================= VIRTUALIZED BODY ================= */}
           <div
             ref={parentRef}
             className="relative bg-[#1a1a1a] scroll-smooth overflow-y-auto overflow-x-hidden"
@@ -199,7 +175,6 @@ export default function LeadTable() {
                         : "hover:bg-white/5"
                     )}
                   >
-                    {/* Index - Sticky Column */}
                     <div
                       style={{ width: colWidth.index }}
                       className="sticky left-0 z-30 bg-[#1a1a1a] flex items-center justify-center px-4 text-white/70 font-medium  "
@@ -207,7 +182,6 @@ export default function LeadTable() {
                       {virtualRow.index + 1}
                     </div>
 
-                    {/* Website */}
                     <div
                       style={{ width: colWidth.website }}
                       className="flex items-center px-4  border-white/5"
@@ -227,7 +201,6 @@ export default function LeadTable() {
                       )}
                     </div>
 
-                    {/* Name */}
                     <div
                       style={{ width: colWidth.name }}
                       className="flex items-center px-4 text-white font-medium  border-white/5 truncate text-sm"
@@ -235,7 +208,6 @@ export default function LeadTable() {
                       {lead.name}
                     </div>
 
-                    {/* Business Type */}
                     <div
                       style={{ width: colWidth.business }}
                       className="flex items-center px-4  border-white/5"
@@ -245,7 +217,6 @@ export default function LeadTable() {
                       </span>
                     </div>
 
-                    {/* Email */}
                     <div
                       style={{ width: colWidth.email }}
                       className="flex items-center px-4  border-white/5"
@@ -263,7 +234,6 @@ export default function LeadTable() {
                       )}
                     </div>
 
-                    {/* Score */}
                     <div
                       style={{ width: colWidth.score }}
                       className="flex items-center justify-center px-4  border-white/5"
@@ -278,7 +248,6 @@ export default function LeadTable() {
                       </span>
                     </div>
 
-                    {/* Socials */}
                     <div
                       style={{ width: colWidth.socials }}
                       className="flex items-center px-4 gap-3  border-white/5"
@@ -342,7 +311,6 @@ export default function LeadTable() {
                       )}
                     </div>
 
-                    {/* Date */}
                     <div
                       style={{ width: colWidth.date }}
                       className="flex items-center px-4 text-white/50 text-sm"
@@ -361,7 +329,6 @@ export default function LeadTable() {
         </div>
       </div>
 
-      {/* ================= DETAILS CARD ================= */}
       {selected && (
         <div className="absolute right-6 bottom-6 z-50 w-[400px] animate-in slide-in-from-right-4 duration-300">
           <div className="bg-[#0F1117] backdrop-blur-xl rounded-xl border border-white/20 shadow-2xl p-1">
@@ -382,7 +349,6 @@ export default function LeadTable() {
         </div>
       )}
 
-      {/* Keyboard Shortcuts Hint */}
       <div className="absolute bottom-4 left-4 text-xs text-white/30 space-y-1">
         <div>↑↓ Navigate • Enter Select • Esc Close</div>
       </div>
