@@ -316,104 +316,92 @@ export class  ScraperEngine  {
         }
     }
 
-    private findEmail($: cheerio.CheerioAPI, html: string): string {
-        const mails = new Set<string>();
-        const emailQuality = new Map<string, string>();
+    private findEmail($: cheerio.CheerioAPI, html: string, baseUrl?: string): string {
+  const emails = new Map<string, number>();
 
-        // Blocklist for spam/legal emails
-        const emailBlocklist = [
-            "privacy@",
-            "legal@",
-            "abuse@",
-            "noreply@",
-            "no-reply@",
-            "donotreply@",
-            "postmaster@",
-            "webmaster@",
-            "copyright@",
-        ];
+  const blocklist = [
+    "privacy@", "legal@", "abuse@", "noreply@", "no-reply@", "donotreply@",
+    "postmaster@", "webmaster@", "copyright@"
+  ];
 
-        // Check mailto links first (highest quality)
-        $("a[href^='mailto:']").each((_, el) => {
-            const href = $(el).attr("href");
-            if (!href) return; //  guard clause
+  const domain = baseUrl ? new URL(baseUrl).hostname.replace("www.", "") : "";
 
-            const email = href
-                ?.replace(/^mailto:/i, "")
-                ?.split("?")[0]
-                ?.trim()
-                ?.toLowerCase();
+  const addEmail = (email: string, score: number) => {
+    const e = email.toLowerCase().trim();
 
-            if (!email) return;
+    if (!e || blocklist.some(b => e.startsWith(b))) return;
+    if (!e.includes("@")) return;
 
-            if (!emailBlocklist.some(blocked => email.startsWith(blocked))) {
-                mails.add(email);
-                emailQuality.set(email, "high");
-            }
-        });
+    const current = emails.get(e) || 0;
+    emails.set(e, current + score);
+  };
 
 
-        // Check contact section (excluding footer)
-        const contactSection = $(
-            "section:contains('Contact'), div:contains('Contact'), #contact, .contact"
-        )
-            .not("footer")
-            .text();
-        const contactRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-        const contactMatches = contactSection.match(contactRegex) || [];
+  $("a[href^='mailto:']").each((_, el) => {
+    const href = $(el).attr("href") || "";
+    const email = href.replace(/^mailto:/i, "").split("?")[0] as string;
+    addEmail(email, 100);
+  });
 
-        contactMatches.forEach((email) => {
-            const lowerEmail = email.toLowerCase();
-            if (!emailBlocklist.some((blocked) => lowerEmail.startsWith(blocked))) {
-                if (!emailQuality.has(lowerEmail)) {
-                    emailQuality.set(lowerEmail, "medium");
-                }
-                mails.add(lowerEmail);
-            }
-        });
+  
+  const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+  (html.match(emailRegex) || []).forEach(e => addEmail(e, 60));
 
-        // Scan body text (lowest priority)
-        const bodyText = $("body").not("footer").text();
-        const bodyRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-        const bodyMatches = bodyText.match(bodyRegex) || [];
 
-        bodyMatches.forEach((email) => {
-            const lowerEmail = email.toLowerCase();
-            if (
-                !emailQuality.has(lowerEmail) &&
-                !emailBlocklist.some((blocked) => lowerEmail.startsWith(blocked))
-            ) {
-                emailQuality.set(lowerEmail, "low");
-                mails.add(lowerEmail);
-            }
-        });
+  const deobfuscated = html
+    .replace(/\s?\[at\]\s?/gi, "@")
+    .replace(/\s?\(at\)\s?/gi, "@")
+    .replace(/\s?\[dot\]\s?/gi, ".")
+    .replace(/\s?\(dot\)\s?/gi, ".");
 
-        // Filter out fake/placeholder emails
-        const validEmails = [...mails].filter((email) => {
-            const lower = email.toLowerCase();
-            const blocklist = [
-                "example.com",
-                "domain.com",
-                "email.com",
-                "test.com",
-                "your@",
-                "name@",
-                "user@",
-                "info@example",
-                "support@example",
-                "contact@example",
-                "hello@example",
-                "admin@example",
-            ];
-            return !blocklist.some((blocked) => lower.includes(blocked));
-        });
+  (deobfuscated.match(emailRegex) || []).forEach(e => addEmail(e, 55));
 
-        // Return highest quality email found
-        const highQuality = validEmails.find((e) => emailQuality.get(e) === "high");
-        const mediumQuality = validEmails.find((e) => emailQuality.get(e) === "medium");
+  $("[data-email], [data-mail]").each((_, el) => {
+    const e = $(el).attr("data-email") || $(el).attr("data-mail");
+    if (e) addEmail(e, 70);
+  });
 
-        return highQuality || mediumQuality || validEmails[0] || "";
+ 
+  const base64Regex = /[A-Za-z0-9+/=]{20,}/g;
+  (html.match(base64Regex) || []).forEach(str => {
+    try {
+      const decoded = Buffer.from(str, "base64").toString("utf8");
+      if (decoded.includes("@")) addEmail(decoded, 50);
+    } catch {}
+  });
+
+ 
+  $("[data-cfemail]").each((_, el) => {
+    const encoded = $(el).attr("data-cfemail");
+    if (!encoded) return;
+
+    let email = "";
+    const r = parseInt(encoded.substr(0, 2), 16);
+    for (let n = 2; n < encoded.length; n += 2) {
+      const code = parseInt(encoded.substr(n, 2), 16) ^ r;
+      email += String.fromCharCode(code);
     }
+
+    addEmail(email, 95);
+  });
+
+   
+  $("script").each((_, el) => {
+    const content = $(el).html() || "";
+    (content.match(emailRegex) || []).forEach(e => addEmail(e, 65));
+  });
+
+  const sorted = [...emails.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([email]) => email);
+
+  if (domain) {
+    const domainMatch = sorted.find(e => e.includes(domain));
+    if (domainMatch) return domainMatch;
+  }
+
+  return sorted[0] || "";
+}
 
     private findPhone($: cheerio.CheerioAPI): string {
         const text = $("body").text();
