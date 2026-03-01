@@ -7,7 +7,8 @@ export const leadsRoutes = Router();
 // Get all leads for a user
 leadsRoutes.get('/allLeads', requireAuthOrApiKey, async (req, res) => {
   try {
-
+    console.log(req.cookies.token)
+     
     const user = req.user;
 
     const where: any = { userId: user.id };
@@ -27,7 +28,6 @@ leadsRoutes.get('/allLeads', requireAuthOrApiKey, async (req, res) => {
   }
 });
 
-// Get single lead
 leadsRoutes.get('/lead/:id', requireAuthOrApiKey, async (req, res) => {
   try {
     const { id } = req.params as unknown as any;
@@ -48,6 +48,7 @@ leadsRoutes.get('/lead/:id', requireAuthOrApiKey, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 leadsRoutes.get('/lead/jobId/:id', requireAuthOrApiKey, async (req, res) => {
   try {
     const { id } = req.params as unknown as any;

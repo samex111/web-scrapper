@@ -120,7 +120,7 @@ export default function JobsDashboard() {
     <div className="min-h-screen  text-white p-8">
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
-        <div className=" grid grid-cols-4 gap-4 mb-8">
+        <div className=" grid grid-cols-4 gap-4  mb-8">
           <div className="bg-[#1a1a1a] border rounded-lg p-6 flex items-center justify-between  border-[#2a2a2a]">
             <div className="text-gray-400 text-sm mb-2">Total Jobs</div>
             <div className="text-3xl font-bold">{stats.total}</div>
@@ -134,7 +134,7 @@ export default function JobsDashboard() {
             <div className="text-3xl font-bold">{stats.PROCESSING}</div>
           </div>
 
-          <div className="bg-[#1a1a1a] flex items-center justify-betwee`n` rounded-lg p-6 border border-[#2a2a2a]">
+          <div className="bg-[#1a1a1a] flex items-center justify-between rounded-lg p-6 border border-[#2a2a2a]">
             <div className="flex items-center gap-2 text-sm mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
               <span className="text-gray-400">Completed</span>

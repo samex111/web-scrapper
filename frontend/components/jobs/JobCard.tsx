@@ -12,7 +12,7 @@ export function JobCard({ todayJobs }: JobCardProps) {
     return <JobsSkeleton/>
   }
   return (
-    <motion.div
+    <motion.div 
       whileHover={{ y: -2 }}
       className="rounded-xl bg-white/5 border border-white/10 p-6 cursor-pointer"
     >

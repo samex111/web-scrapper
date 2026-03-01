@@ -122,13 +122,6 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
           </div>
         </div>
 
-        <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Award className="w-5 h-5 text-purple-600" />
-            <span className="text-sm font-medium text-white">Export Count</span>
-          </div>
-          <div className="text-2xl font-bold text-white/80">{lead.exportCount}</div>
-        </div>
 
         <div className="rounded-xl bg-white/5 border border-white/10 p-6 rounded-lg shadow-md p-4">
           <div className="flex items-center gap-2 mb-2">

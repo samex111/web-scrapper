@@ -1,30 +1,36 @@
 // app/leads/[id]/page.tsx
 import LeadView from '@/components/leads/SingleLead';
+import { API_URL } from '@/lib/api';
 interface PageProps {
   params: {
     id: string;
   };
 }
 
-async function getLead(id: string) {
-  const res = await fetch(
-    `http://localhost:3001/api/leads/lead/${id}`,
-    {
-      credentials:"include",
+import { cookies } from "next/headers";
+
+export async function getLead(id: string) {
+  try {
+    const cookieStore = await cookies();  
+
+    const res = await fetch(`${API_URL}/api/leads/lead/${id}`, {
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-         'Authorization': `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWt2MzN5dzIwMDAxZ3VlMGRhNjhnNzl3IiwiaWF0IjoxNzcxMjU0NjMyLCJleHAiOjE3NzE4NTk0MzJ9.rTyzn4b5iYs8xaGBbpzNCtg2x6GRCkkPfycqwWjRggA'}` // Pass token if needed
+        Cookie: cookieStore.toString() 
       },
-      // cache: "no-store", // always fresh
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("Failed to fetch lead:", text);
+      return null;
     }
-  );
- 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("Failed to fetch lead:", text);
-   }
-  
-  return await res.json();
+
+    return res.json();
+  } catch (e) {
+    console.error("Error fetching lead:", e);
+  }
 }
 
 export default async function LeadPage({
@@ -32,12 +38,12 @@ export default async function LeadPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // ✅ UNWRAP params
   const { id } = await params;
 
   console.log("Server Fetching lead with ID:", id);
 
   const lead = await getLead(id);
+
 
   return (
     <div className="p-6">

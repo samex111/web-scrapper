@@ -28,6 +28,6 @@ export const scrapeSchema = z.object({
   urls: z.array(z.string().url()).min(1).max(100),
 });
 export const paramsId = z.object({
-  id: z.string().describe('Please provide a id in params '),
+  id: z.string().describe('Please provide  id in params '),
 });
 
