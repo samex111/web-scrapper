@@ -141,7 +141,7 @@ const worker = new Worker('scrape-jobs', async (job: Job) => {
 
     throw error;
   }
-}, { connection });
+}, { connection , concurrency: 3 });
 
 worker.on('completed', (job) => {
   console.log(`Worker completed job ${job.id} `);
