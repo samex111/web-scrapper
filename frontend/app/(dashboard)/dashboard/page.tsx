@@ -53,7 +53,6 @@ export default function DashboardPage() {
   if (loading) return <DashboardSkeleton />;
 
   const stats = data?.stats;
-  const profile = data?.user;
 
   const successRate =
     stats?.totalJobs && stats.totalJobs > 0

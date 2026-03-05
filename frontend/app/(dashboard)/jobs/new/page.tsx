@@ -42,10 +42,6 @@ export default function NewJobPage() {
         throw new Error('Please enter at least one URL');
       }
 
-      const job = await createJob({
-        name: name || undefined,
-        urls: urlList,
-      });
 
       router.push(`/jobs`);
     } catch (err: any) {
