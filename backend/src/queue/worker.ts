@@ -3,9 +3,16 @@ import { config } from '../config/config.js';
 import { ScraperEngine } from '../scrape/engine.js';
 import { prisma } from '../db/client.js';
 
+
+const redisUrl = new URL(config.redis.url);
+
 const connection = {
-  host: new URL(config.redis.url).hostname,
-  port: parseInt(new URL(config.redis.url).port || '6379'),
+  host: redisUrl.hostname,
+  port: Number(redisUrl.port),
+  username: redisUrl.username,
+  password: redisUrl.password,
+  tls: {},
+   maxRetriesPerRequest: null
 };
 
 const worker = new Worker('scrape-jobs', async (job: Job) => {
@@ -145,3 +152,20 @@ worker.on('failed', (job, err) => {
 });
 
 console.log(' Worker started and listening for jobs...');
+import http from "http";
+
+const server = http.createServer((req, res) => {
+  if (req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("ok");
+  } else {
+    res.writeHead(404);
+    res.end();
+  }
+});
+
+const PORT = Number(process.env.PORT) || 3005;
+
+server.listen(PORT, () => {
+  console.log(`Worker health server running on port ${PORT}`);
+});

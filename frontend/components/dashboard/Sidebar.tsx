@@ -52,11 +52,11 @@ export const sidebarNav = [
     href: "/api",
     icon: Key,
   },
-  {
-    label: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
+  // {
+  //   label: "Settings",
+  //   href: "/settings",
+  //   icon: Settings,
+  // },
 ];
 
 

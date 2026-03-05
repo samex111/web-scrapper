@@ -1,10 +1,17 @@
 import { Queue } from 'bullmq';
 import { config } from '../config/config.js';
 
+
+const redisUrl = new URL(config.redis.url);
+
 const connection = {
-  host: new URL(config.redis.url).hostname,
-  port: parseInt(new URL(config.redis.url).port || '6379'),
+  host: redisUrl.hostname,
+  port: Number(redisUrl.port),
+  username: redisUrl.username,
+  password: redisUrl.password,
+  tls: {}
 };
+console.log('Redis connection:', connection);
 
 export const scrapeQueue = new Queue('scrape-jobs', { connection });
 
