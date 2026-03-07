@@ -27,10 +27,14 @@ export function Google() {
       script.onload = initGoogle;
       document.body.appendChild(script);
     };
+    if(!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+      console.error("Google Client ID is not set");
+      return;
+    }
 
     const initGoogle = () => {
       window.google.accounts.id.initialize({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         callback: handleCredentialResponse,
       });
       console.log(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
