@@ -19,7 +19,7 @@ export function Google() {
         initGoogle();
         return;
       }
-
+    
       const script = document.createElement("script");
       script.src = "https://accounts.google.com/gsi/client";
       script.async = true;
@@ -33,6 +33,7 @@ export function Google() {
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
         callback: handleCredentialResponse,
       });
+      console.log(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
 
       window.google.accounts.id.renderButton(
         document.getElementById("google-login"),
