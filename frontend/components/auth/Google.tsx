@@ -27,6 +27,8 @@ export function Google() {
       script.onload = initGoogle;
       document.body.appendChild(script);
     };
+    console.log(process.env.NEXT_PUBLIC_API_URL)
+    console.log(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)
     if(!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
       console.error("Google Client ID is not set");
       return;
