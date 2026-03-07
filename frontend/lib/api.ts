@@ -119,7 +119,7 @@ export async function exportCSV(jobId?: string) {
     });
   if (!res.ok) {
   const err = await res.text();
-  console.error("Google auth failed:", err);
+  console.error("Google auth failed:", err);  
   return;
 }
 
