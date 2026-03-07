@@ -8,7 +8,7 @@ export default function MarketingLayout({ children , modal }:{children:ReactNode
     <><div className="bg-[#0b0f2a] selection:bg-yellow-300 selection:text-black">
       <header><Navbar /></header>
       <main>{children} {modal}</main>
-      <footer><Footer /></footer>
+      {/* <footer><Footer /></footer> */}
       </div>
     </>
   )

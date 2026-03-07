@@ -117,6 +117,7 @@ export async function exportCSV(jobId?: string) {
       credentials: "include", 
       body: JSON.stringify({ idToken }),
     });
+    console.log("Google auth response status:", res.status);
   if (!res.ok) {
   const err = await res.text();
   console.error("Google auth failed:", err);  
