@@ -1,10 +1,11 @@
 import Hero from "@/components/section/hero";
 
 export default function Home() {
-
+ console.log(process.env.NEXT_PUBLIC_API_URL)
+ console.log(process.env.NEXT_PUBLIC_CLIENT_ID)
   return (
     <div className="">
-      <Hero/>
+      <Hero/> 
     </div>
   );
 }
