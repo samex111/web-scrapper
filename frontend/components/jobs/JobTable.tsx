@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { Job } from '@/types/job';
 import { JobsResponse } from '@/types/job';
-import { getCSV, handleViewResults } from '@/lib/api';
+import { API_URL, getCSV, handleViewResults } from '@/lib/api';
 import { useRouter } from "next/navigation";
 import { Button } from '../ui/button';
 import JobsSkeleton from '../jobsSkeleton/jobtableskeleton';
@@ -33,7 +33,7 @@ export default function JobsDashboard() {
   const fetchJobs = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:3001/api/scrape/jobs', {
+      const response = await fetch(`${API_URL}/api/scrape/jobs`, {
         headers: {
           'Content-Type': 'application/json',
         },

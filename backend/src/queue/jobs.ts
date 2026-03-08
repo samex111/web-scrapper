@@ -7,9 +7,9 @@ const redisUrl = new URL(config.redis.url);
 const connection = {
   host: redisUrl.hostname,
   port: Number(redisUrl.port),
-  username: redisUrl.username,
-  password: redisUrl.password,
-  tls: {}
+  // username: redisUrl.username,
+  // password: redisUrl.password,
+  // tls: {}
 };
 console.log('Redis connection:', connection);
 

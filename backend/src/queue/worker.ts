@@ -9,9 +9,9 @@ const redisUrl = new URL(config.redis.url);
 const connection = {
   host: redisUrl.hostname,
   port: Number(redisUrl.port),
-  username: redisUrl.username,
-  password: redisUrl.password,
-  tls: {},
+  // username: redisUrl.username,
+  // password: redisUrl.password,
+  // tls: {},
    maxRetriesPerRequest: null
 };
 
@@ -152,20 +152,20 @@ worker.on('failed', (job, err) => {
 });
 
 console.log(' Worker started and listening for jobs...');
-import http from "http";
+// import http from "http";
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/health") {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("ok");
-  } else {
-    res.writeHead(404);
-    res.end();
-  }
-});
+// const server = http.createServer((req, res) => {
+//   if (req.url === "/health") {
+//     res.writeHead(200, { "Content-Type": "text/plain" });
+//     res.end("ok");
+//   } else {
+//     res.writeHead(404);
+//     res.end();
+//   }
+// });
 
-const PORT = Number(process.env.PORT) || 3005;
+// const PORT = Number(process.env.PORT) || 3005;
 
-server.listen(PORT, () => {
-  console.log(`Worker health server running on port ${PORT}`);
-});
+// server.listen(PORT, () => {
+//   console.log(`Worker health server running on port ${PORT}`);
+// });
