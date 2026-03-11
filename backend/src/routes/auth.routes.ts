@@ -9,7 +9,8 @@ const googleClient = new OAuth2Client(
   config.GoogleClient.ID
 );
 
-const requireBody = z.object({
+const requireBody 
+= z.object({
   idToken: z.string()
 })
 
@@ -88,7 +89,7 @@ authRoutes.post("/google", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24
     });
