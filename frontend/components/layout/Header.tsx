@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { motion, cubicBezier } from "framer-motion";
 import { ChevronDown } from 'lucide-react';
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 
 
@@ -78,7 +79,12 @@ const router  = useRouter()
           {/* LEFT */}
           <div className="flex items-center font-semibold overflow-hidden">
             {/* Logo */}
-            <div className="h-8 w-8 rounded-full bg-red-800 shrink-0 mr-2" />
+            <Image className="h-8 w-8 rounded-full  shrink-0 mr-2" 
+            src={'/faviconScraper.jpg'}
+            alt = {'Logo'}
+            width={'8'}
+            height={'8'}
+            />
 
             {/* Text (collapses smoothly) */}
             <motion.span
@@ -100,10 +106,10 @@ const router  = useRouter()
 
           {/* CENTER */}
           <div className={`hidden md:flex gap-6 text-white text-md mx-auto ${!scrolled &&'ml-10'}`}>
-            <span className=" transition flex gap-1">Features <ChevronDown className="text-white/45 mt-1" size={'18'}/></span> 
+            {/* <span className=" transition flex gap-1">Features <ChevronDown className="text-white/45 mt-1" size={'18'}/></span> 
             <span className=" transition flex gap-1">Developer <ChevronDown className="text-white/45 mt-1" size={'18'} /></span>
             <span className=" transition flex gap-1">Resources <ChevronDown className="text-white/45 mt-1" size={'18'}/></span>
-            <span className=" transition flex gap-1">Pricing <ChevronDown className="text-white/45 mt-1" size={'18'}/></span>
+            <span className=" transition flex gap-1">Pricing <ChevronDown className="text-white/45 mt-1" size={'18'}/></span> */}
           </div>
 
           {/* RIGHT */}

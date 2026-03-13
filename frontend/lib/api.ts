@@ -1,5 +1,6 @@
+import { publicApiResponse } from "@/types/publicTypes";
 
-export const API_URL =  process.env.NEXT_PUBLIC_API_URL   || "http://localhost:3001";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 type FetchOptions = RequestInit;
 
@@ -13,7 +14,7 @@ async function apiFetch(
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
-    ...options,         
+    ...options,
   });
 
   if (!res.ok) {
@@ -21,11 +22,11 @@ async function apiFetch(
     try {
       error = await res.json();
     } catch (e) {
-      throw new Error("Something went wrong : "+e);
+      throw new Error("Something went wrong : " + e);
     }
     // console.error("API Error:", error);
 
-    throw new Error(error|| "Request failed");  
+    throw new Error(error || "Request failed");
   }
 
   return res;
@@ -72,16 +73,16 @@ export async function getLeads() {
 }
 export async function getSingleLead(leadId: string) {
   try {
-  const res = await fetch(`http://localhost:3001/api/leads/lead/cmkv4rwmr00091048oeqieb17`,{credentials: "include" ,headers: {'Content-Type': 'application/json' , }});
+    const res = await fetch(`http://localhost:3001/api/leads/lead/cmkv4rwmr00091048oeqieb17`, { credentials: "include", headers: { 'Content-Type': 'application/json', } });
     if (res.ok) {
       console.log("Raw response from getSingleLead:", await res.json()); // Debug log to check the raw response
-  return await res.json();
+      return await res.json();
     }
     throw new Error("Failed to fetch single lead");
-   }catch(e){
+  } catch (e) {
     console.log("Error fetching single lead:", e);
-   }
-  
+  }
+
 }
 export async function exportCSV(jobId?: string) {
   const query = jobId ? `?jobId=${jobId}` : "";
@@ -108,43 +109,43 @@ export async function exportCSV(jobId?: string) {
   window.URL.revokeObjectURL(url);
 }
 
-  export async function handleCredential(response: any) {
-    const idToken = response.credential;
+export async function handleCredential(response: any) {
+  const idToken = response.credential;
 
-    const res = await fetch(`${API_URL}/api/auth/google`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", 
-      body: JSON.stringify({ idToken }),
-    });
-    console.log("Google auth response status:", res.status);
+  const res = await fetch(`${API_URL}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ idToken }),
+  });
+  console.log("Google auth response status:", res.status);
   if (!res.ok) {
-  const err = await res.text();
-  console.error("Google auth failed:", err);  
-  return;
-}
-
-const data = await res.json();
-localStorage.setItem("user", JSON.stringify(data.user));
+    const err = await res.text();
+    console.error("Google auth failed:", err);
+    return;
   }
 
- export async function handleViewResults(jobId:number){
-   try{
-    const res = await fetch(`${API_URL}/api/leads/lead/jobId/${jobId}`,{
-      method:"GET",
-      credentials:"include",
-      headers:{"Content-type":"application/json"}
+  const data = await res.json();
+  localStorage.setItem("user", JSON.stringify(data.user));
+}
+
+export async function handleViewResults(jobId: number) {
+  try {
+    const res = await fetch(`${API_URL}/api/leads/lead/jobId/${jobId}`, {
+      method: "GET",
+      credentials: "include",
+      headers: { "Content-type": "application/json" }
     });
-    const data:resultLead[] = await res.json();
+    const data: resultLead[] = await res.json();
     return data;
-   }catch(e){
-    console.error("Error in view resluts: "+e)
+  } catch (e) {
+    console.error("Error in view resluts: " + e)
     throw new Error("Error in handle view results")
-   }
- }
- interface resultLead {
-  leadId:string
- }
+  }
+}
+interface resultLead {
+  leadId: string
+}
 export async function getCSV(jobId: number) {
   try {
     const res = await fetch(
@@ -159,7 +160,7 @@ export async function getCSV(jobId: number) {
       throw new Error("Failed to export CSV");
     }
 
-    const blob = await res.blob(); 
+    const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement("a");
@@ -174,82 +175,115 @@ export async function getCSV(jobId: number) {
     console.log("Error in get csv", e);
   }
 }
- export async function getAllCSV(queryParams: any) {
+export async function getAllCSV(queryParams: any) {
   try {
-   const response = await fetch(`${API_URL}/api/export/leads?${queryParams.toString()}`, {
-        method: 'GET',
-        credentials:'include'
-      });
+    const response = await fetch(`${API_URL}/api/export/leads?${queryParams.toString()}`, {
+      method: 'GET',
+      credentials: 'include'
+    });
 
-      if (!response.ok) {
-        throw new Error('Export failed');
-      }
-
-      // Create download link
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `leads-${Date.now()}.csv}`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Export error:', error);
-      alert('Failed to export leads. Please try again.');
+    if (!response.ok) {
+      throw new Error('Export failed');
     }
-  
-}
- export default async function GenerateApi(){
-   try{
-     const res = await fetch(`${API_URL}/api/api-key/generate` , {
-      method : "POST",
-      headers : {"Content-type":'application/json'},
-      credentials : "include"
-     })
-     const data =  await res.json();
-     return data;
-   }catch(err){
-     throw new Error("Error in generate key : --- "+ err)
-   }
- }
- export  async function getDetails(){
-   try{
-     const res = await fetch(`${API_URL}/api/api-key/get-details` , {
-      method : "GET",
-      headers : {"Content-type":'application/json'},
-      credentials : "include"
-     })
-     const data =  await res.json();
-     return data;
-   }catch(err){
-     throw new Error("Error in generate key : --- "+ err)
-   }
- }
- export async function getResponce(){
-  try{
-    const res  = await fetch(`${API_URL}/api/api-key/scape`, {
-      method :"POST",
-      headers : {"Content-type": 'application/json'}
-    })
-  }catch(e){
-    
+
+    // Create download link
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `leads-${Date.now()}.csv}`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('Failed to export leads. Please try again.');
   }
- }
- export async function reovkeApiKey(id:string){
-  try{
-    const res = await fetch(`${API_URL}/api/api-key/revoke/${id}` , {
-      method : "PATCH",
-      headers :{'Content-type': 'application/json'},
-      credentials:"include"
+
+}
+export default async function GenerateApi() {
+  try {
+    const res = await fetch(`${API_URL}/api/api-key/generate`, {
+      method: "POST",
+      headers: { "Content-type": 'application/json' },
+      credentials: "include"
     })
-    if(!res.ok){
-       throw new Error("Api key not revoked:--"+ res.text)
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw new Error("Error in generate key : --- " + err)
+  }
+}
+export async function getDetails() {
+  try {
+    const res = await fetch(`${API_URL}/api/api-key/get-details`, {
+      method: "GET",
+      headers: { "Content-type": 'application/json' },
+      credentials: "include"
+    })
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw new Error("Error in generate key : --- " + err)
+  }
+}
+export async function getResponce() {
+  try {
+    const res = await fetch(`${API_URL}/api/api-key/scape`, {
+      method: "POST",
+      headers: { "Content-type": 'application/json' }
+    })
+  } catch (e) {
+
+  }
+}
+export async function reovkeApiKey(id: string) {
+  try {
+    const res = await fetch(`${API_URL}/api/api-key/revoke/${id}`, {
+      method: "PATCH",
+      headers: { 'Content-type': 'application/json' },
+      credentials: "include"
+    })
+    if (!res.ok) {
+      throw new Error("Api key not revoked:--" + res.text)
     }
     const data = await res.json();
     return data
-  }catch(e){
-    throw new Error("error in revoke api key --"+ e)
+  } catch (e) {
+    throw new Error("error in revoke api key --" + e)
+  }
+}
+export async function publicScraper(url: string) {
+  try {
+    const res = await fetch(`${API_URL}/api/public/scrape`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        urls: [url]
+      })
+    })
+
+    if (!res.ok) {
+      let message = "Failed to scrape"
+
+      try {
+        const error = await res.json()
+        message = error?.error || message
+      } catch { }
+
+      throw new Error(message)
+    }
+
+    const data = await res.json() as publicApiResponse
+    return data
+
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(`Public scraper failed: ${e.message}`)
+    }
+    throw new Error("Public scraper failed with unknown error")
   }
 }

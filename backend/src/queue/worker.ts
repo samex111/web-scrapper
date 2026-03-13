@@ -9,9 +9,9 @@ const redisUrl = new URL(config.redis.url);
 const connection = {
   host: redisUrl.hostname,
   port: Number(redisUrl.port),
-  // username: redisUrl.username,
-  // password: redisUrl.password,
-  // tls: {},
+  username: redisUrl.username,
+  password: redisUrl.password,
+  tls: {},
    maxRetriesPerRequest: null
 };
 
@@ -149,6 +149,9 @@ worker.on('completed', (job) => {
 
 worker.on('failed', (job, err) => {
   console.error(` Worker failed job ${job?.id}:`, err.message);
+});
+worker.on('error', (err) => {
+  console.error('Worker error:', err);
 });
 
 console.log(' Worker started and listening for jobs...');

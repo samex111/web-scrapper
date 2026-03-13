@@ -38,48 +38,46 @@ authRoutes.post("/google", async (req, res) => {
     const name = payload.name ?? "User";
     const avatar = payload.picture ?? null;
 
-    const user = await prisma.$transaction(async (tx) => {
-      let user = await tx.user.findUnique({
-        where: { googleId },
-      });
+    let user = await prisma.user.findUnique({
+  where: { googleId }
+});
 
-      if (user) {
-        return tx.user.update({
-          where: { id: user.id },
-          data: { lastLoginAt: new Date() },
-        });
+if (user) {
+  user = await prisma.user.update({
+    where: { id: user.id },
+    data: { lastLoginAt: new Date() }
+  });
+} else {
+  const existingUser = await prisma.user.findUnique({
+    where: { email }
+  });
+
+  if (existingUser) {
+    user = await prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        googleId,
+        avatar,
+        name,
+        emailVerified: true,
+        lastLoginAt: new Date()
       }
-
-      const existingUser = await tx.user.findUnique({
-        where: { email },
-      });
-
-      if (existingUser) {
-        return tx.user.update({
-          where: { id: existingUser.id },
-          data: {
-            googleId,
-            avatar,
-            name,
-            emailVerified: true,
-            lastLoginAt: new Date(),
-          },
-        });
-      }
-
-      return tx.user.create({
-        data: {
-          email,
-          name,
-          avatar,
-          googleId,
-          emailVerified: true,
-          plan: "FREE",
-          monthlyQuota: 100,
-          lastLoginAt: new Date(),
-        },
-      });
     });
+  } else {
+    user = await prisma.user.create({
+      data: {
+        email,
+        name,
+        avatar,
+        googleId,
+        emailVerified: true,
+        plan: "FREE",
+        monthlyQuota: 100,
+        lastLoginAt: new Date()
+      }
+    });
+  }
+}
 
     const token = jwt.sign(
       { userId: user.id },
@@ -90,7 +88,7 @@ authRoutes.post("/google", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24
     });
 

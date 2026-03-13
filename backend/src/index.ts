@@ -7,6 +7,7 @@ import { exportRoutes } from './routes/export.routes.js';
 import { authRoutes } from './routes/auth.routes.js';
 import cookieParser from "cookie-parser";
 import { apiKeyRoutes } from './routes/apiKey.routes.js';
+import { publicRoutes } from './routes/public.routes.js';
  
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/api-key', apiKeyRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/auth',authRoutes);
+app.use('/api/public', publicRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

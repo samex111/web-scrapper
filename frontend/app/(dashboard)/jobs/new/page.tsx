@@ -10,11 +10,11 @@ import { X } from 'lucide-react';
 export default function NewJobPage() {
   const router = useRouter();
   const [name, setName] = useState('');
-  const [urls, setUrls] = useState<any>();
+  const [urls, setUrls] = useState<string[]>(['']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const addUrl = () => {
+    const addUrl = () => {
     if (urls.length < 100) {
       setUrls([...urls, '']);
     }
@@ -36,7 +36,7 @@ export default function NewJobPage() {
     setError('');
 
     try {
-      const urlList = urls.split('\n').filter((u : any)=> !!u.trim()) as string[];
+       const urlList = urls.filter(u => u.trim());
 
       if (urlList.length === 0) {
         throw new Error('Please enter at least one URL');
@@ -47,7 +47,7 @@ export default function NewJobPage() {
         urls: urlList,
       });
 
-      router.push(`/jobs/${job.jobId}`);
+      router.push(`/jobs`);
     } catch (err: any) {
       setError(err.message);
     } finally {

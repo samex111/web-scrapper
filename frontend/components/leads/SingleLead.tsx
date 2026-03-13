@@ -40,8 +40,8 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
   };
 
   const socialIcons: { [key: string]: React.ReactNode } = {
-    github: <Github className="w-5 h-5" />,
-    twitter: <Twitter className="w-5 h-5" />,
+    github: <Github  className="w-5 h-5" />,
+    twitter: <Twitter  className="w-5 h-5" />,
     youtube: <Youtube className="w-5 h-5" />,
     linkedin: <Linkedin className="w-5 h-5" />,
     instagram: <Instagram className="w-5 h-5" />,
@@ -180,7 +180,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
               >
                 {socialIcons[platform]}
                 <span className="capitalize text-sm font-medium">{platform}</span>
