@@ -29,13 +29,13 @@ export class ScraperEngine {
     async initialize(): Promise<void> {
         this.browser = await puppeteer.launch({
             headless: true,
+            executablePath:
+    "/opt/render/.cache/puppeteer/chrome/linux-143.0.7499.192/chrome-linux64/chrome",
             args: [
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
                 "--disable-accelerated-2d-canvas",
-
-
             ],
         });
         console.log("Browser launched");
