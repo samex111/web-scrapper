@@ -787,7 +787,7 @@ console.log("STEP 1: Creating new page");
 
         try {
             await Promise.race([
-                page.goto(url, { waitUntil: "domcontentloaded", }),
+                page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 }),
                 new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 30000)),
             ]);
             await page.screenshot({ path: filename, fullPage: true });
