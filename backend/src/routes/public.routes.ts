@@ -7,11 +7,12 @@ export const publicRoutes = Router();
 
 publicRoutes.post("/scrape",  async (req, res) => {
   const start = Date.now();
-
+ 
   let engine;
 
   try {
     const { urls } = scrapeSchema.parse(req.body);
+    console.log("REQ BODY:", req.body);
     if (urls.length == 0) {
       return res.status(404).json({
         success: false,
