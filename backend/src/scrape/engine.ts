@@ -2,14 +2,14 @@ import puppeteer, { Browser, Page } from "puppeteer";
 import * as cheerio from "cheerio";
 import { promises as fs } from "fs";
 import { fileURLToPath } from "url";
-import type { EngineOptions , ScrapedData , ScrapeMultipleOptions } from './types.js';
+import type { EngineOptions, ScrapedData, ScrapeMultipleOptions } from './types.js';
 
 // Global crash recovery
 process.on("unhandledRejection", (err) => console.error("  Unhandled:", err));
 process.on("uncaughtException", (err) => console.error(" Fatal:", err));
 
 
-export class  ScraperEngine  {
+export class ScraperEngine {
     private browser: Browser | null = null;
     private jobs = 0;
     private activePages = 0;
@@ -34,16 +34,22 @@ export class  ScraperEngine  {
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
                 "--disable-accelerated-2d-canvas",
-                 
-                 
+
+
             ],
         });
+        console.log("Browser launched");
+
     }
 
     private async resetInterception(page: Page): Promise<void> {
         await page.setRequestInterception(false);
         page.removeAllListeners("request");
-        await page.setRequestInterception(true);
+        try {
+            await page.setRequestInterception(true);
+        } catch (e) {
+            console.log("Interception failed, continuing...");
+        }
         page.on("request", (req) => {
             const block = [
                 "doubleclick",
@@ -130,12 +136,11 @@ export class  ScraperEngine  {
             let success = false;
             for (let i = 0; i < this.options.retries && !success; i++) {
                 try {
-                    await Promise.race([
-                        page.goto(url, { waitUntil: "domcontentloaded" }),
-                        new Promise((_, reject) =>
-                            setTimeout(() => reject(new Error("Navigation timeout")), this.options.timeout)
-                        ),
-                    ]);
+                    await page.goto(url, {
+                        waitUntil: "domcontentloaded",
+                        timeout: this.options.timeout
+                    });
+                    console.log("STEP 4: Navigation done");
                     success = true;
                 } catch (e) {
                     if (i === this.options.retries - 1) throw e;
@@ -146,6 +151,8 @@ export class  ScraperEngine  {
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             let html = await page.content();
+            console.log("STEP 6: HTML length:", html.length);
+
             let $ = cheerio.load(html);
 
             // Check for bot challenge pages (updated Cloudflare detection)
@@ -169,6 +176,7 @@ export class  ScraperEngine  {
                 });
             }
 
+
             // Detect if SPA and reload with JS if needed
             const isSPA = this.detectSPA(html, $);
 
@@ -183,7 +191,13 @@ export class  ScraperEngine  {
                 });
             }
 
-            const metrics = await page.metrics();
+            let metrics: any = {};
+
+            try {
+                metrics = await page.metrics();
+            } catch (e) {
+                console.log("Metrics failed, skipping...");
+            }
 
             const data: ScrapedData = {
                 website: url,
@@ -225,7 +239,7 @@ export class  ScraperEngine  {
             throw error;
         }
     }
-    
+
     private detectSPA(html: string, $: cheerio.CheerioAPI): boolean {
         // Real SPA signals - strict detection
         const spaIndicators = [
@@ -316,91 +330,91 @@ export class  ScraperEngine  {
     }
 
     private findEmail($: cheerio.CheerioAPI, html: string, baseUrl?: string): string {
-  const emails = new Map<string, number>();
+        const emails = new Map<string, number>();
 
-  const blocklist = [
-    "privacy@", "legal@", "abuse@", "noreply@", "no-reply@", "donotreply@",
-    "postmaster@", "webmaster@", "copyright@"
-  ];
+        const blocklist = [
+            "privacy@", "legal@", "abuse@", "noreply@", "no-reply@", "donotreply@",
+            "postmaster@", "webmaster@", "copyright@"
+        ];
 
-  const domain = baseUrl ? new URL(baseUrl).hostname.replace("www.", "") : "";
+        const domain = baseUrl ? new URL(baseUrl).hostname.replace("www.", "") : "";
 
-  const addEmail = (email: string, score: number) => {
-    const e = email.toLowerCase().trim();
+        const addEmail = (email: string, score: number) => {
+            const e = email.toLowerCase().trim();
 
-    if (!e || blocklist.some(b => e.startsWith(b))) return;
-    if (!e.includes("@")) return;
+            if (!e || blocklist.some(b => e.startsWith(b))) return;
+            if (!e.includes("@")) return;
 
-    const current = emails.get(e) || 0;
-    emails.set(e, current + score);
-  };
-
-
-  $("a[href^='mailto:']").each((_, el) => {
-    const href = $(el).attr("href") || "";
-    const email = href.replace(/^mailto:/i, "").split("?")[0] as string;
-    addEmail(email, 100);
-  });
-
-  
-  const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
-  (html.match(emailRegex) || []).forEach(e => addEmail(e, 60));
+            const current = emails.get(e) || 0;
+            emails.set(e, current + score);
+        };
 
 
-  const deobfuscated = html
-    .replace(/\s?\[at\]\s?/gi, "@")
-    .replace(/\s?\(at\)\s?/gi, "@")
-    .replace(/\s?\[dot\]\s?/gi, ".")
-    .replace(/\s?\(dot\)\s?/gi, ".");
+        $("a[href^='mailto:']").each((_, el) => {
+            const href = $(el).attr("href") || "";
+            const email = href.replace(/^mailto:/i, "").split("?")[0] as string;
+            addEmail(email, 100);
+        });
 
-  (deobfuscated.match(emailRegex) || []).forEach(e => addEmail(e, 55));
 
-  $("[data-email], [data-mail]").each((_, el) => {
-    const e = $(el).attr("data-email") || $(el).attr("data-mail");
-    if (e) addEmail(e, 70);
-  });
+        const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+        (html.match(emailRegex) || []).forEach(e => addEmail(e, 60));
 
- 
-  const base64Regex = /[A-Za-z0-9+/=]{20,}/g;
-  (html.match(base64Regex) || []).forEach(str => {
-    try {
-      const decoded = Buffer.from(str, "base64").toString("utf8");
-      if (decoded.includes("@")) addEmail(decoded, 50);
-    } catch {}
-  });
 
- 
-  $("[data-cfemail]").each((_, el) => {
-    const encoded = $(el).attr("data-cfemail");
-    if (!encoded) return;
+        const deobfuscated = html
+            .replace(/\s?\[at\]\s?/gi, "@")
+            .replace(/\s?\(at\)\s?/gi, "@")
+            .replace(/\s?\[dot\]\s?/gi, ".")
+            .replace(/\s?\(dot\)\s?/gi, ".");
 
-    let email = "";
-    const r = parseInt(encoded.substr(0, 2), 16);
-    for (let n = 2; n < encoded.length; n += 2) {
-      const code = parseInt(encoded.substr(n, 2), 16) ^ r;
-      email += String.fromCharCode(code);
+        (deobfuscated.match(emailRegex) || []).forEach(e => addEmail(e, 55));
+
+        $("[data-email], [data-mail]").each((_, el) => {
+            const e = $(el).attr("data-email") || $(el).attr("data-mail");
+            if (e) addEmail(e, 70);
+        });
+
+
+        const base64Regex = /[A-Za-z0-9+/=]{20,}/g;
+        (html.match(base64Regex) || []).forEach(str => {
+            try {
+                const decoded = Buffer.from(str, "base64").toString("utf8");
+                if (decoded.includes("@")) addEmail(decoded, 50);
+            } catch { }
+        });
+
+
+        $("[data-cfemail]").each((_, el) => {
+            const encoded = $(el).attr("data-cfemail");
+            if (!encoded) return;
+
+            let email = "";
+            const r = parseInt(encoded.substr(0, 2), 16);
+            for (let n = 2; n < encoded.length; n += 2) {
+                const code = parseInt(encoded.substr(n, 2), 16) ^ r;
+                email += String.fromCharCode(code);
+            }
+
+            addEmail(email, 95);
+        });
+
+
+        $("script").each((_, el) => {
+            const content = $(el).html() || "";
+            (content.match(emailRegex) || []).forEach(e => addEmail(e, 65));
+        });
+
+        const sorted = [...emails.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .map(([email]) => email);
+
+        if (domain) {
+            const domainMatch = sorted.find(e => e.includes(domain));
+            if (domainMatch) return domainMatch;
+        }
+
+        return sorted[0] || "";
     }
-
-    addEmail(email, 95);
-  });
-
-   
-  $("script").each((_, el) => {
-    const content = $(el).html() || "";
-    (content.match(emailRegex) || []).forEach(e => addEmail(e, 65));
-  });
-
-  const sorted = [...emails.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .map(([email]) => email);
-
-  if (domain) {
-    const domainMatch = sorted.find(e => e.includes(domain));
-    if (domainMatch) return domainMatch;
-  }
-
-  return sorted[0] || "";
-}
 
     private findPhone($: cheerio.CheerioAPI): string {
         const text = $("body").text();
@@ -761,16 +775,19 @@ export class  ScraperEngine  {
         while (this.activePages >= this.maxPages) {
             await new Promise((r) => setTimeout(r, 300));
         }
-
+console.log("STEP 1: Creating new page");
         const page = await this.browser!.newPage();
+        console.log("STEP 2: Page created");
         this.activePages++;
         page.on("close", () => this.activePages--);
+
+        console.log("STEP 3: Navigating to", url);
 
         await page.setViewport({ width: 1920, height: 1080 });
 
         try {
             await Promise.race([
-                page.goto(url, { waitUntil: "domcontentloaded" }),
+                page.goto(url, { waitUntil: "domcontentloaded", }),
                 new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 30000)),
             ]);
             await page.screenshot({ path: filename, fullPage: true });
@@ -893,4 +910,4 @@ export class  ScraperEngine  {
 //   main(); // OR quickTest()
 // }
 
-export default  ScraperEngine ;
+export default ScraperEngine;
