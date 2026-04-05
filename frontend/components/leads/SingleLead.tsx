@@ -180,7 +180,7 @@ export default function LeadDetail({ lead }: LeadDetailProps) {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                className="flex bg-gray-100 items-center gap-2 px-4 py-2 rounded-lg transition-colors"
               >
                 {socialIcons[platform]}
                 <span className="capitalize text-sm font-medium">{platform}</span>
