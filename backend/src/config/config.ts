@@ -22,9 +22,12 @@ export const config = {
   },
   GoogleClient:{
     ID : process.env.GOOGLE_CLIENT_ID
+  },
+  tavily: {
+    apiKey: process.env.TAVILY_API_KEY  ,
   }
 };
-
+console.log('Config loaded:', config);
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
